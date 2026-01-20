@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ศูนย์ช่วยเหลือ PAYPOINTSERVICE - ปัญหาเครื่องพิมพ์</title>
+    <!-- Google Fonts: Prompt for Thai language -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Modal Backdrop with Blur */
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Typing Indicator Animation */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Chat Bubble */
+        .chat-bubble {
+            position: relative;
+            max-width: 85%;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .chat-bubble.ai {
+            background-color: white;
+            border-bottom-left-radius: 0.25rem;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+        .chat-bubble.user {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+            margin-left: auto;
+        }
+        
+        /* Prose for Markdown content inside AI bubbles */
+        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-top: 0.5em; margin-bottom: 0.5em; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-top: 0.5em; margin-bottom: 0.5em; }
+        .prose strong { color: #4f46e5; font-weight: 600; }
+        .prose p { margin-bottom: 0.5em; }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm z-20 border-b border-slate-200 flex-shrink-0 sticky top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Logo Section -->
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="showHome()">
+                <div class="relative">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0o9dy2uhW38GNxBXXHg4HiSPX15dXO3NMX1kOG0xJc7Tpmva2s_vqh_3cz3jA-2DFDOGzv3cJcg3BR06tW2CzOFzCDVkcMEYQpm6TKzaGWLnHUZAnFpWzS-LW6HFcSB7g-ENiGlmYDcP74K33dOokl3ZJOlpeILfS2xIA9LS8IpJA_-umKp-ssSe_oGo/w200-h96/PAYPOINT%20_111.png" 
+                        alt="Paypoint Service Logo" 
+                        class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                </div>
+                <div class="hidden sm:block h-8 w-px bg-slate-200 mx-2"></div>
+                <span class="hidden sm:block text-slate-500 text-sm font-medium tracking-wide">Support Center</span>
+            </div>
+
+            <!-- Top Navigation (Desktop) -->
+            <nav class="hidden lg:flex items-center gap-1 bg-slate-50 p-1 rounded-full border border-slate-200">
+                <a href="https://tuikub.github.io/paypoint/" class="px-4 py-1.5 rounded-full text-sm font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-all flex items-center gap-2">
+                    <i class="ph ph-house-line"></i> กลับสู่หน้าหลัก
+                </a>
+                <div class="w-px h-4 bg-slate-300 mx-1"></div>
+                <a href="https://www.facebook.com/paypointservice" target="_blank" class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-600 hover:text-orange-600 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2">
+                    <i class="ph ph-facebook-logo"></i> แฟนเพจ
+                </a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAiSearch()" class="lg:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                    <i class="ph ph-magnifying-glass text-xl"></i>
+                </button>
+                <button onclick="toggleContactModal()" class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-orange-500/30 transition-all transform hover:-translate-y-0.5 text-sm font-semibold flex items-center gap-2">
+                    <i class="ph ph-headset"></i>
+                    <span class="hidden sm:inline">ติดต่อเรา</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden max-w-7xl mx-auto w-full relative">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col overflow-y-auto flex-shrink-0 z-10">
+            <div class="p-5 flex-1">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 px-2">เมนูหลัก</h3>
+                <nav class="space-y-1.5" id="sidebar-nav">
+                    <!-- Nav items will be injected here -->
+                </nav>
+            </div>
+            
+            <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+                <div onclick="toggleAiSearch()" class="cursor-pointer group flex items-center gap-3 p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-md hover:shadow-lg hover:shadow-indigo-500/25 transition-all">
+                    <div class="bg-white/20 p-2 rounded-lg">
+                        <i class="ph ph-sparkle text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-indigo-100">AI Assistant</p>
+                        <p class="text-sm font-bold">ปรึกษาปัญหาด่วน</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative scroll-smooth bg-[#f8fafc]" id="main-content">
+            <!-- Dynamic Content -->
+        </main>
+    </div>
+
+    <!-- AI Search Modal (The "Chat with AI" feature) -->
+    <div id="aiSearchModal" class="fixed inset-0 z-[60] hidden modal-backdrop flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl h-[600px] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300 relative">
+            
+            <!-- Modal Header -->
+            <div class="bg-white px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                        <i class="ph ph-robot text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">AI กูรูเครื่องพิมพ์</h3>
+                        <p class="text-xs text-slate-500 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ประสบการณ์ 10 ปี+
+                        </p>
+                    </div>
+                </div>
+                <button onclick="toggleAiSearch()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Chat Area -->
+            <div id="aiChatArea" class="flex-1 overflow-y-auto p-6 bg-slate-50 space-y-6">
+                <!-- Initial Message -->
+                <div class="flex gap-3 fade-in">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0 mt-1">
+                        <i class="ph ph-robot"></i>
+                    </div>
+                    <div class="chat-bubble ai">
+                        สวัสดีครับ! ผมคือ AI ผู้เชี่ยวชาญด้านเครื่องพิมพ์แฟรนไชส์ 🖨️ <br>
+                        มีปัญหาอะไรบอกผมได้เลยครับ เช่น
+                        <ul class="list-disc pl-4 mt-2 text-sm text-slate-600">
+                            <li>ปริ้นใบเสร็จไม่ออก</li>
+                            <li>เครื่องขึ้นไฟแดง</li>
+                            <li>ตั้งค่ากระดาษยังไง</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 bg-white border-t border-slate-100">
+                <form onsubmit="handleAiSearch(event)" class="relative">
+                    <input type="text" id="aiSearchInput" placeholder="พิมพ์ปัญหาของคุณที่นี่..." 
+                           class="w-full pl-5 pr-14 py-4 rounded-2xl bg-slate-100 border-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-slate-700 placeholder-slate-400 font-medium">
+                    <button type="submit" class="absolute right-2 top-2 p-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="ph ph-paper-plane-right text-lg"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full relative overflow-hidden transform scale-95 transition-transform duration-300">
+            <button onclick="toggleContactModal()" class="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-1.5 transition-colors z-10 backdrop-blur-sm">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+
+            <div class="bg-gradient-to-br from-orange-500 to-red-600 p-8 text-center text-white relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <div class="mx-auto bg-white/20 w-20 h-20 rounded-2xl rotate-3 flex items-center justify-center mb-4 backdrop-blur-md shadow-inner border border-white/20">
+                    <i class="ph ph-chats-teardrop text-4xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold relative z-10">ติดต่อสอบถาม</h3>
+                <p class="text-orange-100 text-sm mt-1 relative z-10 font-medium">@pratya Chartmontree</p>
+            </div>
+
+            <div class="p-6 space-y-3">
+                <a href="https://lin.ee/QX46lQgh" target="_blank" class="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:border-green-500 hover:bg-green-50 transition-all group shadow-sm hover:shadow-md">
+                    <div class="bg-green-100 text-green-600 p-3 rounded-xl group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <i class="ph ph-chat-circle-dots text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Line Official</p>
+                        <p class="text-slate-900 font-bold text-lg">ขอความช่วยเหลือ</p>
+                    </div>
+                </a>
+
+                <a href="tel:0855078656" class="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:border-blue-500 hover:bg-blue-50 transition-all group shadow-sm hover:shadow-md">
+                    <div class="bg-blue-100 text-blue-600 p-3 rounded-xl group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                        <i class="ph ph-phone text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">เบอร์โทรศัพท์</p>
+                        <p class="text-slate-900 font-bold text-lg">085-507-8656</p>
+                    </div>
+                </a>
+
+                <div class="pt-4 mt-2 text-center">
+                    <a href="#" class="inline-flex items-center gap-1.5 text-slate-400 hover:text-slate-600 text-xs transition-colors">
+                        <i class="ph ph-shield-check text-base"></i>
+                        <span>นโยบายความเป็นส่วนตัว (PDPA)</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // ==========================================
+        //  ส่วนตั้งค่า API KEY
+        // ==========================================
+        const API_KEY = "AIzaSyAnqjmk-VxP-XAVVnddpua394Pw71NtVfU"; 
+        // ==========================================
+
+        // Modal Logic
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const content = modal.querySelector('div'); // The inner card
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function toggleContactModal() { toggleModal('contactModal'); }
+        function toggleAiSearch() { 
+            toggleModal('aiSearchModal'); 
+            const input = document.getElementById('aiSearchInput');
+            setTimeout(() => input.focus(), 100); 
+        }
+
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+            backdrop.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    if(this.id === 'contactModal') toggleContactModal();
+                    if(this.id === 'aiSearchModal') toggleAiSearch();
+                }
+            });
+        });
+
+        // Data & Logic
+        const categories = [
+            { id: 'receipt', name: 'ใบเสร็จ (Receipt)', icon: 'ph-scroll' },
+            { id: 'label', name: 'ใบปะหน้า (Label)', icon: 'ph-sticker' },
+            { id: 'general', name: 'ตั้งค่าทั่วไป', icon: 'ph-gear' },
+            { id: 'resources', name: 'ดาวน์โหลด & วิดีโอ', icon: 'ph-download-simple', isResource: true }
+        ];
+        
+        const resources = {
+            drive: [
+                { title: 'ดาวน์โหลดไดร์เวอร์ และ ติดตั้ง เครื่องปริ้น ทั้งหมด ด้วยตัวเองได้ที่', url: 'https://drive.google.com/drive/u/0/folders/1plcTWY-1HbnjNccqbXzDKYSOSEGVqF0h', desc: 'คลิกเพื่อดาวน์โหลดไดร์เวอร์' },
+                { title: 'รวมปัญหาเครื่องปริ้นใบเสร็จ / ใบปะหน้า ดูวิธีการแก้ไขได้ที่', url: 'https://drive.google.com/drive/folders/1dEp0PmWPcYAlXH9GPz6FkS3o8vsELD1W', desc: 'คู่มือแก้ไขปัญหาต่างๆ' }
+            ],
+            videos: [
+                 { title: 'แก้ปัญหาเครื่องพิมพ์ 1', url: 'https://youtu.be/yK_FO3hcg38?si=uJz1hPAmBrZWSM6h', type: 'full' },
+                 { title: 'แก้ปัญหาเครื่องพิมพ์ 2', url: 'https://youtu.be/2YHOr9kYDOw?si=6IeZh59anfQsIu04', type: 'full' },
+                 { title: 'ทริคสั้น: การใช้งาน 1', url: 'https://youtube.com/shorts/V6CAo3-x2IM?si=j5YEZdadUlLo5Lsy', type: 'short' },
+                 { title: 'ทริคสั้น: การใช้งาน 2', url: 'https://youtube.com/shorts/pxLnuHjSNC0?si=pIZ_RydOz4tea3bc', type: 'short' },
+                 { title: 'ทริคสั้น: การใช้งาน 3', url: 'https://youtube.com/shorts/HDbzm7V_S58?si=Vg0A-2M8XVd0f290', type: 'short' },
+                 { title: 'ทริคสั้น: การใช้งาน 4', url: 'https://youtube.com/shorts/Whv-jaoNquo?si=XV9r7tcn1NMHRLAo', type: 'short' },
+                 { title: 'ทริคสั้น: การใช้งาน 5', url: 'https://youtube.com/shorts/6UffCm4iyCc?si=E8ofXKcDl9eyWDFM', type: 'short' },
+                 { title: 'ทริคสั้น: การใช้งาน 6', url: 'https://youtube.com/shorts/tclTpXLR-ws?si=V1SkXJm8QfCMmHvf', type: 'short' }
+            ]
+        };
+
+        const guides = [
+            {
+                id: 'download-driver', categoryId: 'general', title: 'วิธีดาวน์โหลดไดร์เวอร์', description: 'รวมลิงก์ดาวน์โหลด Driver และคู่มือการติดตั้งสำหรับทุกรุ่น', keywords: ['download', 'driver', 'โหลด', 'ไดร์เวอร์', 'ติดตั้ง', 'program'], icon: 'ph-download-simple', steps: []
+            },
+            {
+                id: 'receipt-no-print', categoryId: 'receipt', title: 'ปริ้นใบเสร็จไม่ออก', description: 'แก้ไขกรณีสั่งปริ้นแล้วเงียบ หรือเครื่องไม่ทำงาน', keywords: ['ปริ้นไม่ออก', 'เงียบ', 'ไม่ทำงาน', 'usb', 'port', 'driver', 'xp-80c'], icon: 'ph-printer-slash', steps: [{ text: 'ตรวจสอบสาย USB ว่าเสียบแน่น หรือมีการย้ายช่องเสียบหรือไม่' }, { text: 'ไปที่ <strong>Control Panel > Devices and Printers</strong>' }, { text: 'คลิกขวาที่ไดรเวอร์ (เช่น XP-80C) เลือก <strong>Printer Properties</strong>' }, { text: 'ไปที่แท็บ <strong>Ports</strong> ลองติ๊กเลือก Port ที่เป็น <strong>USB00x</strong> ช่องอื่นดู' }, { text: 'กด Apply แล้วลองปริ้นใหม่' }]
+            },
+            {
+                id: 'receipt-no-cut', categoryId: 'receipt', title: 'ใบเสร็จไม่ตัดกระดาษ', description: 'ตั้งค่าให้เครื่องตัดกระดาษอัตโนมัติ', keywords: ['ไม่ตัด', 'ตัดกระดาษ', 'cutter', 'cut', 'ฉีกเอง'], icon: 'ph-scissors', steps: [{ text: 'คลิกขวาที่เครื่องพิมพ์ XP-80C เลือก <strong>Printer properties</strong>' }, { text: 'ไปที่แท็บ <strong>Device Settings</strong> > <strong>Cutter Select</strong>' }, { text: 'เลือกเป็น <strong>Report Cut</strong> (แนะนำ) เพื่อให้ตัดเมื่อจบข้อความ' }, { text: 'กด OK แล้วทดลองพิมพ์' }]
+            },
+            {
+                id: 'receipt-no-amount', categoryId: 'receipt', title: 'ใบเสร็จไม่แสดงยอดเงิน', description: 'ข้อมูลบางส่วนหายไป หรือไม่มียอดเงิน', keywords: ['ไม่มียอดเงิน', 'ข้อมูลหาย', 'ยอดเงินหาย', 'ขอบตก'], icon: 'ph-currency-slash', steps: [{ text: 'ในหน้า Preview กด <strong>More settings</strong>' }, { text: 'ปรับ <strong>Margins</strong> เป็น <strong>None</strong>' }, { text: 'ปรับ <strong>Paper size</strong> เป็น <strong>80(72.1) x 297 mm</strong>' }, { text: 'เอาติ๊กถูกช่อง <strong>Headers and footers</strong> ออก' }]
+            },
+            {
+                id: 'receipt-58mm-setup', categoryId: 'receipt', title: 'ตั้งค่าใบเสร็จ 58mm (XP-58)', description: 'ตั้งค่าสำหรับเครื่องพิมพ์ขนาดเล็ก', keywords: ['58mm', 'xp-58', 'ตัวเล็ก', 'เครื่องเล็ก'], icon: 'ph-receipt', steps: [{ text: 'คลิกขวา XP-58 เลือก <strong>Printer properties</strong>' }, { text: 'แท็บ Device Settings: ตั้ง Manual Paper Feed เป็น <strong>58(48) x 297 mm</strong>' }, { text: 'แท็บ Advanced & General (Preferences): ตั้ง Paper Size เป็น <strong>58(48) x 297 mm</strong>' }]
+            },
+            {
+                id: 'receipt-58mm-incomplete', categoryId: 'receipt', title: 'ใบเสร็จ 58mm ข้อมูลออกไม่ครบ', description: 'ข้อความล้นขอบสำหรับกระดาษ 58mm', keywords: ['58mm', 'ล้นขอบ', 'ตกขอบ', 'ไม่ครบ'], icon: 'ph-arrows-in-line-horizontal', steps: [{ text: 'ในหน้า Preview เลือก XP-58' }, { text: 'Margins: <strong>None</strong>' }, { text: 'Scale: เลือก <strong>Custom</strong> แล้วใส่ค่าประมาณ <strong>65-80</strong> จนกว่าจะพอดี' }]
+            },
+            {
+                id: 'adjust-darkness', categoryId: 'receipt', title: 'ปรับความเข้ม (จาง/ไม่ชัด)', description: 'วิธีแก้ปัญหาตัวหนังสือจาง', keywords: ['จาง', 'ไม่ชัด', 'สีอ่อน', 'ความเข้ม', 'density', 'darkness'], icon: 'ph-drop-half', steps: [{ text: '<strong>XP-80C:</strong> Printer Properties > Device Settings > Printing Density' }, { text: '<strong>Label:</strong> Printer Properties > General > Preferences > Options > Darkness' }, { text: 'ถ้าปรับสุดแล้วยังจาง ให้เช็ดหัวพิมพ์ด้วยแอลกอฮอล์ หรือเปลี่ยนม้วนกระดาษ' }]
+            },
+            {
+                id: 'label-red-light', categoryId: 'label', title: 'เครื่องปริ้นขึ้นไฟแดง', description: 'เครื่องร้อง หรือไฟแดงค้าง', keywords: ['ไฟแดง', 'ร้อง', 'ปี๊บ', 'error', 'red light'], icon: 'ph-warning-circle', steps: [{ text: 'เปิดฝาแล้วปิดใหม่ให้แน่น (ดังแก๊ก)' }, { text: 'ดึงกระดาษให้เลยปากเครื่องออกมานิดนึง' }, { text: '<strong>Calibrate:</strong> ปิดเครื่อง > กดปุ่ม Feed ค้าง > เปิดเครื่อง (ยังกดค้าง) > รอปี๊บ 2 ครั้งแล้วปล่อย' }]
+            },
+            {
+                id: 'label-size', categoryId: 'label', title: 'ปรับขนาดใบปะหน้า', description: 'ตั้งค่าขนาด 4x6 นิ้ว (100x150mm)', keywords: ['ขนาดกระดาษ', '4x6', '100x150', 'size'], icon: 'ph-arrows-out', steps: [{ text: 'Printer Preferences > Page Setup เลือก <strong>4 x 6</strong>' }, { text: 'ถ้าไม่มีให้กด New สร้างขนาด กว้าง 100mm สูง 150mm' }, { text: 'ต้องตั้งค่าทั้งใน Preferences และ Printing Defaults' }]
+            },
+            {
+                id: 'paper-setup', categoryId: 'general', title: 'ตั้งค่าหน้ากระดาษ (Chrome/Edge)', description: 'ตั้งค่า Browser ให้พิมพ์ออกมาสมบูรณ์', keywords: ['chrome', 'edge', 'browser', 'ตั้งค่า'], icon: 'ph-file-text', steps: [{ text: '<strong>ใบเสร็จ:</strong> 80x297mm, Margins: None' }, { text: '<strong>ใบปะหน้า:</strong> 4x6, Scale: Fit to printable area' }]
+            },
+             {
+                id: 'label-no-print', categoryId: 'label', title: 'ปริ้นใบปะหน้าไม่ออก', description: 'กดสั่งปริ้นแล้วเงียบ', keywords: ['ปริ้นไม่ออก', 'เงียบ', 'label ไม่ออก'], icon: 'ph-printer-slash', steps: [{ text: 'คลิกขวาเครื่องพิมพ์ > <strong>Troubleshoot</strong>' }, { text: 'ถ้าขึ้น Make printer default ให้กด Apply fix' }, { text: 'เช็ค Port USB ว่าติ๊กถูกช่องที่ถูกต้องหรือไม่' }]
+            }
+        ];
+
+        // AI Chat Logic
+        async function handleAiSearch(e) {
+            e.preventDefault();
+            const input = document.getElementById('aiSearchInput');
+            const chatArea = document.getElementById('aiChatArea');
+            const query = input.value.trim();
+            
+            if (!query) return;
+
+            // 1. User Message
+            appendMessage('user', query);
+            input.value = '';
+
+            // 2. Loading Indicator
+            const loadingId = 'loading-' + Date.now();
+            const loadingHtml = `
+                <div id="${loadingId}" class="flex gap-3 fade-in">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0 mt-1">
+                        <i class="ph ph-robot"></i>
+                    </div>
+                    <div class="chat-bubble ai flex items-center gap-1">
+                        <div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            chatArea.insertAdjacentHTML('beforeend', loadingHtml);
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            try {
+                // 3. Prepare Knowledge Base for AI
+                const knowledgeBase = JSON.stringify(guides);
+                
+                // 4. Call Gemini API
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `คุณคือ "AI กูรูเครื่องพิมพ์" ผู้เชี่ยวชาญด้าน IT และระบบแฟรนไชส์ขนส่งประสบการณ์ 10 ปี
+                                บุคลิก: สุภาพ ใจเย็น อธิบายเข้าใจง่ายเหมือนสอนจับมือทำ (Step-by-step)
+                                
+                                ข้อมูลในคลังความรู้ (Knowledge Base) ที่คุณมี:
+                                ${knowledgeBase}
+                                
+                                หน้าที่: 
+                                1. ตอบคำถามผู้ใช้โดยอ้างอิงจาก Knowledge Base เป็นหลัก
+                                2. หากข้อมูลใน KB มีขั้นตอนชัดเจน ให้สรุปเป็นข้อๆ 1, 2, 3
+                                3. หากไม่มีใน KB ให้ใช้ความรู้ทั่วไปเกี่ยวกับเครื่องพิมพ์ (XP-80C, XP-58, Label Printer) ในการตอบ
+                                4. ตอบเป็นภาษาไทย ใช้ Markdown ในการจัดรูปแบบ (เช่น **ตัวหนา** หรือ รายการ)
+                                
+                                คำถามจากผู้ใช้: "${query}"`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+
+                const botReply = data.candidates[0].content.parts[0].text;
+                appendMessage('ai', marked.parse(botReply));
+
+            } catch (error) {
+                document.getElementById(loadingId)?.remove();
+                appendMessage('ai', `ขออภัยครับ ระบบขัดข้อง (${error.message}) <br>กรุณาลองใหม่อีกครั้ง หรือติดต่อแอดมินโดยตรงครับ`);
+            }
+        }
+
+        function appendMessage(type, html) {
+            const chatArea = document.getElementById('aiChatArea');
+            const icon = type === 'ai' 
+                ? `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0 mt-1"><i class="ph ph-robot"></i></div>` 
+                : ``;
+            
+            const msgHtml = `
+                <div class="flex gap-3 fade-in ${type === 'user' ? 'justify-end' : ''}">
+                    ${type === 'ai' ? icon : ''}
+                    <div class="chat-bubble ${type} ${type === 'ai' ? 'prose prose-sm max-w-none' : ''}">
+                        ${html}
+                    </div>
+                </div>
+            `;
+            chatArea.insertAdjacentHTML('beforeend', msgHtml);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // UI Rendering
+        function renderSidebar() {
+            const nav = document.getElementById('sidebar-nav');
+            let html = '';
+            
+            html += `
+                <a href="#" onclick="showHome()" class="group flex items-center px-3 py-2 text-sm font-medium rounded-xl text-slate-600 hover:bg-white hover:text-orange-600 hover:shadow-sm transition-all mb-4">
+                    <i class="ph ph-squares-four mr-3 text-lg text-slate-400 group-hover:text-orange-500"></i>
+                    หน้าหลัก
+                </a>
+            `;
+
+            categories.forEach(cat => {
+                if (cat.isResource) {
+                     html += `
+                        <div class="mt-6 mb-2 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">แหล่งข้อมูล</div>
+                        <a href="#" onclick="showResourcesPage()" class="group flex items-center px-3 py-2 text-sm font-medium rounded-xl text-blue-600 hover:bg-blue-50 transition-all mb-1">
+                            <i class="ph ${cat.icon} mr-3 text-lg"></i>
+                            ${cat.name}
+                        </a>
+                    `;
+                } else {
+                    const catGuides = guides.filter(g => g.categoryId === cat.id);
+                    if (catGuides.length > 0) {
+                        html += `<div class="mt-6 mb-2 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">${cat.name}</div>`;
+                        catGuides.forEach(guide => {
+                            html += `
+                                <a href="#" onclick="showGuide('${guide.id}')" class="group flex items-center px-3 py-2 text-sm font-medium rounded-xl text-slate-600 hover:bg-white hover:text-orange-600 hover:shadow-sm transition-all mb-1">
+                                    <i class="ph ${guide.icon} mr-3 text-lg text-slate-400 group-hover:text-orange-500 transition-colors"></i>
+                                    ${guide.title}
+                                </a>
+                            `;
+                        });
+                    }
+                }
+            });
+            nav.innerHTML = html;
+        }
+
+        function showHome() {
+            const content = document.getElementById('main-content');
+            let html = `
+                <div class="fade-in max-w-5xl mx-auto pt-4 pb-12">
+                    <div class="text-center mb-12">
+                        <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+                            ศูนย์ช่วยเหลือ <span class="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-600">PAYPOINTSERVICE</span>
+                        </h1>
+                        <p class="text-slate-500 text-lg mb-8">เราพร้อมช่วยแก้ปัญหาเครื่องพิมพ์ของคุณ</p>
+                        
+                        <div onclick="toggleAiSearch()" class="cursor-pointer max-w-2xl mx-auto bg-white rounded-2xl shadow-lg shadow-indigo-100 hover:shadow-xl hover:shadow-indigo-200 border border-slate-100 p-2 flex items-center gap-3 transition-all transform hover:-translate-y-1 group">
+                            <div class="bg-indigo-50 text-indigo-600 p-3 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                <i class="ph ph-sparkle text-2xl"></i>
+                            </div>
+                            <div class="flex-1 text-left">
+                                <div class="text-slate-400 text-sm sm:text-base font-medium">บอกปัญหาของคุณให้เรารู้...</div>
+                            </div>
+                            <div class="bg-slate-50 text-slate-400 px-4 py-2 rounded-lg text-xs font-bold border border-slate-100 hidden sm:block">
+                                AI SEARCH
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            `;
+
+             html += `
+                <div onclick="showResourcesPage()" class="md:hidden bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl shadow-lg shadow-blue-500/20 text-white cursor-pointer relative overflow-hidden group">
+                     <div class="absolute top-0 right-0 p-4 opacity-20 transform translate-x-4 -translate-y-4">
+                        <i class="ph ph-download-simple text-8xl"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 backdrop-blur-sm">
+                            <i class="ph ph-download-simple text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">คลังโหลด & วิดีโอ</h3>
+                        <p class="text-blue-100 text-xs">Driver, PDF, Clips</p>
+                    </div>
+                </div>
+            `;
+
+            guides.forEach(guide => {
+                const cat = categories.find(c => c.id === guide.categoryId);
+                const isRedirect = guide.id === 'download-driver';
+                const cardClass = isRedirect 
+                    ? 'bg-blue-50 border-blue-100 hover:border-blue-300' 
+                    : 'bg-white border-slate-100 hover:border-orange-200';
+                
+                const iconBgClass = isRedirect
+                    ? 'bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white'
+                    : 'bg-orange-50 text-orange-500 group-hover:bg-orange-500 group-hover:text-white';
+
+                const titleClass = isRedirect
+                    ? 'text-blue-800 group-hover:text-blue-600'
+                    : 'text-slate-800 group-hover:text-orange-600';
+
+                html += `
+                    <div onclick="showGuide('${guide.id}')" class="${cardClass} p-6 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all group flex flex-col h-full border">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl ${iconBgClass} flex items-center justify-center text-2xl transition-colors duration-300">
+                                <i class="ph ${guide.icon}"></i>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-1 rounded-md bg-slate-50 text-slate-500 uppercase tracking-wide">
+                                ${cat.name.split(' ')[0]}
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold ${titleClass} mb-2 transition-colors">${guide.title}</h3>
+                        <p class="text-sm text-slate-500 line-clamp-2 mt-auto">${guide.description}</p>
+                    </div>
+                `;
+            });
+
+            html += `</div>
+                
+                <div class="mt-12 text-center">
+                    <button onclick="showResourcesPage()" class="hidden md:inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-6 py-3 rounded-xl hover:bg-slate-50 hover:text-orange-600 transition-all font-medium">
+                        <i class="ph ph-download-simple text-lg"></i>
+                        ดูคลังดาวน์โหลดและวิดีโอทั้งหมด
+                    </button>
+                </div>
+
+                <div class="mt-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white/20 p-3 rounded-full">
+                            <i class="ph ph-chats-circle text-3xl text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">สอบถามหน้างานเพิ่มเติม</h3>
+                            <p class="text-orange-100 text-sm">ติดต่อแอดมินหลักของท่านได้ทุกวัน</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleContactModal()" class="bg-white text-orange-600 px-6 py-2.5 rounded-xl font-semibold hover:bg-gray-100 transition shadow-sm whitespace-nowrap">
+                        ติดต่อ Support
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-slate-400 text-sm">
+                        <i class="ph ph-code"></i> Developed by <span class="font-medium text-slate-500">@pratya chartmontree</span>
+                    </p>
+                </div>
+            </div>`;
+            content.innerHTML = html;
+        }
+
+        function showGuide(guideId) {
+            if (guideId === 'download-driver') {
+                showResourcesPage();
+                return;
+            }
+
+            const guide = guides.find(g => g.id === guideId);
+            if (!guide) return;
+
+            const content = document.getElementById('main-content');
+            let stepsHtml = '';
+
+            guide.steps.forEach((step, index) => {
+                stepsHtml += `
+                    <div class="flex gap-4 p-4 bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5 shadow-md shadow-orange-500/30">
+                            ${index + 1}
+                        </div>
+                        <div class="text-slate-700 leading-relaxed pt-1">${step.text}</div>
+                    </div>
+                `;
+            });
+
+            const html = `
+                <div class="fade-in max-w-4xl mx-auto pb-10">
+                    <button onclick="showHome()" class="mb-6 flex items-center text-sm font-medium text-slate-500 hover:text-orange-600 transition-colors bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm hover:shadow">
+                        <i class="ph ph-arrow-left mr-2"></i> กลับหน้าหลัก
+                    </button>
+                    
+                    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                        <div class="bg-slate-50/50 p-8 border-b border-slate-100">
+                            <div class="flex items-center gap-4 mb-3">
+                                <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-3xl">
+                                    <i class="ph ${guide.icon}"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-2xl font-bold text-slate-800">${guide.title}</h2>
+                                    <p class="text-slate-500 text-sm mt-1">${guide.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-8 space-y-4 bg-white">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">ขั้นตอนการแก้ไข</h3>
+                            ${stepsHtml}
+                            
+                            <div class="mt-8 p-5 bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl border border-orange-100 flex gap-4 items-start">
+                                <div class="bg-white p-2 rounded-lg text-orange-500 shadow-sm">
+                                    <i class="ph ph-headset text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-orange-800 text-sm">ยังแก้ไม่ได้ใช่ไหม?</h4>
+                                    <p class="text-orange-700/80 text-sm mt-1">
+                                        ลอง Restart เครื่องพิมพ์ดูอีกครั้ง หรือ
+                                        <button onclick="toggleContactModal()" class="underline font-semibold hover:text-orange-900">ติดต่อแอดมิน</button> 
+                                        เพื่อให้เราช่วยเหลือคุณโดยตรง
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            content.innerHTML = html;
+        }
+
+        function showResourcesPage() {
+            const content = document.getElementById('main-content');
+            
+            let videoShortsHtml = '';
+            let videoFullHtml = '';
+            let driveHtml = '';
+
+            resources.drive.forEach(item => {
+                driveHtml += `
+                    <a href="${item.url}" target="_blank" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-white hover:border-blue-500 hover:shadow-md transition-all group">
+                        <div class="bg-blue-50 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i class="ph ph-google-drive-logo text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">${item.title}</h4>
+                            <p class="text-xs text-slate-500 mt-1">${item.desc}</p>
+                        </div>
+                        <i class="ph ph-arrow-square-out text-slate-300 ml-auto group-hover:text-blue-500"></i>
+                    </a>
+                `;
+            });
+
+            resources.videos.forEach(vid => {
+                 const card = `
+                    <a href="${vid.url}" target="_blank" class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-white hover:border-red-500 hover:shadow-md transition-all group">
+                        <div class="text-red-500 bg-red-50 p-2 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
+                            <i class="ph ${vid.type === 'short' ? 'ph-film-strip' : 'ph-youtube-logo'} text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h5 class="text-sm font-bold text-slate-700 truncate group-hover:text-red-600">${vid.title}</h5>
+                        </div>
+                        <i class="ph ph-play-circle text-slate-300 text-xl group-hover:text-red-500"></i>
+                    </a>
+                `;
+                if(vid.type === 'short') videoShortsHtml += card;
+                else videoFullHtml += card;
+            });
+
+             const html = `
+                <div class="fade-in max-w-5xl mx-auto pb-10">
+                    <button onclick="showHome()" class="mb-6 flex items-center text-sm font-medium text-slate-500 hover:text-orange-600 transition-colors bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm hover:shadow">
+                        <i class="ph ph-arrow-left mr-2"></i> กลับหน้าหลัก
+                    </button>
+
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                        <span class="bg-blue-100 text-blue-600 p-2 rounded-lg"><i class="ph ph-download-simple"></i></span>
+                        คลังดาวน์โหลด & วิดีโอสอน
+                    </h2>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                             <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">ไฟล์และเอกสาร</h3>
+                             <div class="grid gap-4">${driveHtml}</div>
+                             
+                             <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 mt-8">วิดีโอตัวเต็ม</h3>
+                             <div class="grid gap-3">${videoFullHtml}</div>
+                        </div>
+                        <div>
+                             <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">คลิปสั้น (Shorts) แก้ปัญหาด่วน</h3>
+                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">${videoShortsHtml}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/20 p-3 rounded-full">
+                                <i class="ph ph-chats-circle text-3xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold">สอบถามหน้างานเพิ่มเติม</h3>
+                                <p class="text-orange-100 text-sm">ติดต่อแอดมินหลักของท่านได้ทุกวัน</p>
+                            </div>
+                        </div>
+                        <button onclick="toggleContactModal()" class="bg-white text-orange-600 px-6 py-2.5 rounded-xl font-semibold hover:bg-gray-100 transition shadow-sm whitespace-nowrap">
+                            ติดต่อ Support
+                        </button>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-slate-400 text-sm">
+                            <i class="ph ph-code"></i> Developed by <span class="font-medium text-slate-500">@pratya chartmontree</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+            content.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+            showHome();
+        });
+    </script>
+</body>
+</html>
