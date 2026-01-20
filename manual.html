@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือการใช้งานระบบ - Paypoint Staff Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; color: #334155; scroll-behavior: smooth; }
+        .step-card { border-left: 4px solid #3b82f6; }
+        .search-focus:focus-within { ring: 4px solid rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+        .highlight-match { background-color: #fef08a; padding: 0 2px; border-radius: 2px; }
+        .hidden-section { display: none; }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="https://tuikub.github.io/tracking//paypoint.png" alt="Logo" class="w-8 h-8 rounded-full">
+                <span class="font-bold text-slate-800">Staff Manual</span>
+            </div>
+            <a href="staff_login.html" class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors">
+                <i data-lucide="log-in" class="w-4 h-4"></i> เข้าสู่ระบบหลังบ้าน
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header & AI Search Section -->
+    <header class="bg-slate-900 text-white pt-16 pb-20 px-4 text-center relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl -ml-24 -mb-24"></div>
+
+        <div class="relative z-10">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">คู่มือพนักงาน Paypoint</h1>
+            <p class="text-slate-400 max-w-xl mx-auto mb-8 font-light italic text-sm md:text-base">"มีข้อสงสัย? ลองถาม AI ช่วยค้นหาข้อมูลที่ต้องการได้ทันที"</p>
+            
+            <!-- Smart Search Bar -->
+            <div class="max-w-xl mx-auto relative search-focus transition-all duration-300">
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-400 animate-pulse"></i>
+                </div>
+                <input type="text" id="aiSearchInput" 
+                       placeholder="พิมพ์สิ่งที่คุณอยากรู้... เช่น ส่งผลไม้, วิธีคัดลอก, เคลมพัสดุ" 
+                       class="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:bg-white focus:text-slate-900 focus:outline-none shadow-2xl transition-all"
+                       onkeyup="handleSmartSearch()">
+                <div id="searchBadge" class="hidden absolute right-3 top-1/2 -translate-y-1/2 bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase">ค้นหาเสร็จสิ้น</div>
+            </div>
+            <div id="searchStatus" class="mt-3 text-xs text-slate-500 italic hidden">พบข้อมูลที่เกี่ยวข้องทั้งหมด <span id="matchCount">0</span> หัวข้อ</div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 mt-[-40px] space-y-12 relative z-20" id="mainContent">
+
+        <!-- Section 1: AI Assistant Basics -->
+        <section class="manual-section" data-keywords="ai assistant น้องโอ วิธีใช้งาน คัดลอก ส่งแชท ข้อมูลลูกค้า context">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                    <i data-lucide="bot" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">การใช้งาน AI Assistant (น้องโอ)</h2>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 space-y-6">
+                    <div class="step-card bg-slate-50 p-4 rounded-r-xl">
+                        <h3 class="font-bold text-blue-800 mb-1">1. การใส่ข้อมูลลูกค้า (Context)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">กรอกชื่อลูกค้า เลขพัสดุ หรือยอดเงินในแถบด้านข้างเพียงครั้งเดียว ระบบจะนำไปเติมในสคริปต์ให้โดยอัตโนมัติ ช่วยให้ไม่ต้องพิมพ์ซ้ำทุกครั้งที่เปลี่ยนประโยค</p>
+                    </div>
+                    <div class="step-card bg-slate-50 p-4 rounded-r-xl border-blue-400">
+                        <h3 class="font-bold text-blue-800 mb-1">2. การเลือกสคริปต์คำตอบ</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">เลือกหมวดหมู่ที่เหมาะสมกับสถานการณ์ (เช่น กำลังจะแจ้งราคา หรือกำลังตามของให้ลูกค้า) แล้วคลิกเลือกหัวข้อที่ต้องการ ระบบจะแสดงตัวอย่างข้อความในช่อง Preview</p>
+                    </div>
+                    <div class="step-card bg-slate-50 p-4 rounded-r-xl border-blue-400">
+                        <h3 class="font-bold text-blue-800 mb-1">3. การคัดลอกและส่ง</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">เมื่อพอใจกับข้อความแล้ว กดปุ่ม <strong>"คัดลอกข้อความ"</strong> สีน้ำเงินด้านล่าง ระบบจะบันทึกลงเครื่องให้ทันที จากนั้นนำไปวาง (Paste) ใน LINE หรือ Facebook ได้เลย</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: AI Categories Breakdown -->
+        <section class="manual-section" data-keywords="หมวดหมู่ สี สคริปต์ ทักทาย ราคา เช็คพัสดุ ปัญหา greeting price tracking problem">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="bg-indigo-100 p-2 rounded-lg text-indigo-600">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">หมวดหมู่คำตอบของ AI</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold uppercase tracking-tight">Greeting</span>
+                        <h4 class="font-bold text-slate-700">ทักทายลูกค้า</h4>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4">ใช้สำหรับเปิดบทสนทนาเมื่อลูกค้าทักเข้ามาครั้งแรก หรือแจ้งเวลาทำการในกรณีลูกค้านอกเวลา</p>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4 leading-relaxed">
+                        <li>ทักทายลูกค้าใหม่</li>
+                        <li>แจ้งเตือนนอกเวลาทำการ</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold uppercase tracking-tight">Price</span>
+                        <h4 class="font-bold text-slate-700">แจ้งราคา / ปิดยอด</h4>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4">ใช้แจ้งราคาค่าส่งเบื้องต้น หรือสรุปยอดเงินที่ลูกค้าต้องชำระ (สามารถดึงข้อมูล "ยอดเงิน" มาใส่ได้อัตโนมัติ)</p>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4 leading-relaxed">
+                        <li>แจ้งราคาเริ่มต้น</li>
+                        <li>แจ้งสรุปยอดโอน</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold uppercase tracking-tight">Tracking</span>
+                        <h4 class="font-bold text-slate-700">เช็คพัสดุ / ตามของ</h4>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4">ใช้ขอเลขพัสดุจากลูกค้า หรือแจ้งสถานะต่างๆ เช่น กำลังนำจ่าย หรือพัสดุตกค้าง</p>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4 leading-relaxed">
+                        <li>ส่งลิงก์เช็คพัสดุด้วยตัวเอง</li>
+                        <li>แจ้งสถานะนำจ่าย/พัสดุมีปัญหา</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-rose-100 text-rose-700 px-2 py-1 rounded text-xs font-bold uppercase tracking-tight">Problem</span>
+                        <h4 class="font-bold text-slate-700">แก้ปัญหา / กฎร้าน</h4>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4">ใช้ตอบโต้ในกรณีสินค้าเสียหาย หรือแจ้งกฎเหล็กของขนส่งเกี่ยวกับของต้องห้ามส่ง</p>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4 leading-relaxed">
+                        <li>ขอหลักฐานวิดีโอเคลมสินค้า</li>
+                        <li>เตือนเรื่องการส่งผลไม้และของห้ามส่ง</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Best Practices -->
+        <section class="manual-section" data-keywords="เทคนิค ปิดการขาย ตอบไว สุภาพ ใส่ใจ ลูกค้า">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="bg-green-100 p-2 rounded-lg text-green-600">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">เทคนิคการตอบแชทให้ปิดการขายไว</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-blue-500 mb-3"><i data-lucide="zap" class="w-8 h-8"></i></div>
+                    <h4 class="font-bold mb-2">ตอบไวภายใน 5 นาที</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">ลูกค้ามักทักหลายร้านพร้อมกัน การตอบไวและมีสคริปต์ที่พร้อมช่วยให้เราดูเป็นมืออาชีพและน่าเชื่อถือกว่าคู่แข่ง</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-rose-500 mb-3"><i data-lucide="heart" class="w-8 h-8"></i></div>
+                    <h4 class="font-bold mb-2">เรียกชื่อลูกค้าเสมอ</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">การใส่ชื่อลูกค้าในระบบ AI ช่วยให้ลูกค้ารู้สึกถึงความใส่ใจ ไม่เหมือนคุยกับบอททื่อๆ เพิ่มโอกาสในการกลับมาใช้บริการซ้ำ</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: FAQ for Staff -->
+        <section class="bg-slate-100 rounded-3xl p-8 border border-slate-200 manual-section" data-keywords="ถามตอบ คำถามพบบ่อย รหัสผ่าน สคริปต์ คัดลอก ข้อมูลหาย reset">
+            <h2 class="text-xl font-bold mb-6 text-center">ถาม-ตอบ เกี่ยวกับระบบ AI Assistant</h2>
+            <div class="space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sm text-blue-600 mb-2">Q: ระบบ AI นี้ตอบลูกค้าอัตโนมัติเลยไหม?</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">A: ไม่ครับ ระบบนี้คือ <strong>"เครื่องมือช่วยตอบ"</strong> พนักงานต้องเป็นคนกดเลือกสคริปต์และนำไปวางในแชทเอง เพื่อให้พนักงานยังสามารถตรวจสอบความถูกต้องได้ 100% ก่อนส่งครับ</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sm text-blue-600 mb-2">Q: ทำไมกดคัดลอกแล้วเอาไปวางไม่ได้?</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">A: อาจเกิดจากเบราว์เซอร์ไม่อนุญาตการเข้าถึงคลิปบอร์ด ให้ลอง Refresh หน้าเว็บหนึ่งครั้ง หรือตรวจสอบว่าได้เลือกหัวข้อสคริปต์จนมีข้อความขึ้นในช่อง Preview หรือยัง</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sm text-blue-600 mb-2">Q: ข้อมูลลูกค้าที่เรากรอกไปจะหายไหม?</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">A: ข้อมูลจะหายไปเมื่อคุณปิดเบราว์เซอร์หรือกดปุ่ม "Reset" (รูปลูกศรหมุน) ที่หัวมุมขวาบน เพื่อป้องกันข้อมูลลูกค้าปะปนกับรายถัดไปครับ</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 text-center text-slate-400 text-xs">
+        <p>© ระบบสนับสนุนสาขา Paypoint Family</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Smart AI Search Logic
+        function handleSmartSearch() {
+            const input = document.getElementById('aiSearchInput');
+            const filter = input.value.toLowerCase().trim();
+            const sections = document.querySelectorAll('.manual-section');
+            const searchStatus = document.getElementById('searchStatus');
+            const matchCountEl = document.getElementById('matchCount');
+            const searchBadge = document.getElementById('searchBadge');
+            
+            let count = 0;
+
+            if (filter === "") {
+                // Show all if empty
+                sections.forEach(s => s.classList.remove('hidden-section'));
+                searchStatus.classList.add('hidden');
+                searchBadge.classList.add('hidden');
+                return;
+            }
+
+            searchStatus.classList.remove('hidden');
+            searchBadge.classList.remove('hidden');
+
+            sections.forEach(section => {
+                const keywords = section.getAttribute('data-keywords') || "";
+                const content = section.innerText.toLowerCase();
+                
+                if (keywords.toLowerCase().includes(filter) || content.includes(filter)) {
+                    section.classList.remove('hidden-section');
+                    count++;
+                } else {
+                    section.classList.add('hidden-section');
+                }
+            });
+
+            matchCountEl.innerText = count;
+            
+            // Auto-scroll to top of results if found
+            if(count > 0 && filter.length > 2) {
+                // Throttle scroll for better UX
+            }
+        }
+    </script>
+</body>
+</html>
