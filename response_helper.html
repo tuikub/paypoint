@@ -22,12 +22,6 @@
             transform: translateX(5px);
             background-color: #eff6ff;
         }
-        .nong-o-card {
-            border-left: 4px solid #f59e0b;
-        }
-        .nong-o-card:hover {
-            background-color: #fffbeb;
-        }
         .ai-glow {
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
         }
@@ -41,23 +35,21 @@
             60% { content: '...'; }
             80%, 100% { content: ''; }
         }
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
+        .qa-card {
+            transition: all 0.2s ease;
+            border: 1px solid #e2e8f0;
         }
-        .faq-item.active .faq-answer {
-            max-height: 400px;
-            margin-top: 0.5rem;
+        .qa-card:hover {
+            border-color: #3b82f6;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
-        .faq-item.active i {
-            transform: rotate(180deg);
+        .category-tab {
+            white-space: nowrap;
+            scrollbar-width: none;
         }
-        .script-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 99px;
-            text-transform: uppercase;
+        .category-tab::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
@@ -90,8 +82,8 @@
             </svg>
         </div>
         <div class="relative z-10">
-            <h1 class="text-3xl font-bold mb-2">คู่มือการใช้งานสำหรับสาขา</h1>
-            <p class="text-slate-400 max-w-xl mx-auto italic font-light">"รวมเทคนิคการใช้งานระบบ และสคริปต์แก้ปัญหาลูกค้ามืออาชีพ"</p>
+            <h1 class="text-3xl font-bold mb-2">คลังถาม-ตอบ มืออาชีพ</h1>
+            <p class="text-slate-400 max-w-xl mx-auto italic font-light">"สคริปต์พร้อมใช้ ลดแรงปะทะ มัดใจลูกค้าทุกสถานการณ์"</p>
         </div>
     </header>
 
@@ -102,7 +94,7 @@
                 <div class="bg-orange-500 p-2 rounded-xl text-white">
                     <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
-                <input type="text" id="ai-search-input" placeholder="ถามน้องโอ๋ AI เรื่องวิธีคุยกับลูกค้า หรือปัญหาหน้างาน..." class="w-full bg-transparent border-none focus:ring-0 text-slate-700 placeholder-slate-400 font-medium text-sm sm:text-base">
+                <input type="text" id="ai-search-input" placeholder="ถามน้องโอ๋ AI: ส่งน้ำพริกยังไง? / ของแตกเคลมได้ไหม?..." class="w-full bg-transparent border-none focus:ring-0 text-slate-700 placeholder-slate-400 font-medium text-sm sm:text-base">
                 <button id="ai-search-btn" class="bg-slate-900 text-white px-5 py-2 rounded-xl font-medium hover:bg-black transition-colors flex items-center gap-2 shrink-0 text-sm">
                     <span>ถามน้องโอ๋</span>
                     <i data-lucide="send" class="w-4 h-4"></i>
@@ -122,7 +114,7 @@
                     </div>
                 </div>
                 <div class="mt-4 flex justify-between items-center border-t border-orange-100 pt-3">
-                    <span class="text-[10px] text-slate-400 italic">"ใจเย็นๆ นะคะ น้องโอ๋อยู่ช่วยพี่ๆ ทุกคนค่ะ"</span>
+                    <span class="text-[10px] text-slate-400 italic">"น้องโอ๋ช่วยสรุปให้สั้นและเข้าใจง่ายที่สุดค่ะ"</span>
                     <button id="clear-search" class="text-xs text-slate-400 hover:text-rose-500 flex items-center gap-1 transition-colors">
                         <i data-lucide="trash-2" class="w-3 h-3"></i> ล้างข้อมูล
                     </button>
@@ -131,137 +123,193 @@
         </div>
     </section>
 
-    <main class="max-w-4xl mx-auto px-4 mt-12 space-y-12">
+    <main class="max-w-4xl mx-auto px-4 mt-8 space-y-12">
 
-        <!-- NEW Section: Customer Conflict Management Scripts -->
-        <section id="conflict-scripts-section">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="bg-rose-100 p-2 rounded-lg text-rose-600">
-                    <i data-lucide="message-circle-warning" class="w-6 h-6"></i>
-                </div>
-                <h2 class="text-xl font-bold text-slate-800">สคริปต์แก้ปัญหาลูกค้า (Customer Service Scripts)</h2>
-            </div>
-            
-            <div class="grid grid-cols-1 gap-4">
-                <!-- Case 1: Delay -->
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-rose-300 transition-all">
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="script-badge bg-amber-100 text-amber-700 font-bold">กรณี: พัสดุล่าช้า</span>
-                            <button onclick="copyScript('delay-script')" class="text-xs text-blue-600 flex items-center gap-1 hover:underline">
-                                <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
-                            </button>
-                        </div>
-                        <p id="delay-script" class="text-sm text-slate-600 italic leading-relaxed">
-                            "ต้องขออภัยในความไม่สะดวกจริงๆ ค่ะคุณลูกค้า จากการตรวจสอบพบว่าพัสดุติดปัญหาที่ศูนย์กระจายสินค้า... ตอนนี้ทางสาขาเร่งประสานงานติดตามให้เป็นกรณีพิเศษแล้วค่ะ คาดว่าสถานะจะอัปเดตภายใน 24 ชม. นี้ค่ะ"
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Case 2: Damage -->
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-rose-300 transition-all">
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="script-badge bg-red-100 text-red-700 font-bold">กรณี: พัสดุเสียหาย</span>
-                            <button onclick="copyScript('damage-script')" class="text-xs text-blue-600 flex items-center gap-1 hover:underline">
-                                <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
-                            </button>
-                        </div>
-                        <p id="damage-script" class="text-sm text-slate-600 italic leading-relaxed">
-                            "ทางสาขาต้องขออภัยเป็นอย่างสูงสำหรับความผิดพลาดที่เกิดขึ้นค่ะ รบกวนคุณลูกค้าถ่ายรูปหน้ากล่องและจุดที่เสียหายไว้ได้ไหมคะ? ทางเราจะรีบส่งเรื่องทำเคลมกับทางขนส่งให้ทันที และจะคอยแจ้งความคืบหน้าให้ทราบทุกระยะค่ะ"
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Case 3: Angry Customer -->
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-rose-300 transition-all">
-                    <div class="p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="script-badge bg-slate-800 text-white font-bold">กรณี: ลูกค้าโวยวาย/โมโห</span>
-                            <button onclick="copyScript('angry-script')" class="text-xs text-blue-600 flex items-center gap-1 hover:underline">
-                                <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
-                            </button>
-                        </div>
-                        <p id="angry-script" class="text-sm text-slate-600 italic leading-relaxed">
-                            "เข้าใจความรู้สึกของคุณลูกค้าเลยค่ะ ทางเราไม่ได้นิ่งนอนใจและพร้อมรับผิดชอบแก้ไขให้เต็มที่ค่ะ รบกวนขอรหัสพัสดุหรือชื่อให้ทางเราบันทึกเรื่องเข้าสู่ระบบสำนักงานใหญ่เพื่อแก้ปัญหาให้ด่วนที่สุดเลยนะคะ"
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <p class="text-[10px] text-slate-400 mt-2">* พนักงานสามารถปรับเปลี่ยน "ค่ะ/ครับ" ตามความเหมาะสม</p>
-        </section>
-
-        <!-- Section 1: Tools -->
-        <section id="tools-summary">
-            <div class="flex items-center gap-2 mb-4">
+        <!-- Q&A Category Tabs -->
+        <section id="qa-database">
+            <div class="flex items-center gap-2 mb-6">
                 <div class="bg-blue-600 p-2 rounded-lg text-white">
-                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800">เครื่องมือหลักในระบบ</h2>
+                <h2 class="text-xl font-bold text-slate-800">คลังสคริปต์ถาม-ตอบ แยกตามหมวด</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <h3 class="font-bold text-blue-800 mb-2">น้องพอยท์ (Script Assistant)</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">เน้นสร้างสคริปต์ตอบแชทที่สมบูรณ์แบบโดยการเติมข้อมูลลูกค้าลงในเทมเพลตมาตรฐาน</p>
+
+            <!-- Category Filter Buttons -->
+            <div class="category-tab flex gap-2 overflow-x-auto pb-4 mb-4">
+                <button onclick="filterQA('all')" class="qa-filter-btn active bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-medium">ทั้งหมด</button>
+                <button onclick="filterQA('price')" class="qa-filter-btn bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-full text-xs font-medium hover:border-blue-400 transition-all">ราคา & พื้นฐาน</button>
+                <button onclick="filterQA('rule')" class="qa-filter-btn bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-full text-xs font-medium hover:border-blue-400 transition-all">ของต้องห้าม & เงื่อนไข</button>
+                <button onclick="filterQA('track')" class="qa-filter-btn bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-full text-xs font-medium hover:border-blue-400 transition-all">ติดตามพัสดุ & ปัญหา</button>
+                <button onclick="filterQA('claim')" class="qa-filter-btn bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-full text-xs font-medium hover:border-blue-400 transition-all">เคลม & ประกัน</button>
+            </div>
+
+            <!-- QA Grid -->
+            <div id="qa-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- Price & Basic -->
+                <div class="qa-item price bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-blue-500 font-bold uppercase mb-1 block">ราคา & พื้นฐาน</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: ส่งเจ้าไหนถูกสุดคะ?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ต้องขอนำพัสดุมาชั่งน้ำหนักและวัดขนาดก่อนครับ เพราะแต่ละขนส่งคิดราคาต่างกัน เดี๋ยวผมเช็คเทียบราคาให้ทุกเจ้าเพื่อให้พี่ได้ความคุ้มค่าที่สุดเลยครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
                 </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <h3 class="font-bold text-amber-800 mb-2">น้องโอ (Utility Tools)</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">ใช้คำนวณราคาค่าส่งจากหลายขนส่ง และสร้างรูปสรุปยอดโอนให้ลูกค้าดูง่าย</p>
+
+                <div class="qa-item price bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-blue-500 font-bold uppercase mb-1 block">ราคา & พื้นฐาน</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: ส่งวันนี้ ถึงเมื่อไหร่?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ปกติ 1-2 วันทำการครับ (ไม่นับวันส่ง) แต่ถ้าเป็นพื้นที่ห่างไกลอาจบวกเพิ่ม 1-2 วันครับ เดี๋ยวผมระบุวันที่คาดว่าจะได้รับในใบเสร็จให้ดูครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
                 </div>
+
+                <!-- Restrictions -->
+                <div class="qa-item rule bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-orange-500 font-bold uppercase mb-1 block">ของต้องห้าม & เงื่อนไข</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: ส่งของสด/ผลไม้ ได้ไหม?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ส่งได้ครับ แต่ต้องแพ็คลงกล่องเฉพาะ (เจาะรู) หรือใส่กล่องโฟมอัดน้ำแข็งให้แน่นหนาครับ เพื่อความปลอดภัยแนะนำรถควบคุมอุณหภูมิ (Cold Chain) ครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="qa-item rule bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-orange-500 font-bold uppercase mb-1 block">ของต้องห้าม & เงื่อนไข</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: ส่งน้ำพริก/ปลาร้า ได้ไหม?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ส่งได้ครับ แต่ต้องซีลปากขวดให้แน่น ใส่ถุงซิปล็อค และห่อบับเบิ้ลหนาๆ ครับ เพราะถ้าไหลออกมาเสียหาย ขนส่งจะไม่รับเคลมและอาจมีค่าปรับกรณีเลอะของคนอื่นครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Tracking & Issues -->
+                <div class="qa-item track bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-emerald-500 font-bold uppercase mb-1 block">ติดตาม & ปัญหา</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: เลขพัสดุ "ไม่พบข้อมูล"?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ต้องรอรถขนส่งยิงเข้าระบบ Hub ใหญ่ช่วงค่ำครับ สถานะถึงจะอัปเดตเข้าระบบกลาง พี่ลองเช็คอีกทีพรุ่งนี้เช้าได้เลยครับ ข้อมูลมาแน่นอน"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="qa-item track bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-emerald-500 font-bold uppercase mb-1 block">ติดตาม & ปัญหา</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: สำเร็จแต่ไม่ได้รับของ?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "เบื้องต้นอาจจะมีการฝากไว้ที่ป้อมยามหรือนิติบุคคลครับ เดี๋ยวผมรีบประสานงานขอรูปถ่ายหลักฐานการส่ง (POD) จากขนส่งมายืนยันให้พี่ทันทีครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Claims -->
+                <div class="qa-item claim bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-rose-500 font-bold uppercase mb-1 block">เคลม & ประกัน</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: ของแตกใครรับผิดชอบ?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ผมจะช่วยเปิดเคสเคลมให้ทันทีครับ รบกวนพี่ส่งคลิปวิดีโอตอนแกะกล่องเป็นหลักฐานสำคัญด้วยนะครับ การอนุมัติจะเป็นไปตามเงื่อนไขของสำนักงานใหญ่ขนส่งครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="qa-item claim bg-white p-4 rounded-2xl qa-card relative group">
+                    <span class="text-[10px] text-rose-500 font-bold uppercase mb-1 block">เคลม & ประกัน</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-2 italic">Q: ประกันคุ้มครองเท่าไหร่?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-8">
+                        "ปกติคุ้มครองสูงสุด 2,000 บาท/ชิ้นครับ (กรณีสูญหายจากขนส่ง) หากสินค้ามีมูลค่าสูง แนะนำซื้อประกันเพิ่มเพื่อให้คุ้มครองเต็มวงเงินนะครับ"
+                    </p>
+                    <button onclick="copyRawText(this)" class="absolute bottom-3 right-3 bg-slate-100 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
             </div>
         </section>
 
-        <!-- Section 3: FAQ -->
-        <section id="faq-section" class="bg-slate-100 rounded-3xl p-8 border border-slate-200">
-            <h2 class="text-xl font-bold mb-6 text-center text-slate-800">คำถามที่พบบ่อย (FAQ)</h2>
-            <div class="space-y-3">
-                <div class="faq-item bg-white p-4 rounded-xl shadow-sm border border-slate-100 cursor-pointer" onclick="toggleFaq(this)">
-                    <div class="flex justify-between items-center">
-                        <h4 class="font-bold text-sm text-slate-700">Q: หากลืมรหัสผ่านหรือล็อกอินไม่ได้?</h4>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform"></i>
-                    </div>
-                    <div class="faq-answer text-sm text-slate-500">
-                        A: ติดต่อกลุ่ม LINE ส่วนกลางแจ้งชื่อสาขาเพื่อรีเซ็ตรหัสผ่านใหม่ค่ะ
-                    </div>
-                </div>
-                <div class="faq-item bg-white p-4 rounded-xl shadow-sm border border-slate-100 cursor-pointer" onclick="toggleFaq(this)">
-                    <div class="flex justify-between items-center">
-                        <h4 class="font-bold text-sm text-slate-700">Q: หน้า Response Helper มีไว้ทำไม?</h4>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform"></i>
-                    </div>
-                    <div class="faq-answer text-sm text-slate-500">
-                        A: ใช้สำหรับตรวจสอบผลลัพธ์การทำรายการหลังกดชำระเงิน หรือดู Metadata เพื่อแก้ปัญหาเวลาข้อมูลไม่เข้าค่ะ
-                    </div>
-                </div>
+        <!-- Pro Tips Section -->
+        <section class="bg-blue-900 text-white rounded-3xl p-8 relative overflow-hidden">
+            <div class="absolute right-0 top-0 p-4 opacity-20">
+                <i data-lucide="lightbulb" class="w-24 h-24"></i>
+            </div>
+            <div class="relative z-10">
+                <h3 class="text-xl font-bold mb-4">💡 เคล็ดลับมือโปร (Pro Tips)</h3>
+                <ul class="space-y-3 text-sm text-blue-100">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check-square" class="w-4 h-4 mt-1 text-blue-400"></i>
+                        <span><strong>อย่ารับปาก 100%:</strong> ให้ใช้คำว่า "ปกติ 1-2 วัน" แทน "พรุ่งนี้ถึงแน่นอน" เพื่อลดดราม่ากรณีขนส่งติดขัด</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="camera" class="w-4 h-4 mt-1 text-blue-400"></i>
+                        <span><strong>รูปถ่ายคือพระเจ้า:</strong> ถ่ายรูปตอนชั่งน้ำหนักและสภาพกล่องไว้ทุกชิ้น ไว้ใช้ยันกับขนส่งเวลาลูกค้าโวยวาย</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="megaphone" class="w-4 h-4 mt-1 text-blue-400"></i>
+                        <span><strong>ป้ายเตือน:</strong> เขียนป้าย "เงื่อนไขการรับประกัน" ติดหน้าเคาน์เตอร์ตัวโตๆ ช่วยลดข้อโต้แย้งได้ 80%</span>
+                    </li>
+                </ul>
             </div>
         </section>
 
     </main>
 
     <footer class="mt-12 text-center text-slate-400 text-[10px] uppercase tracking-widest pb-12">
-        <p>© 2024 Paypoint Family Support System</p>
+        <p>© 2024 Paypoint Family | Professional Staff Support System</p>
     </footer>
 
     <!-- Custom Toast Message -->
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-2 rounded-full text-sm font-medium opacity-0 transition-opacity pointer-events-none z-[100]">
-        คัดลอกข้อความสำเร็จ!
+        คัดลอกสคริปต์สำเร็จ!
     </div>
 
     <script>
         lucide.createIcons();
 
-        function toggleFaq(el) {
-            el.classList.toggle('active');
+        function filterQA(category) {
+            const items = document.querySelectorAll('.qa-item');
+            const btns = document.querySelectorAll('.qa-filter-btn');
+            
+            btns.forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+
+            event.target.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+            event.target.classList.add('bg-slate-900', 'text-white');
+
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
         }
 
-        function copyScript(id) {
-            const text = document.getElementById(id).innerText;
-            const tempInput = document.createElement("textarea");
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
+        function copyRawText(btn) {
+            const p = btn.parentElement.querySelector('p');
+            const textToCopy = p.innerText.replace(/"/g, ''); // Remove quotes
+            
+            const el = document.createElement('textarea');
+            el.value = textToCopy;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
             
             showToast();
         }
@@ -272,12 +320,12 @@
             setTimeout(() => { toast.style.opacity = '0'; }, 2000);
         }
 
+        // AI Search Logic (Optimized for Flash)
         const searchInput = document.getElementById('ai-search-input');
         const searchBtn = document.getElementById('ai-search-btn');
         const responseContainer = document.getElementById('ai-response-container');
         const loadingEl = document.getElementById('ai-loading');
         const resultEl = document.getElementById('ai-result');
-        const clearBtn = document.getElementById('clear-search');
 
         const apiKey = ""; 
         
@@ -288,16 +336,10 @@
             loadingEl.classList.remove('hidden');
             resultEl.innerHTML = "";
             
-            const systemPrompt = `คุณคือ "น้องโอ๋ AI" ผู้ช่วยผู้เชี่ยวชาญด้านร้านรับส่งพัสดุ ประสบการณ์ 10 ปี
-            บุคลิก: ใจเย็นที่สุด, สุภาพมาก (คะ/ขา), เข้าใจปัญหาพนักงานสาขา
-            
-            หน้าที่ของคุณในวันนี้:
-            1. แนะนำสคริปต์การตอบลูกค้าในสถานการณ์ต่างๆ (ล่าช้า, เสียหาย, หาย, ลูกค้าโวยวาย)
-            2. ให้กำลังใจพนักงานสาขาเมื่อเจอลูกค้าใจร้อน
-            3. แนะนำการใช้งานหน้าหลัก, Response Helper, น้องพอยท์, และน้องโอ
-            
-            หากลูกค้าโมโห: ให้แนะนำพนักงานให้ใช้หลักการ "ขออภัย - รับฟัง - เสนอทางแก้" 
-            ใช้ข้อมูลสคริปต์ในคู่มือในการตอบหากตรงกับหัวข้อนะคะ`;
+            const systemPrompt = `คุณคือ "น้องโอ๋ AI" ผู้ช่วยผู้เชี่ยวชาญร้านรับส่งพัสดุ 10 ปี
+            บุคลิก: ใจเย็น, สุภาพมาก (คะ/ขา), ตอบสั้น กระชับ และแก้ปัญหาได้จริง
+            ข้อมูล: ให้ใช้สคริปต์จาก 5 หมวดในคู่มือ (ราคา, กฎระเบียบ, ติดตาม, เคลม, เทคนิค) มาสรุปตอบให้พนักงาน
+            หากมีการถามถึงของต้องห้ามหรือวิธีคุยกับลูกค้า ให้ดึงสคริปต์ที่สั้นที่สุดมาแนะนำค่ะ`;
 
             try {
                 let retries = 0;
@@ -323,9 +365,9 @@
                     }
                 }
 
-                if (!success) throw new Error('น้องโอ๋ขออภัยค่ะ ระบบสะดุดนิดหน่อย ลองใหม่อีกทีนะคะ');
+                if (!success) throw new Error('น้องโอ๋ขออภัยค่ะ ระบบสะดุดนิดหน่อย');
 
-                const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "ลองถามน้องโอ๋อีกครั้งนะคะ";
+                const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "ลองถามใหม่อีกครั้งนะคะ";
                 loadingEl.classList.add('hidden');
                 resultEl.innerHTML = formatAIResponse(answer);
                 lucide.createIcons();
@@ -339,13 +381,11 @@
         function formatAIResponse(text) {
             return text
                 .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-800">$1</strong>')
-                .replace(/\n/g, '<br>')
-                .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline">$1</a>');
+                .replace(/\n/g, '<br>');
         }
 
         searchBtn.addEventListener('click', () => askAI(searchInput.value));
         searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') askAI(searchInput.value); });
-        clearBtn.addEventListener('click', () => { responseContainer.classList.add('hidden'); searchInput.value = ""; });
     </script>
 </body>
 </html>
