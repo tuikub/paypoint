@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือการใช้งานระบบ - Paypoint Staff Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background-color: #f8fafc; 
+            color: #334155; 
+            scroll-behavior: smooth;
+        }
+        .step-card { 
+            border-left: 4px solid #3b82f6; 
+            transition: all 0.2s ease;
+        }
+        .step-card:hover {
+            transform: translateX(5px);
+            background-color: #eff6ff;
+        }
+        .nong-o-card {
+            border-left: 4px solid #f59e0b;
+        }
+        .nong-o-card:hover {
+            background-color: #fffbeb;
+        }
+        .ai-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="https://tuikub.github.io/tracking//paypoint.png" alt="Logo" class="w-8 h-8 rounded-full" onerror="this.src='https://via.placeholder.com/32'">
+                <span class="font-bold text-slate-800">Staff Manual</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    น้องโอ๋ AI พร้อมช่วยเหลือ
+                </div>
+                <a href="staff_login.html" class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> เข้าสู่ระบบ
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white py-12 px-4 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"></path>
+            </svg>
+        </div>
+        <div class="relative z-10">
+            <h1 class="text-3xl font-bold mb-2">คู่มือการใช้งานสำหรับสาขา</h1>
+            <p class="text-slate-400 max-w-xl mx-auto">รวบรวมเทคนิคการดูแลลูกค้า และวิธีการใช้งานระบบฉบับมืออาชีพ</p>
+        </div>
+    </header>
+
+    <!-- AI Search Section (Nong Oh AI) -->
+    <section class="max-w-3xl mx-auto px-4 -mt-8 relative z-10">
+        <div class="bg-white rounded-2xl shadow-xl p-2 ai-glow border border-blue-100">
+            <div class="flex items-center gap-3 p-2">
+                <div class="bg-orange-500 p-2 rounded-xl text-white">
+                    <i data-lucide="user-check" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="ai-search-input" placeholder="ถามน้องโอ๋ AI ผู้เชี่ยวชาญงานสาขา..." class="w-full bg-transparent border-none focus:ring-0 text-slate-700 placeholder-slate-400 font-medium">
+                <button id="ai-search-btn" class="bg-slate-900 text-white px-5 py-2 rounded-xl font-medium hover:bg-black transition-colors flex items-center gap-2 shrink-0">
+                    <span class="hidden sm:inline">ถามน้องโอ๋</span>
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- AI Response Box -->
+            <div id="ai-response-container" class="hidden mt-2 p-5 border-t border-slate-50 bg-orange-50/20 rounded-b-xl">
+                <div class="flex items-start gap-3">
+                    <div class="bg-white p-1.5 rounded-lg shadow-sm shrink-0 border border-orange-100">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Nong Oh AI" class="w-6 h-6">
+                    </div>
+                    <div class="flex-1">
+                        <div id="ai-loading" class="hidden items-center gap-2 text-orange-600 font-medium py-1">
+                            <span class="loading-dots text-sm text-slate-500 font-normal italic">น้องโอ๋กำลังนึกคำตอบให้สักครู่นะคะ</span>
+                        </div>
+                        <div id="ai-result" class="text-sm text-slate-700 leading-relaxed prose prose-orange max-w-none">
+                            <!-- AI response will appear here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-between items-center border-t border-orange-100 pt-3">
+                    <span class="text-[10px] text-slate-400">น้องโอ๋ AI | ประสบการณ์งานพัสดุ 10+ ปี</span>
+                    <button id="clear-search" class="text-xs text-slate-400 hover:text-rose-500 flex items-center gap-1 transition-colors">
+                        <i data-lucide="trash-2" class="w-3 h-3"></i> ล้างข้อมูล
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Suggestions -->
+        <div class="flex flex-wrap gap-2 mt-4 justify-center">
+            <button onclick="quickSearch('ลูกค้าโวยวายเรื่องของช้า แก้ไขยังไงดี?')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-full text-slate-500 hover:border-orange-400 hover:text-orange-600 transition-all shadow-sm">
+                ลูกค้าโวยวาย แก้ไขยังไง?
+            </button>
+            <button onclick="quickSearch('น้องพอยท์กับน้องโอต่างกันยังไง?')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-full text-slate-500 hover:border-orange-400 hover:text-orange-600 transition-all shadow-sm">
+                พอยท์ vs โอ ต่างกันยังไง?
+            </button>
+            <button onclick="quickSearch('วิธีคัดลอกสคริปต์จากน้องพอยท์')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-full text-slate-500 hover:border-orange-400 hover:text-orange-600 transition-all shadow-sm">
+                วิธีคัดลอกสคริปต์
+            </button>
+        </div>
+    </section>
+
+    <main class="max-w-4xl mx-auto px-4 mt-12 space-y-12">
+
+        <!-- Section 1: AI Assistant (Nong Point) -->
+        <section id="nong-point-section">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                    <i data-lucide="bot" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">1. การใช้งาน AI Assistant (น้องพอยท์)</h2>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 space-y-4">
+                    <p class="text-sm text-slate-500 mb-2 italic">* เน้นการสร้างชุดคำตอบตามสคริปต์ที่ตั้งไว้ เพื่อความรวดเร็วและเป็นมาตรฐาน</p>
+                    <div class="step-card bg-slate-50 p-4 rounded-r-xl">
+                        <h3 class="font-bold text-blue-800 mb-1">ใส่ข้อมูลลูกค้า</h3>
+                        <p class="text-sm text-slate-600">กรอกชื่อลูกค้า เลขพัสดุ หรือราคา ในแถบข้าง ระบบจะเติมข้อมูลในประโยคให้อัตโนมัติในทุกสคริปต์</p>
+                    </div>
+                    <div class="step-card bg-slate-50 p-4 rounded-r-xl border-blue-400">
+                        <h3 class="font-bold text-blue-800 mb-1">คัดลอกและส่ง</h3>
+                        <p class="text-sm text-slate-600">เลือกประโยคที่ต้องการ กดปุ่มคัดลอก และวางในช่องแชท (Line/Facebook) ได้ทันที</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Chat Assistant Tool (Nong Oh) -->
+        <section id="nong-o-section">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="bg-amber-100 p-2 rounded-lg text-amber-600">
+                    <i data-lucide="message-square-more" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">2. เครื่องมือช่วยตอบแชท (น้องโอ)</h2>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 space-y-6">
+                    <p class="text-sm text-slate-500 mb-2 italic">* เครื่องมืออเนกประสงค์สำหรับงานหน้าเคาน์เตอร์ และการปิดการขาย</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
+                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
+                                <i data-lucide="calculator" class="w-4 h-4"></i> คำนวณค่าส่งแม่นยำ
+                            </h3>
+                            <p class="text-sm text-slate-600">เปรียบเทียบราคาจากทุกขนส่งในหน้าเดียว ช่วยให้พนักงานแจ้งยอดลูกค้าได้รวดเร็วไม่ผิดพลาด</p>
+                        </div>
+                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
+                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
+                                <i data-lucide="image" class="w-4 h-4"></i> สร้างรูปภาพสรุปยอด
+                            </h3>
+                            <p class="text-sm text-slate-600">เปลี่ยนตัวเลขสรุปยอดให้กลายเป็นรูปภาพสวยงาม ส่งให้ลูกค้าดูง่ายและดูเป็นมืออาชีพ</p>
+                        </div>
+                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
+                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
+                                <i data-lucide="clock" class="w-4 h-4"></i> ระบบติดตามพัสดุ
+                            </h3>
+                            <p class="text-sm text-slate-600">ใส่เลขพัสดุเพื่อดึงสถานะล่าสุดมาตอบลูกค้าได้ทันที ไม่ต้องเข้าเว็บแยก</p>
+                        </div>
+                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
+                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
+                                <i data-lucide="smile" class="w-4 h-4"></i> ตัวช่วยแก้ปัญหาหน้างาน
+                            </h3>
+                            <p class="text-sm text-slate-600">รวมเทคนิคการแก้ปัญหาเฉพาะหน้าที่พนักงานสาขามักเจอในการให้บริการ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: FAQ -->
+        <section id="faq-section" class="bg-slate-100 rounded-3xl p-8 border border-slate-200">
+            <h2 class="text-xl font-bold mb-6 text-center text-slate-800">คำถามพบบ่อยสำหรับสาขา</h2>
+            <div class="space-y-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm">
+                    <h4 class="font-bold text-sm text-blue-600 mb-1">Q: หากรหัสผ่านล็อกอินไม่ได้ทำอย่างไร?</h4>
+                    <p class="text-sm text-slate-500 font-light italic leading-relaxed">A: ติดต่อเจ้าหน้าที่เทคนิคของ Paypoint HQ เพื่อทำการรีเซ็ตรหัสผ่านใหม่ครับ</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm">
+                    <h4 class="font-bold text-sm text-blue-600 mb-1">Q: หากข้อมูลจาก "น้องโอ" ไม่ตรงกับหน้าเว็บขนส่ง?</h4>
+                    <p class="text-sm text-slate-500 font-light italic leading-relaxed">A: ให้ยึดข้อมูลจากเว็บหลักขนส่งเป็นสำคัญ และรีบแจ้งส่วนกลางเพื่ออัปเดตระบบครับ</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 text-center text-slate-400 text-[10px] uppercase tracking-widest">
+        <p>© 2024 Paypoint Family Support System</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const searchInput = document.getElementById('ai-search-input');
+        const searchBtn = document.getElementById('ai-search-btn');
+        const responseContainer = document.getElementById('ai-response-container');
+        const loadingEl = document.getElementById('ai-loading');
+        const resultEl = document.getElementById('ai-result');
+        const clearBtn = document.getElementById('clear-search');
+
+        // Gemini API Configuration
+        const apiKey = ""; // Set to empty as per instruction, will be injected by environment
+        
+        async function askAI(query) {
+            if (!query.trim()) return;
+
+            responseContainer.classList.remove('hidden');
+            loadingEl.classList.remove('hidden');
+            resultEl.innerHTML = "";
+            
+            // Context from the manual
+            const manualText = Array.from(document.querySelectorAll('main section')).map(s => s.innerText).join('\n');
+            
+            const systemPrompt = `คุณคือ "น้องโอ๋ AI" ผู้ช่วยผู้เชี่ยวชาญด้านร้านรับส่งพัสดุที่มีประสบการณ์มากกว่า 10 ปี 
+            คุณเข้าใจปัญหาของสาขาทุกมิติ ทั้งเรื่องระบบ การบริการ และปัญหาลูกค้า
+            บุคลิกของคุณคือ: ใจเย็น, รอบคอบ, พูดจาสุภาพ (ใช้คะ/ขา), และให้คำแนะนำที่นำไปใช้ได้จริง 
+            
+            หน้าที่ของคุณ: 
+            1. ตอบคำถามเกี่ยวกับคู่มือ Paypoint นี้
+            2. ให้คำแนะนำเรื่องการบริการลูกค้า โดยเฉพาะในกรณีที่ลูกค้ามีปัญหาหรือโกรธ 
+            3. สรุปความแตกต่างของเครื่องมือ "น้องพอยท์" และ "น้องโอ"
+            
+            หากคำถามไม่อยู่ในคู่มือ ให้ใช้ประสบการณ์ 10 ปีของคุณแนะนำแนวทางที่ประนีประนอมที่สุด
+            
+            ข้อมูลคู่มือพนักงานเบื้องต้น:
+            ${manualText}`;
+
+            try {
+                let retries = 0;
+                let success = false;
+                let data;
+
+                while (retries < 5 && !success) {
+                    try {
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: query }] }],
+                                systemInstruction: { parts: [{ text: systemPrompt }] }
+                            })
+                        });
+                        
+                        if (!response.ok) throw new Error('API Error');
+                        data = await response.json();
+                        success = true;
+                    } catch (err) {
+                        retries++;
+                        await new Promise(r => setTimeout(r, Math.pow(2, retries) * 1000));
+                    }
+                }
+
+                if (!success) throw new Error('น้องโอ๋ขออภัยค่ะ พอดีระบบเชื่อมต่อติดขัดเล็กน้อย ลองใหม่อีกครั้งนะคะ');
+
+                const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "น้องโอ๋ยังหาคำตอบที่ชัดเจนไม่ได้ ลองติดต่อทีมส่วนกลางดูนะคะ";
+                
+                loadingEl.classList.add('hidden');
+                resultEl.innerHTML = formatAIResponse(answer);
+                lucide.createIcons();
+
+            } catch (error) {
+                loadingEl.classList.add('hidden');
+                resultEl.innerHTML = `<span class="text-rose-500 font-medium">เกิดข้อผิดพลาด: ${error.message}</span>`;
+            }
+        }
+
+        function formatAIResponse(text) {
+            // Markdown-ish formatting
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-800">$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/- (.*?)(<br>|$)/g, '<li class="ml-4 mb-1">$1</li>');
+        }
+
+        function quickSearch(text) {
+            searchInput.value = text;
+            askAI(text);
+        }
+
+        searchBtn.addEventListener('click', () => askAI(searchInput.value));
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') askAI(searchInput.value);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            responseContainer.classList.add('hidden');
+            searchInput.value = "";
+        });
+    </script>
+</body>
+</html>
