@@ -41,6 +41,24 @@
             60% { content: '...'; }
             80%, 100% { content: ''; }
         }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 400px;
+            margin-top: 0.5rem;
+        }
+        .faq-item.active i {
+            transform: rotate(180deg);
+        }
+        .script-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body class="min-h-screen pb-12">
@@ -53,12 +71,12 @@
                 <span class="font-bold text-slate-800">Staff Manual</span>
             </div>
             <div class="flex items-center gap-4">
-                <div class="hidden md:flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                <div class="hidden md:flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
                     <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    น้องโอ๋ AI พร้อมช่วยเหลือ
+                    น้องโอ๋ AI (Flash Mode)
                 </div>
-                <a href="staff_login.html" class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
-                    <i data-lucide="log-in" class="w-4 h-4"></i> เข้าสู่ระบบ
+                <a href="https://tuikub.github.io/paypoint/" class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                    <i data-lucide="home" class="w-4 h-4"></i> หน้าหลัก
                 </a>
             </div>
         </div>
@@ -73,25 +91,24 @@
         </div>
         <div class="relative z-10">
             <h1 class="text-3xl font-bold mb-2">คู่มือการใช้งานสำหรับสาขา</h1>
-            <p class="text-slate-400 max-w-xl mx-auto">รวบรวมเทคนิคการดูแลลูกค้า และวิธีการใช้งานระบบฉบับมืออาชีพ</p>
+            <p class="text-slate-400 max-w-xl mx-auto italic font-light">"รวมเทคนิคการใช้งานระบบ และสคริปต์แก้ปัญหาลูกค้ามืออาชีพ"</p>
         </div>
     </header>
 
-    <!-- AI Search Section (Nong Oh AI) -->
+    <!-- AI Search Section -->
     <section class="max-w-3xl mx-auto px-4 -mt-8 relative z-10">
         <div class="bg-white rounded-2xl shadow-xl p-2 ai-glow border border-blue-100">
             <div class="flex items-center gap-3 p-2">
                 <div class="bg-orange-500 p-2 rounded-xl text-white">
-                    <i data-lucide="user-check" class="w-5 h-5"></i>
+                    <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
-                <input type="text" id="ai-search-input" placeholder="ถามน้องโอ๋ AI ผู้เชี่ยวชาญงานสาขา..." class="w-full bg-transparent border-none focus:ring-0 text-slate-700 placeholder-slate-400 font-medium">
-                <button id="ai-search-btn" class="bg-slate-900 text-white px-5 py-2 rounded-xl font-medium hover:bg-black transition-colors flex items-center gap-2 shrink-0">
-                    <span class="hidden sm:inline">ถามน้องโอ๋</span>
+                <input type="text" id="ai-search-input" placeholder="ถามน้องโอ๋ AI เรื่องวิธีคุยกับลูกค้า หรือปัญหาหน้างาน..." class="w-full bg-transparent border-none focus:ring-0 text-slate-700 placeholder-slate-400 font-medium text-sm sm:text-base">
+                <button id="ai-search-btn" class="bg-slate-900 text-white px-5 py-2 rounded-xl font-medium hover:bg-black transition-colors flex items-center gap-2 shrink-0 text-sm">
+                    <span>ถามน้องโอ๋</span>
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </div>
             
-            <!-- AI Response Box -->
             <div id="ai-response-container" class="hidden mt-2 p-5 border-t border-slate-50 bg-orange-50/20 rounded-b-xl">
                 <div class="flex items-start gap-3">
                     <div class="bg-white p-1.5 rounded-lg shadow-sm shrink-0 border border-orange-100">
@@ -99,126 +116,161 @@
                     </div>
                     <div class="flex-1">
                         <div id="ai-loading" class="hidden items-center gap-2 text-orange-600 font-medium py-1">
-                            <span class="loading-dots text-sm text-slate-500 font-normal italic">น้องโอ๋กำลังนึกคำตอบให้สักครู่นะคะ</span>
+                            <span class="loading-dots text-sm text-slate-500 font-normal italic">น้องโอ๋กำลังสรุปคำตอบให้นะคะ</span>
                         </div>
-                        <div id="ai-result" class="text-sm text-slate-700 leading-relaxed prose prose-orange max-w-none">
-                            <!-- AI response will appear here -->
-                        </div>
+                        <div id="ai-result" class="text-sm text-slate-700 leading-relaxed prose prose-orange max-w-none"></div>
                     </div>
                 </div>
                 <div class="mt-4 flex justify-between items-center border-t border-orange-100 pt-3">
-                    <span class="text-[10px] text-slate-400">น้องโอ๋ AI | ประสบการณ์งานพัสดุ 10+ ปี</span>
+                    <span class="text-[10px] text-slate-400 italic">"ใจเย็นๆ นะคะ น้องโอ๋อยู่ช่วยพี่ๆ ทุกคนค่ะ"</span>
                     <button id="clear-search" class="text-xs text-slate-400 hover:text-rose-500 flex items-center gap-1 transition-colors">
                         <i data-lucide="trash-2" class="w-3 h-3"></i> ล้างข้อมูล
                     </button>
                 </div>
             </div>
         </div>
-        
-        <!-- Suggestions -->
-        <div class="flex flex-wrap gap-2 mt-4 justify-center">
-            <button onclick="quickSearch('ลูกค้าโวยวายเรื่องของช้า แก้ไขยังไงดี?')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-full text-slate-500 hover:border-orange-400 hover:text-orange-600 transition-all shadow-sm">
-                ลูกค้าโวยวาย แก้ไขยังไง?
-            </button>
-            <button onclick="quickSearch('น้องพอยท์กับน้องโอต่างกันยังไง?')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-full text-slate-500 hover:border-orange-400 hover:text-orange-600 transition-all shadow-sm">
-                พอยท์ vs โอ ต่างกันยังไง?
-            </button>
-            <button onclick="quickSearch('วิธีคัดลอกสคริปต์จากน้องพอยท์')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-full text-slate-500 hover:border-orange-400 hover:text-orange-600 transition-all shadow-sm">
-                วิธีคัดลอกสคริปต์
-            </button>
-        </div>
     </section>
 
     <main class="max-w-4xl mx-auto px-4 mt-12 space-y-12">
 
-        <!-- Section 1: AI Assistant (Nong Point) -->
-        <section id="nong-point-section">
+        <!-- NEW Section: Customer Conflict Management Scripts -->
+        <section id="conflict-scripts-section">
             <div class="flex items-center gap-2 mb-4">
-                <div class="bg-blue-100 p-2 rounded-lg text-blue-600">
-                    <i data-lucide="bot" class="w-6 h-6"></i>
+                <div class="bg-rose-100 p-2 rounded-lg text-rose-600">
+                    <i data-lucide="message-circle-warning" class="w-6 h-6"></i>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800">1. การใช้งาน AI Assistant (น้องพอยท์)</h2>
+                <h2 class="text-xl font-bold text-slate-800">สคริปต์แก้ปัญหาลูกค้า (Customer Service Scripts)</h2>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="p-6 space-y-4">
-                    <p class="text-sm text-slate-500 mb-2 italic">* เน้นการสร้างชุดคำตอบตามสคริปต์ที่ตั้งไว้ เพื่อความรวดเร็วและเป็นมาตรฐาน</p>
-                    <div class="step-card bg-slate-50 p-4 rounded-r-xl">
-                        <h3 class="font-bold text-blue-800 mb-1">ใส่ข้อมูลลูกค้า</h3>
-                        <p class="text-sm text-slate-600">กรอกชื่อลูกค้า เลขพัสดุ หรือราคา ในแถบข้าง ระบบจะเติมข้อมูลในประโยคให้อัตโนมัติในทุกสคริปต์</p>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Case 1: Delay -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-rose-300 transition-all">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="script-badge bg-amber-100 text-amber-700 font-bold">กรณี: พัสดุล่าช้า</span>
+                            <button onclick="copyScript('delay-script')" class="text-xs text-blue-600 flex items-center gap-1 hover:underline">
+                                <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
+                            </button>
+                        </div>
+                        <p id="delay-script" class="text-sm text-slate-600 italic leading-relaxed">
+                            "ต้องขออภัยในความไม่สะดวกจริงๆ ค่ะคุณลูกค้า จากการตรวจสอบพบว่าพัสดุติดปัญหาที่ศูนย์กระจายสินค้า... ตอนนี้ทางสาขาเร่งประสานงานติดตามให้เป็นกรณีพิเศษแล้วค่ะ คาดว่าสถานะจะอัปเดตภายใน 24 ชม. นี้ค่ะ"
+                        </p>
                     </div>
-                    <div class="step-card bg-slate-50 p-4 rounded-r-xl border-blue-400">
-                        <h3 class="font-bold text-blue-800 mb-1">คัดลอกและส่ง</h3>
-                        <p class="text-sm text-slate-600">เลือกประโยคที่ต้องการ กดปุ่มคัดลอก และวางในช่องแชท (Line/Facebook) ได้ทันที</p>
+                </div>
+
+                <!-- Case 2: Damage -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-rose-300 transition-all">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="script-badge bg-red-100 text-red-700 font-bold">กรณี: พัสดุเสียหาย</span>
+                            <button onclick="copyScript('damage-script')" class="text-xs text-blue-600 flex items-center gap-1 hover:underline">
+                                <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
+                            </button>
+                        </div>
+                        <p id="damage-script" class="text-sm text-slate-600 italic leading-relaxed">
+                            "ทางสาขาต้องขออภัยเป็นอย่างสูงสำหรับความผิดพลาดที่เกิดขึ้นค่ะ รบกวนคุณลูกค้าถ่ายรูปหน้ากล่องและจุดที่เสียหายไว้ได้ไหมคะ? ทางเราจะรีบส่งเรื่องทำเคลมกับทางขนส่งให้ทันที และจะคอยแจ้งความคืบหน้าให้ทราบทุกระยะค่ะ"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Case 3: Angry Customer -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-rose-300 transition-all">
+                    <div class="p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="script-badge bg-slate-800 text-white font-bold">กรณี: ลูกค้าโวยวาย/โมโห</span>
+                            <button onclick="copyScript('angry-script')" class="text-xs text-blue-600 flex items-center gap-1 hover:underline">
+                                <i data-lucide="copy" class="w-3 h-3"></i> คัดลอก
+                            </button>
+                        </div>
+                        <p id="angry-script" class="text-sm text-slate-600 italic leading-relaxed">
+                            "เข้าใจความรู้สึกของคุณลูกค้าเลยค่ะ ทางเราไม่ได้นิ่งนอนใจและพร้อมรับผิดชอบแก้ไขให้เต็มที่ค่ะ รบกวนขอรหัสพัสดุหรือชื่อให้ทางเราบันทึกเรื่องเข้าสู่ระบบสำนักงานใหญ่เพื่อแก้ปัญหาให้ด่วนที่สุดเลยนะคะ"
+                        </p>
                     </div>
                 </div>
             </div>
+            <p class="text-[10px] text-slate-400 mt-2">* พนักงานสามารถปรับเปลี่ยน "ค่ะ/ครับ" ตามความเหมาะสม</p>
         </section>
 
-        <!-- Section 2: Chat Assistant Tool (Nong Oh) -->
-        <section id="nong-o-section">
+        <!-- Section 1: Tools -->
+        <section id="tools-summary">
             <div class="flex items-center gap-2 mb-4">
-                <div class="bg-amber-100 p-2 rounded-lg text-amber-600">
-                    <i data-lucide="message-square-more" class="w-6 h-6"></i>
+                <div class="bg-blue-600 p-2 rounded-lg text-white">
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800">2. เครื่องมือช่วยตอบแชท (น้องโอ)</h2>
+                <h2 class="text-xl font-bold text-slate-800">เครื่องมือหลักในระบบ</h2>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="p-6 space-y-6">
-                    <p class="text-sm text-slate-500 mb-2 italic">* เครื่องมืออเนกประสงค์สำหรับงานหน้าเคาน์เตอร์ และการปิดการขาย</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
-                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
-                                <i data-lucide="calculator" class="w-4 h-4"></i> คำนวณค่าส่งแม่นยำ
-                            </h3>
-                            <p class="text-sm text-slate-600">เปรียบเทียบราคาจากทุกขนส่งในหน้าเดียว ช่วยให้พนักงานแจ้งยอดลูกค้าได้รวดเร็วไม่ผิดพลาด</p>
-                        </div>
-                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
-                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
-                                <i data-lucide="image" class="w-4 h-4"></i> สร้างรูปภาพสรุปยอด
-                            </h3>
-                            <p class="text-sm text-slate-600">เปลี่ยนตัวเลขสรุปยอดให้กลายเป็นรูปภาพสวยงาม ส่งให้ลูกค้าดูง่ายและดูเป็นมืออาชีพ</p>
-                        </div>
-                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
-                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
-                                <i data-lucide="clock" class="w-4 h-4"></i> ระบบติดตามพัสดุ
-                            </h3>
-                            <p class="text-sm text-slate-600">ใส่เลขพัสดุเพื่อดึงสถานะล่าสุดมาตอบลูกค้าได้ทันที ไม่ต้องเข้าเว็บแยก</p>
-                        </div>
-                        <div class="nong-o-card bg-slate-50 p-4 rounded-r-xl">
-                            <h3 class="font-bold text-amber-800 mb-1 flex items-center gap-2">
-                                <i data-lucide="smile" class="w-4 h-4"></i> ตัวช่วยแก้ปัญหาหน้างาน
-                            </h3>
-                            <p class="text-sm text-slate-600">รวมเทคนิคการแก้ปัญหาเฉพาะหน้าที่พนักงานสาขามักเจอในการให้บริการ</p>
-                        </div>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-blue-800 mb-2">น้องพอยท์ (Script Assistant)</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">เน้นสร้างสคริปต์ตอบแชทที่สมบูรณ์แบบโดยการเติมข้อมูลลูกค้าลงในเทมเพลตมาตรฐาน</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-amber-800 mb-2">น้องโอ (Utility Tools)</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">ใช้คำนวณราคาค่าส่งจากหลายขนส่ง และสร้างรูปสรุปยอดโอนให้ลูกค้าดูง่าย</p>
                 </div>
             </div>
         </section>
 
         <!-- Section 3: FAQ -->
         <section id="faq-section" class="bg-slate-100 rounded-3xl p-8 border border-slate-200">
-            <h2 class="text-xl font-bold mb-6 text-center text-slate-800">คำถามพบบ่อยสำหรับสาขา</h2>
-            <div class="space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-sm text-blue-600 mb-1">Q: หากรหัสผ่านล็อกอินไม่ได้ทำอย่างไร?</h4>
-                    <p class="text-sm text-slate-500 font-light italic leading-relaxed">A: ติดต่อเจ้าหน้าที่เทคนิคของ Paypoint HQ เพื่อทำการรีเซ็ตรหัสผ่านใหม่ครับ</p>
+            <h2 class="text-xl font-bold mb-6 text-center text-slate-800">คำถามที่พบบ่อย (FAQ)</h2>
+            <div class="space-y-3">
+                <div class="faq-item bg-white p-4 rounded-xl shadow-sm border border-slate-100 cursor-pointer" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-sm text-slate-700">Q: หากลืมรหัสผ่านหรือล็อกอินไม่ได้?</h4>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform"></i>
+                    </div>
+                    <div class="faq-answer text-sm text-slate-500">
+                        A: ติดต่อกลุ่ม LINE ส่วนกลางแจ้งชื่อสาขาเพื่อรีเซ็ตรหัสผ่านใหม่ค่ะ
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-sm text-blue-600 mb-1">Q: หากข้อมูลจาก "น้องโอ" ไม่ตรงกับหน้าเว็บขนส่ง?</h4>
-                    <p class="text-sm text-slate-500 font-light italic leading-relaxed">A: ให้ยึดข้อมูลจากเว็บหลักขนส่งเป็นสำคัญ และรีบแจ้งส่วนกลางเพื่ออัปเดตระบบครับ</p>
+                <div class="faq-item bg-white p-4 rounded-xl shadow-sm border border-slate-100 cursor-pointer" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-sm text-slate-700">Q: หน้า Response Helper มีไว้ทำไม?</h4>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform"></i>
+                    </div>
+                    <div class="faq-answer text-sm text-slate-500">
+                        A: ใช้สำหรับตรวจสอบผลลัพธ์การทำรายการหลังกดชำระเงิน หรือดู Metadata เพื่อแก้ปัญหาเวลาข้อมูลไม่เข้าค่ะ
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="mt-12 text-center text-slate-400 text-[10px] uppercase tracking-widest">
+    <footer class="mt-12 text-center text-slate-400 text-[10px] uppercase tracking-widest pb-12">
         <p>© 2024 Paypoint Family Support System</p>
     </footer>
 
+    <!-- Custom Toast Message -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-2 rounded-full text-sm font-medium opacity-0 transition-opacity pointer-events-none z-[100]">
+        คัดลอกข้อความสำเร็จ!
+    </div>
+
     <script>
         lucide.createIcons();
+
+        function toggleFaq(el) {
+            el.classList.toggle('active');
+        }
+
+        function copyScript(id) {
+            const text = document.getElementById(id).innerText;
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            showToast();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
 
         const searchInput = document.getElementById('ai-search-input');
         const searchBtn = document.getElementById('ai-search-btn');
@@ -227,8 +279,7 @@
         const resultEl = document.getElementById('ai-result');
         const clearBtn = document.getElementById('clear-search');
 
-        // Gemini API Configuration
-        const apiKey = ""; // Set to empty as per instruction, will be injected by environment
+        const apiKey = ""; 
         
         async function askAI(query) {
             if (!query.trim()) return;
@@ -237,22 +288,16 @@
             loadingEl.classList.remove('hidden');
             resultEl.innerHTML = "";
             
-            // Context from the manual
-            const manualText = Array.from(document.querySelectorAll('main section')).map(s => s.innerText).join('\n');
+            const systemPrompt = `คุณคือ "น้องโอ๋ AI" ผู้ช่วยผู้เชี่ยวชาญด้านร้านรับส่งพัสดุ ประสบการณ์ 10 ปี
+            บุคลิก: ใจเย็นที่สุด, สุภาพมาก (คะ/ขา), เข้าใจปัญหาพนักงานสาขา
             
-            const systemPrompt = `คุณคือ "น้องโอ๋ AI" ผู้ช่วยผู้เชี่ยวชาญด้านร้านรับส่งพัสดุที่มีประสบการณ์มากกว่า 10 ปี 
-            คุณเข้าใจปัญหาของสาขาทุกมิติ ทั้งเรื่องระบบ การบริการ และปัญหาลูกค้า
-            บุคลิกของคุณคือ: ใจเย็น, รอบคอบ, พูดจาสุภาพ (ใช้คะ/ขา), และให้คำแนะนำที่นำไปใช้ได้จริง 
+            หน้าที่ของคุณในวันนี้:
+            1. แนะนำสคริปต์การตอบลูกค้าในสถานการณ์ต่างๆ (ล่าช้า, เสียหาย, หาย, ลูกค้าโวยวาย)
+            2. ให้กำลังใจพนักงานสาขาเมื่อเจอลูกค้าใจร้อน
+            3. แนะนำการใช้งานหน้าหลัก, Response Helper, น้องพอยท์, และน้องโอ
             
-            หน้าที่ของคุณ: 
-            1. ตอบคำถามเกี่ยวกับคู่มือ Paypoint นี้
-            2. ให้คำแนะนำเรื่องการบริการลูกค้า โดยเฉพาะในกรณีที่ลูกค้ามีปัญหาหรือโกรธ 
-            3. สรุปความแตกต่างของเครื่องมือ "น้องพอยท์" และ "น้องโอ"
-            
-            หากคำถามไม่อยู่ในคู่มือ ให้ใช้ประสบการณ์ 10 ปีของคุณแนะนำแนวทางที่ประนีประนอมที่สุด
-            
-            ข้อมูลคู่มือพนักงานเบื้องต้น:
-            ${manualText}`;
+            หากลูกค้าโมโห: ให้แนะนำพนักงานให้ใช้หลักการ "ขออภัย - รับฟัง - เสนอทางแก้" 
+            ใช้ข้อมูลสคริปต์ในคู่มือในการตอบหากตรงกับหัวข้อนะคะ`;
 
             try {
                 let retries = 0;
@@ -269,7 +314,6 @@
                                 systemInstruction: { parts: [{ text: systemPrompt }] }
                             })
                         });
-                        
                         if (!response.ok) throw new Error('API Error');
                         data = await response.json();
                         success = true;
@@ -279,42 +323,29 @@
                     }
                 }
 
-                if (!success) throw new Error('น้องโอ๋ขออภัยค่ะ พอดีระบบเชื่อมต่อติดขัดเล็กน้อย ลองใหม่อีกครั้งนะคะ');
+                if (!success) throw new Error('น้องโอ๋ขออภัยค่ะ ระบบสะดุดนิดหน่อย ลองใหม่อีกทีนะคะ');
 
-                const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "น้องโอ๋ยังหาคำตอบที่ชัดเจนไม่ได้ ลองติดต่อทีมส่วนกลางดูนะคะ";
-                
+                const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "ลองถามน้องโอ๋อีกครั้งนะคะ";
                 loadingEl.classList.add('hidden');
                 resultEl.innerHTML = formatAIResponse(answer);
                 lucide.createIcons();
 
             } catch (error) {
                 loadingEl.classList.add('hidden');
-                resultEl.innerHTML = `<span class="text-rose-500 font-medium">เกิดข้อผิดพลาด: ${error.message}</span>`;
+                resultEl.innerHTML = `<span class="text-rose-500">${error.message}</span>`;
             }
         }
 
         function formatAIResponse(text) {
-            // Markdown-ish formatting
             return text
                 .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-800">$1</strong>')
                 .replace(/\n/g, '<br>')
-                .replace(/- (.*?)(<br>|$)/g, '<li class="ml-4 mb-1">$1</li>');
-        }
-
-        function quickSearch(text) {
-            searchInput.value = text;
-            askAI(text);
+                .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-600 underline">$1</a>');
         }
 
         searchBtn.addEventListener('click', () => askAI(searchInput.value));
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') askAI(searchInput.value);
-        });
-
-        clearBtn.addEventListener('click', () => {
-            responseContainer.classList.add('hidden');
-            searchInput.value = "";
-        });
+        searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') askAI(searchInput.value); });
+        clearBtn.addEventListener('click', () => { responseContainer.classList.add('hidden'); searchInput.value = ""; });
     </script>
 </body>
 </html>
