@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือการโต้แย้งค่าปรับส่วนต่างค่าขนส่ง</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts: Sarabun & Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Markdown Parser for AI responses -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f3f4f6;
+        }
+        h1, h2, h3, .font-prompt {
+            font-family: 'Prompt', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8800 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* Pulse Animation for AI Button */
+        @keyframes subtle-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+        }
+        .ai-pulse {
+            animation: subtle-pulse 2s infinite;
+        }
+
+        /* Chat Window Styles */
+        #chat-window {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: bottom right;
+        }
+        .chat-message {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 relative min-h-screen">
+
+    <!-- Header Section -->
+    <header class="gradient-bg text-white pb-12 pt-6 px-4 shadow-lg rounded-b-3xl">
+        <div class="max-w-3xl mx-auto">
+            <!-- Back to Home Link -->
+            <a href="https://tuikub.github.io/paypoint/" class="inline-flex items-center text-white text-opacity-90 hover:text-opacity-100 hover:bg-white hover:bg-opacity-10 px-3 py-1.5 rounded-lg transition mb-2">
+                <i class="fas fa-chevron-left mr-2"></i> กลับหน้าหลัก
+            </a>
+
+            <div class="text-center">
+                <div class="mb-4 inline-block p-3 bg-white bg-opacity-20 rounded-full">
+                    <i class="fas fa-balance-scale text-3xl"></i>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold mb-2">คู่มือการโต้แย้งค่าปรับ</h1>
+                <p class="text-white text-opacity-90">ส่วนต่างค่าขนส่ง (Weight & Dimension Surcharge)</p>
+                <div class="mt-4 inline-block bg-white text-orange-600 px-4 py-1 rounded-full text-sm font-bold shadow-sm">
+                    สำหรับเจ้าของแฟรนไชส์
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 -mt-8 pb-12">
+        
+        <!-- Warning Alert -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6 border-l-4 border-red-500 card-hover">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-xl mt-1"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-bold text-red-600 mb-1">คำเตือนสำคัญ!</h3>
+                    <p class="text-gray-600">
+                        ห้ามกดปุ่ม <span class="font-bold text-red-600">"ยืนยันยอมรับ" (Accept)</span> โดยเด็ดขาด หากท่านต้องการโต้แย้ง เพราะถ้ากดแล้วจะไม่สามารถยื่นเรื่องได้อีก
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 Golden Rules (จากโจทย์ 5 ขั้นตอน/ข้อ) -->
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-xl shadow-sm text-center card-hover">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-calendar-alt text-xl"></i>
+                </div>
+                <h4 class="font-bold text-lg mb-2">5 วันทำการ</h4>
+                <p class="text-sm text-gray-500">ต้องยื่นเรื่องภายใน 5 วันหลังจากได้รับแจ้ง</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm text-center card-hover">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-undo-alt text-xl"></i>
+                </div>
+                <h4 class="font-bold text-lg mb-2">สูงสุด 2 ครั้ง</h4>
+                <p class="text-sm text-gray-500">โต้แย้งได้สูงสุด 2 ครั้งต่อ 1 รายการพัสดุ</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm text-center card-hover">
+                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-camera text-xl"></i>
+                </div>
+                <h4 class="font-bold text-lg mb-2">หลักฐานภาพถ่าย</h4>
+                <p class="text-sm text-gray-500">ต้องมีภาพพัสดุบนตาชั่งที่ชัดเจนประกอบการยื่น</p>
+            </div>
+        </div>
+
+        <!-- Prevention Section -->
+        <section class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-100">
+                <h2 class="font-bold text-xl text-gray-800"><i class="fas fa-shield-alt text-green-500 mr-2"></i>วิธีป้องกันค่าปรับ</h2>
+            </div>
+            <div class="p-6">
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <div>
+                            <span class="font-bold text-gray-800">คีย์ข้อมูลตามจริง:</span>
+                            <span class="text-gray-600">วัดขนาด (กว้าง x ยาว x สูง) และชั่งน้ำหนักให้เป๊ะ อย่ากะด้วยสายตา</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <div>
+                            <span class="font-bold text-gray-800">เก็บหลักฐานทุกชิ้น:</span>
+                            <span class="text-gray-600">ถ่ายรูปพัสดุวางบนเครื่องชั่ง ให้เห็นตัวเลขน้ำหนักและสายวัดขนาด เก็บไว้ในคอมพิวเตอร์หรือ Cloud</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <div>
+                            <span class="font-bold text-gray-800">ใช้ Web Cam:</span>
+                            <span class="text-gray-600">ติดตั้งกล้อง Web Cam เชื่อมต่อระบบ เพื่อบันทึกภาพอัตโนมัติขณะคีย์งาน (ถ้ามี)</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Q&A Section -->
+        <section class="mb-8">
+            <h2 class="font-bold text-2xl text-gray-800 mb-4 px-2">ถาม-ตอบ ข้อสงสัย (Q&A)</h2>
+            
+            <div class="space-y-3">
+                <!-- Q1 -->
+                <details class="group bg-white rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800 hover:bg-gray-50 rounded-xl transition">
+                        <span><i class="fas fa-question-circle text-orange-500 mr-2"></i> ส่วนต่างค่าขนส่ง เกิดจากอะไร?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="text-gray-600 mt-0 px-5 pb-5 border-t border-gray-100 pt-3">
+                        เกิดจากการที่ข้อมูลน้ำหนักหรือขนาดพัสดุที่สาขาคีย์เข้าระบบ <strong>"น้อยกว่า"</strong> ข้อมูลที่ศูนย์กระจายสินค้า (Hub) ของขนส่งวัดได้จริง ระบบจึงเรียกเก็บเงินส่วนต่างเพิ่ม
+                    </div>
+                </details>
+
+                <!-- Q2 -->
+                <details class="group bg-white rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800 hover:bg-gray-50 rounded-xl transition">
+                        <span><i class="fas fa-clock text-orange-500 mr-2"></i> เงินจะถูกหักออกจากระบบตอนไหน?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="text-gray-600 mt-0 px-5 pb-5 border-t border-gray-100 pt-3">
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>หากยื่นคำร้อง<strong>ไม่ผ่าน</strong> หรือครบกำหนดเวลา: เงินจะถูกหักในวันถัดไป</li>
+                            <li>รอบการหักเงิน: วันละ 2 รอบ คือ <strong>10:00 น.</strong> และ <strong>16:00 น.</strong></li>
+                            <li>หากเครดิตในระบบไม่พอ: ระบบจะรอหักเมื่อมีการเติมเครดิตเข้ามาจนครบยอด</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- Q3 -->
+                <details class="group bg-white rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800 hover:bg-gray-50 rounded-xl transition">
+                        <span><i class="fas fa-file-upload text-orange-500 mr-2"></i> ต้องเตรียมไฟล์อะไรบ้างในการยื่น?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="text-gray-600 mt-0 px-5 pb-5 border-t border-gray-100 pt-3">
+                        ท่านต้องแนบรูปภาพหรือเอกสารประกอบ (รองรับไฟล์ .jpg, .png, .pdf) ขนาดไม่เกิน 5 MB
+                        <br><strong>สำคัญ:</strong> ภาพต้องชัดเจน เห็นตัวเลขบนตาชั่ง และเห็นสภาพกล่องพัสดุ
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Resources / Links Section -->
+        <section class="bg-gray-800 text-white rounded-xl shadow-md p-6">
+            <h2 class="font-bold text-xl mb-4"><i class="fas fa-video mr-2"></i>สื่อการเรียนรู้เพิ่มเติม</h2>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <!-- Video Link 1 -->
+                <a href="https://youtu.be/LpfwEJ-AtUM" target="_blank" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
+                    <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                        <i class="fas fa-play text-white"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">ขั้นตอนการโต้แย้ง (คลิป 1)</h4>
+                        <p class="text-xs text-gray-400">กดเพื่อรับชมผ่าน YouTube</p>
+                    </div>
+                </a>
+
+                <!-- Video Link 2 -->
+                <a href="https://youtu.be/xcSDlgpNEOY" target="_blank" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
+                    <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
+                        <i class="fas fa-play text-white"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">ขั้นตอนการโต้แย้ง (คลิป 2)</h4>
+                        <p class="text-xs text-gray-400">กดเพื่อรับชมผ่าน YouTube</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-gray-700 flex flex-col md:flex-row gap-3">
+                <a href="https://shorturl.asia/RT04Z" target="_blank" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition font-medium">
+                    <i class="fas fa-book-open mr-2"></i>คู่มือการใช้งาน (PDF)
+                </a>
+                <a href="https://drive.google.com/drive/folders/1n07S7mnoAJP59cjj6AVQsNFe1JsXX30c" target="_blank" class="flex-1 text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition font-medium">
+                    <i class="fab fa-google-drive mr-2"></i>คลังข้อมูล (Drive)
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center mt-8 text-gray-500 text-sm pb-8">
+            <p>&copy; 2024 PAYPOINT FAMILY SYSTEM SUPPORT. ALL RIGHTS RESERVED</p>
+            <p class="mt-1">Pratya Chatmontree</p>
+            <a href="https://tuikub.github.io/paypoint/" class="inline-block mt-2 text-orange-500 hover:text-orange-600 font-medium">กลับสู่หน้าหลัก</a>
+        </footer>
+
+    </main>
+
+    <!-- Chat Interface -->
+    <div id="chat-container" class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-end">
+        
+        <!-- Chat Window (Hidden by default) -->
+        <div id="chat-window" class="bg-white w-[90vw] md:w-96 h-[500px] rounded-2xl shadow-2xl flex flex-col mb-4 hidden border border-gray-200 overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-700 p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-white text-indigo-600 rounded-full flex items-center justify-center font-bold">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm">AI กูรูขนส่ง</h3>
+                        <p class="text-xs text-indigo-200">ผู้เชี่ยวชาญประสบการณ์ 10 ปี+</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Messages Area -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-4">
+                <!-- Welcome Message -->
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-indigo-600 text-xs"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm border border-gray-100">
+                        <p>สวัสดีครับ! ผมคือ AI กูรูขนส่ง 🚚<br>มีปัญหาเรื่องค่าปรับ การเคลม หรือการแพ็คของ ถามผมได้เลยครับ!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-3 bg-white border-t border-gray-100">
+                <div class="flex gap-2">
+                    <input type="text" id="user-input" placeholder="พิมพ์คำถามของคุณที่นี่..." 
+                           class="flex-1 bg-gray-100 border-0 rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                           onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md">
+                        <i class="fas fa-paper-plane text-sm"></i>
+                    </button>
+                </div>
+                <p class="text-[10px] text-center text-gray-400 mt-2">AI สามารถตอบผิดพลาดได้ โปรดตรวจสอบข้อมูลสำคัญอีกครั้ง</p>
+            </div>
+        </div>
+
+        <!-- Floating Button -->
+        <button id="chat-toggle-btn" onclick="toggleChat()" class="group flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-700 text-white px-5 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-white border-opacity-30 ai-pulse">
+            <div class="text-right hidden md:block group-hover:block transition-all duration-300">
+                <p class="text-[10px] md:text-xs text-indigo-100 font-medium tracking-wide">มีปัญหาปรึกษาผม</p>
+                <p class="font-bold text-sm md:text-base leading-tight">AI กูรูขนส่ง <span class="text-[10px] font-normal bg-white bg-opacity-20 px-1 rounded ml-1">10 ปี+</span></p>
+            </div>
+            <div class="bg-white text-indigo-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-inner relative">
+                <i class="fas fa-robot text-lg md:text-2xl animate-bounce"></i>
+                <span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // ==========================================
+        //  ส่วนตั้งค่า API KEY (สำคัญมาก!)
+        // ==========================================
+        
+        // ▼▼▼ วาง API Key ของคุณในบรรทัดด้านล่างนี้ (แทนที่คำว่า วาง_API_KEY_ของคุณที่นี่) ▼▼▼
+        const API_KEY = "วาง_API_KEY_ของคุณที่นี่"; 
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+        
+        const chatWindow = document.getElementById('chat-window');
+        const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const messagesContainer = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+
+        // Toggle Chat Window
+        function toggleChat() {
+            if (chatWindow.classList.contains('hidden')) {
+                chatWindow.classList.remove('hidden');
+                // Hide text label on mobile when open
+                if(window.innerWidth < 768) {
+                    chatToggleBtn.querySelector('.text-right').classList.add('hidden');
+                }
+                setTimeout(() => userInput.focus(), 100);
+            } else {
+                chatWindow.classList.add('hidden');
+            }
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 1. Add User Message
+            addMessage(text, 'user');
+            userInput.value = '';
+
+            // 2. Show Loading
+            const loadingId = addLoading();
+
+            try {
+                // Check API Key
+                if (!API_KEY || API_KEY.includes('วาง_API_KEY')) {
+                    throw new Error("กรุณาใส่ API Key ในโค้ดบรรทัดที่ระบุไว้ก่อนใช้งานครับ");
+                }
+
+                // 3. Call Gemini API
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `คุณคือผู้เชี่ยวชาญด้านธุรกิจขนส่งเอกชนและแฟรนไชส์ไปรษณีย์ที่มีประสบการณ์กว่า 10 ปี ชื่อว่า "AI กูรูขนส่ง"
+                                หน้าที่ของคุณคือให้คำปรึกษาเจ้าของแฟรนไชส์ เกี่ยวกับปัญหาการขนส่ง, การแพ็คของ, การโต้แย้งค่าปรับ, และกฎระเบียบต่างๆ
+                                จงตอบคำถามต่อไปนี้ด้วยน้ำเสียงที่เป็นมิตร มืออาชีพ และเข้าใจง่าย สั้นกระชับ:
+                                "${text}"`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Remove loading
+                document.getElementById(loadingId).remove();
+
+                if (data.error) {
+                    addMessage("ขออภัย ระบบขัดข้อง: " + data.error.message, 'bot');
+                } else {
+                    const botReply = data.candidates[0].content.parts[0].text;
+                    addMessage(botReply, 'bot');
+                }
+
+            } catch (error) {
+                document.getElementById(loadingId)?.remove();
+                addMessage("เกิดข้อผิดพลาด: " + error.message, 'bot');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `flex items-start gap-2.5 chat-message ${sender === 'user' ? 'flex-row-reverse' : ''}`;
+            
+            const avatar = sender === 'bot' 
+                ? `<div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-robot text-indigo-600 text-xs"></i></div>`
+                : `<div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-user text-gray-600 text-xs"></i></div>`;
+
+            const bubbleClass = sender === 'bot'
+                ? 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
+                : 'bg-indigo-600 text-white rounded-tr-none';
+
+            // Parse Markdown for bot response
+            const content = sender === 'bot' ? marked.parse(text) : text;
+
+            div.innerHTML = `
+                ${avatar}
+                <div class="p-3 rounded-2xl shadow-sm text-sm max-w-[80%] ${bubbleClass}">
+                    <div class="prose prose-sm ${sender === 'user' ? 'text-white' : ''}">${content}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addLoading() {
+            const id = 'loading-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex items-start gap-2.5 chat-message';
+            div.innerHTML = `
+                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-robot text-indigo-600 text-xs"></i></div>
+                <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
+                    <div class="flex gap-1">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return id;
+        }
+    </script>
+</body>
+</html>
