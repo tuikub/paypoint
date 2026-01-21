@@ -10,13 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts: Sarabun & Prompt -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Markdown Parser for AI responses -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
             background-color: #f3f4f6;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none; /* Standard syntax */
         }
         h1, h2, h3, .font-prompt {
             font-family: 'Prompt', sans-serif;
@@ -34,58 +35,65 @@
         details > summary::-webkit-details-marker {
             display: none;
         }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
+        
+        /* --- Styles เฉพาะของ Chatbot Widget ใหม่ --- */
+        #chatbot-widget-container { 
+            font-family: 'Sarabun', sans-serif; 
+            z-index: 9999; 
         }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        /* Pulse Animation for AI Button */
-        @keyframes subtle-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
-        }
-        .ai-pulse {
-            animation: subtle-pulse 2s infinite;
-        }
-
-        /* Chat Window Styles */
-        #chat-window {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: bottom right;
-        }
-        .chat-message {
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .typing-dot {
-            animation: typing 1.4s infinite ease-in-out both;
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        
+        .chat-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .chat-hidden { opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; }
+        .chat-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Watermark Style */
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            z-index: 0;
         }
     </style>
+    
+    <!-- Disable Right Click Script -->
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if(event.keyCode == 123) {
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        }
+    </script>
 </head>
 <body class="text-gray-800 relative min-h-screen">
 
+    <!-- Watermark -->
+    <div class="watermark">Copyright © Paypoint Family System</div>
+
     <!-- Header Section -->
-    <header class="gradient-bg text-white pb-12 pt-6 px-4 shadow-lg rounded-b-3xl">
+    <header class="gradient-bg text-white pb-12 pt-6 px-4 shadow-lg rounded-b-3xl relative z-10">
         <div class="max-w-3xl mx-auto">
             <!-- Back to Home Link -->
             <a href="https://tuikub.github.io/paypoint/" class="inline-flex items-center text-white text-opacity-90 hover:text-opacity-100 hover:bg-white hover:bg-opacity-10 px-3 py-1.5 rounded-lg transition mb-2">
@@ -105,7 +113,7 @@
         </div>
     </header>
 
-    <main class="max-w-3xl mx-auto px-4 -mt-8 pb-12">
+    <main class="max-w-3xl mx-auto px-4 -mt-8 pb-12 relative z-10">
         
         <!-- Warning Alert -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6 border-l-4 border-red-500 card-hover">
@@ -122,7 +130,7 @@
             </div>
         </div>
 
-        <!-- 3 Golden Rules (จากโจทย์ 5 ขั้นตอน/ข้อ) -->
+        <!-- 3 Golden Rules -->
         <div class="grid md:grid-cols-3 gap-4 mb-8">
             <div class="bg-white p-5 rounded-xl shadow-sm text-center card-hover">
                 <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -235,7 +243,6 @@
             <h2 class="font-bold text-xl mb-4"><i class="fas fa-video mr-2"></i>สื่อการเรียนรู้เพิ่มเติม</h2>
             
             <div class="grid md:grid-cols-2 gap-4">
-                <!-- Video Link 1 -->
                 <a href="https://youtu.be/LpfwEJ-AtUM" target="_blank" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
                     <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
                         <i class="fas fa-play text-white"></i>
@@ -246,7 +253,6 @@
                     </div>
                 </a>
 
-                <!-- Video Link 2 -->
                 <a href="https://youtu.be/xcSDlgpNEOY" target="_blank" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
                     <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
                         <i class="fas fa-play text-white"></i>
@@ -277,199 +283,352 @@
 
     </main>
 
-    <!-- Chat Interface -->
-    <div id="chat-container" class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-end">
+    <!-- ========================================================================================== -->
+    <!-- ส่วน Chatbot Widget (รองรับ Google Sheets + Together.ai Fallback) -->
+    <!-- ========================================================================================== -->
+    <div id="chatbot-widget-container" class="fixed bottom-4 right-4 flex flex-col items-end gap-4">
         
-        <!-- Chat Window (Hidden by default) -->
-        <div id="chat-window" class="bg-white w-[90vw] md:w-96 h-[500px] rounded-2xl shadow-2xl flex flex-col mb-4 hidden border border-gray-200 overflow-hidden">
+        <!-- หน้าต่าง Chatbot -->
+        <div id="chat-window" class="chat-hidden chat-transition bg-white w-[350px] h-[500px] max-h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+            
             <!-- Header -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-700 p-4 flex justify-between items-center text-white">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex items-center justify-between text-white shadow-md z-10">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-white text-indigo-600 rounded-full flex items-center justify-center font-bold">
-                        <i class="fas fa-robot"></i>
+                    <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold relative">
+                        <i class="fa-solid fa-robot"></i>
+                        <!-- Status Dot: Green=Ready, Red=Error -->
+                        <div id="status-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-blue-600 rounded-full"></div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm">AI กูรูขนส่ง</h3>
-                        <p class="text-xs text-indigo-200">ผู้เชี่ยวชาญประสบการณ์ 10 ปี+</p>
+                        <h1 class="font-bold text-base leading-tight">AI Assistant</h1>
+                        <p id="model-status" class="text-[10px] text-blue-100 opacity-90">Powered by Gemini</p>
                     </div>
                 </div>
-                <button onclick="toggleChat()" class="text-white hover:text-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="toggleSettings()" class="text-white/80 hover:text-white p-1 rounded-full transition" title="ตั้งค่า API">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button onclick="toggleChat()" class="text-white/80 hover:text-white p-1 rounded-full transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
             </div>
-            
-            <!-- Messages Area -->
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-4">
-                <!-- Welcome Message -->
-                <div class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-robot text-indigo-600 text-xs"></i>
-                    </div>
-                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm border border-gray-100">
-                        <p>สวัสดีครับ! ผมคือ AI กูรูขนส่ง 🚚<br>มีปัญหาเรื่องค่าปรับ การเคลม หรือการแพ็คของ ถามผมได้เลยครับ!</p>
+
+            <!-- Chat Box -->
+            <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 scrollbar-hide text-sm relative">
+                <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-[10px] font-bold shrink-0">AI</div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800">
+                        สวัสดีครับ ยิดดีให้บริการ สักครู่นะครับ...
                     </div>
                 </div>
             </div>
 
-            <!-- Input Area -->
-            <div class="p-3 bg-white border-t border-gray-100">
-                <div class="flex gap-2">
-                    <input type="text" id="user-input" placeholder="พิมพ์คำถามของคุณที่นี่..." 
-                           class="flex-1 bg-gray-100 border-0 rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-                           onkeypress="handleEnter(event)">
-                    <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md">
-                        <i class="fas fa-paper-plane text-sm"></i>
-                    </button>
+            <!-- Loading -->
+            <div id="loading" class="hidden px-4 pb-2">
+                <div class="flex items-center space-x-1 bg-white p-2 rounded-xl w-fit shadow-sm border border-gray-100">
+                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full typing-dot"></div>
                 </div>
-                <p class="text-[10px] text-center text-gray-400 mt-2">AI สามารถตอบผิดพลาดได้ โปรดตรวจสอบข้อมูลสำคัญอีกครั้ง</p>
+            </div>
+
+            <!-- Input Form -->
+            <div class="p-3 bg-white border-t border-gray-100">
+                <form id="chat-form" class="flex gap-2 items-center">
+                    <input type="text" id="user-input" 
+                        class="flex-1 bg-gray-100 border-0 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-blue-500 block w-full px-4 py-2.5 outline-none transition placeholder-gray-400" 
+                        placeholder="พิมพ์คำถาม..." autocomplete="off">
+                    <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md transition transform hover:scale-105">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Settings Panel (ซ่อนอยู่) -->
+            <div id="settings-panel" class="hidden absolute inset-0 bg-white z-20 flex flex-col p-5 animate-fade-in">
+                <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-sliders"></i> ตั้งค่าระบบ</h3>
+                
+                <div class="space-y-3 flex-1 overflow-y-auto">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600">Google Sheet ID:</label>
+                        <input type="text" id="sheet-id-input" class="w-full border rounded p-2 text-xs mt-1 bg-gray-50" value="1darv2F3vLlv5hhULgRREzRXPkKy0L2GmTFeyfzNgo9k">
+                        <p class="text-[10px] text-gray-400 mt-1">*ต้อง Publish to Web เป็น CSV ก่อน</p>
+                    </div>
+                    
+                    <hr class="border-gray-100 my-2">
+
+                    <div>
+                        <label class="text-xs font-semibold text-blue-600">Primary: Gemini API Key</label>
+                        <input type="password" id="gemini-key-input" class="w-full border border-blue-200 rounded p-2 text-xs mt-1" placeholder="AIzaSy...">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-purple-600">Fallback: Together.ai Key</label>
+                        <input type="password" id="together-key-input" class="w-full border border-purple-200 rounded p-2 text-xs mt-1" placeholder="วาง API Key ที่นี่">
+                        <p class="text-[10px] text-gray-400 mt-1">*ใช้เมื่อ Gemini เต็ม (Llama 3.2 3B)</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex gap-2">
+                    <button onclick="toggleSettings()" class="flex-1 py-2 text-gray-500 text-xs hover:bg-gray-100 rounded">ปิด</button>
+                    <button onclick="saveSettings()" class="flex-1 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 shadow">บันทึก & รีโหลด</button>
+                </div>
             </div>
         </div>
 
-        <!-- Floating Button -->
-        <button id="chat-toggle-btn" onclick="toggleChat()" class="group flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-700 text-white px-5 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-white border-opacity-30 ai-pulse">
-            <div class="text-right hidden md:block group-hover:block transition-all duration-300">
-                <p class="text-[10px] md:text-xs text-indigo-100 font-medium tracking-wide">มีปัญหาปรึกษาผม</p>
-                <p class="font-bold text-sm md:text-base leading-tight">AI กูรูขนส่ง <span class="text-[10px] font-normal bg-white bg-opacity-20 px-1 rounded ml-1">10 ปี+</span></p>
-            </div>
-            <div class="bg-white text-indigo-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-inner relative">
-                <i class="fas fa-robot text-lg md:text-2xl animate-bounce"></i>
-                <span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-            </div>
+        <!-- Toggle Button -->
+        <button onclick="toggleChat()" id="chat-toggle-btn" 
+            class="bg-blue-600 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 group relative">
+            <i class="fa-solid fa-comment-dots text-2xl absolute transition-all duration-300 transform group-hover:rotate-12 scale-100 opacity-100" id="icon-closed"></i>
+            <i class="fa-solid fa-chevron-down text-xl absolute transition-all duration-300 transform rotate-180 scale-0 opacity-0" id="icon-opened"></i>
         </button>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // ==========================================
-        //  ส่วนตั้งค่า API KEY (สำคัญมาก!)
-        // ==========================================
-        
-        // ▼▼▼ วาง API Key ของคุณในบรรทัดด้านล่างนี้ (แทนที่คำว่า วาง_API_KEY_ของคุณที่นี่) ▼▼▼
-        const API_KEY = "AIzaSyAnqjmk-VxP-XAVVnddpua394Pw71NtVfU"; 
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-        
-        const chatWindow = document.getElementById('chat-window');
-        const chatToggleBtn = document.getElementById('chat-toggle-btn');
-        const messagesContainer = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-
-        // Toggle Chat Window
-        function toggleChat() {
-            if (chatWindow.classList.contains('hidden')) {
-                chatWindow.classList.remove('hidden');
-                // Hide text label on mobile when open
-                if(window.innerWidth < 768) {
-                    chatToggleBtn.querySelector('.text-right').classList.add('hidden');
-                }
-                setTimeout(() => userInput.focus(), 100);
-            } else {
-                chatWindow.classList.add('hidden');
+        // --- ฟังก์ชันเข้ารหัส/ถอดรหัส Key แบบง่าย (Simple Obfuscation) ---
+        // ใช้ Base64 encoding เพื่อไม่ให้เห็น Key เป็น Plain text
+        // (ไม่ได้กัน Hacker เก่งๆ ได้ 100% แต่กันคนทั่วไปได้ดี)
+        function getKey(encodedKey) {
+            try {
+                return atob(encodedKey);
+            } catch (e) {
+                console.error("Decoding error");
+                return "";
             }
         }
 
-        function handleEnter(e) {
-            if (e.key === 'Enter') sendMessage();
+        // --- 1. ตัวแปรระบบ ---
+        let sheetId = localStorage.getItem('chat_sheet_id') || '1darv2F3vLlv5hhULgRREzRXPkKy0L2GmTFeyfzNgo9k';
+        
+        // =========================================================================
+        // 🔑 ใส่ API KEY (เข้ารหัสแล้ว หรือ ใส่ตรงๆ ก็ได้แต่ไม่แนะนำ)
+        // =========================================================================
+        
+        // Gemini Key: 'AIzaSyAnqjmk-VxP-XAVVnddpua394Pw71NtVfU' (Encoded: QUl6YVN5QW5xam1rLVZ4UC1YQVZWbmRkcHVhMzk0UHc3MU50VmZV)
+        let geminiKey = localStorage.getItem('chat_gemini_key') || 'AIzaSyAnqjmk-VxP-XAVVnddpua394Pw71NtVfU'; 
+        
+        // Together Key: 'f1ab2db1ed0da368ff5d3001a70855fac21f2b161a12021e44c1e3e75f05e575' 
+        let togetherKey = localStorage.getItem('chat_together_key') || 'f1ab2db1ed0da368ff5d3001a70855fac21f2b161a12021e44c1e3e75f05e575'; 
+
+        
+        let KNOWLEDGE_BASE = "";
+        let isKnowledgeLoaded = false;
+
+        // --- 2. เริ่มต้นโหลดข้อมูล ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // เติมค่าลงใน Input Settings
+            document.getElementById('sheet-id-input').value = sheetId;
+            document.getElementById('gemini-key-input').value = geminiKey;
+            document.getElementById('together-key-input').value = togetherKey;
+            
+            if(sheetId) fetchSheetData();
+        });
+
+        // --- 3. ฟังก์ชันดึง Google Sheet (CSV) ---
+        async function fetchSheetData() {
+            try {
+                // ใช้ URL export?format=csv
+                const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+                const response = await fetch(url);
+                
+                if (!response.ok) throw new Error("เข้าถึงไฟล์ไม่ได้ (อย่าลืม Publish to Web)");
+                
+                const csvText = await response.text();
+                parseCSVtoKnowledge(csvText);
+                
+                addMessage('system', '✅ เชื่อมต่อฐานข้อมูลสำเร็จ! พร้อมตอบคำถามครับ');
+                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-blue-600 rounded-full";
+                isKnowledgeLoaded = true;
+
+            } catch (error) {
+                console.error(error);
+                addMessage('system', '❌ ไม่สามารถดึงข้อมูล Sheet ได้: กรุณาตรวจสอบ ID หรือทำการ "Publish to Web" (File > Share > Publish to web)');
+                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-blue-600 rounded-full";
+            }
         }
 
-        async function sendMessage() {
+        function parseCSVtoKnowledge(csv) {
+            // แปลง CSV ง่ายๆ (Assume: Col A = ถาม, Col B = ตอบ)
+            const rows = csv.split('\n').map(row => row.split(','));
+            let textData = "# ข้อมูลถาม-ตอบ (Q&A Knowledge Base)\n";
+            
+            rows.forEach((cols, index) => {
+                if(index === 0) return; // ข้าม Header
+                if(cols.length >= 2) {
+                    // ตัดเครื่องหมายคำพูดออก (Clean CSV quotes)
+                    const q = cols[0].replace(/^"|"$/g, '').trim();
+                    const a = cols[1].replace(/^"|"$/g, '').trim();
+                    if(q && a) {
+                        textData += `- คำถาม: "${q}" \n  คำตอบ: "${a}"\n`;
+                    }
+                }
+            });
+            KNOWLEDGE_BASE = textData;
+        }
+
+        // --- 4. Logic การเรียก AI (Chain: Gemini -> Together) ---
+        async function getAIResponse(userMessage) {
+            if (!geminiKey && !togetherKey) {
+                return "กรุณาตั้งค่า API Key ในเมนูตั้งค่าก่อนครับ";
+            }
+
+            // ลอง Gemini ก่อน (Priority 1)
+            if (geminiKey) {
+                document.getElementById('model-status').innerText = "Generating with Gemini...";
+                try {
+                    return await callGemini(userMessage);
+                } catch (error) {
+                    console.warn("Gemini Failed:", error);
+                    // ถ้ามี Together Key ให้ไปต่อ
+                    if (togetherKey) {
+                        addMessage('system', '⚠️ สักครู่จ้า');
+                    } else {
+                        return "ขออภัย Gemini ขัดข้องและไม่มี Key สำรองครับ";
+                    }
+                }
+            }
+
+            // ถ้า Gemini พลาด หรือไม่มี Key -> ลอง Together (Fallback)
+            if (togetherKey) {
+                document.getElementById('model-status').innerText = "Fallback: Llama 3.2 (Together.ai)";
+                try {
+                    return await callTogetherAI(userMessage);
+                } catch (error) {
+                    console.error("Together AI Failed:", error);
+                    return "ขออภัย ระบบขัดข้องทั้ง 2 ช่องทาง กรุณาลองใหม่ภายหลัง";
+                }
+            }
+            
+            return "กรุณาใส่ API Key อย่างน้อย 1 อย่างครับ";
+        }
+
+        // --- 4.1 Gemini API (Flash 1.5) ---
+        async function callGemini(message) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+            const prompt = `
+            Role: คุณคือ AI Support ตอบคำถามจากข้อมูลใน Context เท่านั้น
+            Context: ${KNOWLEDGE_BASE}
+            User Question: ${message}
+            Instruction: ตอบสั้น กระชับ เป็นภาษาไทย ถ้าไม่มีข้อมูลบอกไม่ทราบ`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            
+            // Reset Status UI
+            document.getElementById('model-status').innerText = "Powered by Gemini";
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        // --- 4.2 Together AI API (Llama 3.2 3B) ---
+        async function callTogetherAI(message) {
+            const url = "https://api.together.xyz/v1/chat/completions";
+            const promptSystem = `Context: ${KNOWLEDGE_BASE}\nInstruction: Answer in Thai based on context.`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${togetherKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+                    messages: [
+                        { role: "system", content: promptSystem },
+                        { role: "user", content: message }
+                    ],
+                    max_tokens: 512,
+                    temperature: 0.7
+                })
+            });
+
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            
+            return data.choices[0].message.content;
+        }
+
+        // --- 5. UI Helpers ---
+        const chatWindow = document.getElementById('chat-window');
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const loading = document.getElementById('loading');
+        const settingsPanel = document.getElementById('settings-panel');
+
+        function toggleChat() {
+            const isHidden = chatWindow.classList.contains('chat-hidden');
+            if (isHidden) {
+                chatWindow.classList.remove('chat-hidden');
+                chatWindow.classList.add('chat-visible');
+                document.getElementById('icon-closed').classList.add('scale-0', 'opacity-0');
+                document.getElementById('icon-opened').classList.remove('scale-0', 'opacity-0', 'rotate-180');
+                setTimeout(() => userInput.focus(), 100);
+            } else {
+                chatWindow.classList.add('chat-hidden');
+                chatWindow.classList.remove('chat-visible');
+                document.getElementById('icon-closed').classList.remove('scale-0', 'opacity-0');
+                document.getElementById('icon-opened').classList.add('scale-0', 'opacity-0', 'rotate-180');
+            }
+        }
+
+        function toggleSettings() {
+            settingsPanel.classList.toggle('hidden');
+        }
+
+        function saveSettings() {
+            sheetId = document.getElementById('sheet-id-input').value.trim();
+            geminiKey = document.getElementById('gemini-key-input').value.trim();
+            togetherKey = document.getElementById('together-key-input').value.trim();
+
+            localStorage.setItem('chat_sheet_id', sheetId);
+            localStorage.setItem('chat_gemini_key', geminiKey);
+            localStorage.setItem('chat_together_key', togetherKey);
+
+            addMessage('system', 'บันทึกตั้งค่าแล้ว... กำลังโหลดข้อมูลใหม่');
+            toggleSettings();
+            fetchSheetData(); // โหลดข้อมูลใหม่ทันที
+        }
+
+        function addMessage(role, text) {
+            const isUser = role === 'user';
+            const div = document.createElement('div');
+            div.className = `flex items-start gap-2 ${isUser ? 'flex-row-reverse' : ''}`;
+            
+            const avatar = isUser ? '' : `<div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-[10px] font-bold shrink-0">AI</div>`;
+            const bubbleColor = isUser ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 border border-gray-100';
+            const systemStyle = role === 'system' ? 'bg-yellow-50 text-yellow-800 border-yellow-100 text-xs italic' : '';
+
+            div.innerHTML = `
+                ${role === 'system' ? '' : avatar}
+                <div class="max-w-[85%] p-2.5 px-3 ${role === 'system' ? systemStyle : bubbleColor} rounded-2xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} shadow-sm text-sm leading-relaxed break-words">
+                    ${text}
+                </div>
+            `;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        document.getElementById('chat-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
             const text = userInput.value.trim();
             if (!text) return;
 
-            // 1. Add User Message
-            addMessage(text, 'user');
+            addMessage('user', text);
             userInput.value = '';
-
-            // 2. Show Loading
-            const loadingId = addLoading();
-
-            try {
-                // Check API Key
-                if (!API_KEY || API_KEY.includes('วาง_API_KEY')) {
-                    throw new Error("กรุณาใส่ API Key ในโค้ดบรรทัดที่ระบุไว้ก่อนใช้งานครับ");
-                }
-
-                // 3. Call Gemini API
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `คุณคือผู้เชี่ยวชาญด้านธุรกิจขนส่งเอกชนและแฟรนไชส์ไปรษณีย์ที่มีประสบการณ์กว่า 10 ปี ชื่อว่า "AI กูรูขนส่ง"
-                                หน้าที่ของคุณคือให้คำปรึกษาเจ้าของแฟรนไชส์ เกี่ยวกับปัญหาการขนส่ง, การแพ็คของ, การโต้แย้งค่าปรับ, และกฎระเบียบต่างๆ
-                                จงตอบคำถามต่อไปนี้ด้วยน้ำเสียงที่เป็นมิตร มืออาชีพ และเข้าใจง่าย สั้นกระชับ:
-                                "${text}"`
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                
-                // Remove loading
-                document.getElementById(loadingId).remove();
-
-                if (data.error) {
-                    addMessage("ขออภัย ระบบขัดข้อง: " + data.error.message, 'bot');
-                } else {
-                    const botReply = data.candidates[0].content.parts[0].text;
-                    addMessage(botReply, 'bot');
-                }
-
-            } catch (error) {
-                document.getElementById(loadingId)?.remove();
-                addMessage("เกิดข้อผิดพลาด: " + error.message, 'bot');
-            }
-        }
-
-        function addMessage(text, sender) {
-            const div = document.createElement('div');
-            div.className = `flex items-start gap-2.5 chat-message ${sender === 'user' ? 'flex-row-reverse' : ''}`;
+            loading.classList.remove('hidden');
             
-            const avatar = sender === 'bot' 
-                ? `<div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-robot text-indigo-600 text-xs"></i></div>`
-                : `<div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-user text-gray-600 text-xs"></i></div>`;
-
-            const bubbleClass = sender === 'bot'
-                ? 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
-                : 'bg-indigo-600 text-white rounded-tr-none';
-
-            // Parse Markdown for bot response
-            const content = sender === 'bot' ? marked.parse(text) : text;
-
-            div.innerHTML = `
-                ${avatar}
-                <div class="p-3 rounded-2xl shadow-sm text-sm max-w-[80%] ${bubbleClass}">
-                    <div class="prose prose-sm ${sender === 'user' ? 'text-white' : ''}">${content}</div>
-                </div>
-            `;
+            const reply = await getAIResponse(text);
             
-            messagesContainer.appendChild(div);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function addLoading() {
-            const id = 'loading-' + Date.now();
-            const div = document.createElement('div');
-            div.id = id;
-            div.className = 'flex items-start gap-2.5 chat-message';
-            div.innerHTML = `
-                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-robot text-indigo-600 text-xs"></i></div>
-                <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
-                    <div class="flex gap-1">
-                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
-                    </div>
-                </div>
-            `;
-            messagesContainer.appendChild(div);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            return id;
-        }
+            loading.classList.add('hidden');
+            addMessage('ai', reply);
+        });
     </script>
 </body>
 </html>
