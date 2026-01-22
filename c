@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ขั้นตอนการยื่นเคลมพัสดุ Post Sabuy</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Sarabun & Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f3f4f6;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        h1, h2, h3, .font-prompt {
+            font-family: 'Prompt', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8800 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        /* Chatbot Styles */
+        #chatbot-widget-container { font-family: 'Sarabun', sans-serif; z-index: 9999; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        
+        .chat-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .chat-hidden { opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; }
+        .chat-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if(event.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        }
+    </script>
+</head>
+<body class="text-gray-800 relative min-h-screen">
+
+    <div class="watermark">Copyright © Paypoint Family System</div>
+
+    <!-- Header Section -->
+    <header class="gradient-bg text-white pb-12 pt-6 px-4 shadow-lg rounded-b-3xl relative z-10">
+        <div class="max-w-3xl mx-auto">
+            <a href="https://tuikub.github.io/paypoint/" class="inline-flex items-center text-white text-opacity-90 hover:text-opacity-100 hover:bg-white hover:bg-opacity-10 px-3 py-1.5 rounded-lg transition mb-2">
+                <i class="fas fa-chevron-left mr-2"></i> กลับหน้าหลัก
+            </a>
+
+            <div class="text-center">
+                <div class="mb-4 inline-block p-3 bg-white bg-opacity-20 rounded-full">
+                    <i class="fas fa-box-open text-3xl"></i>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold mb-2">การยื่นเคลมพัสดุ Post Sabuy</h1>
+                <p class="text-white text-opacity-90">สำหรับเจ้าของแฟรนไชส์และลูกค้า</p>
+                <div class="mt-4 inline-block bg-white text-orange-600 px-4 py-1 rounded-full text-sm font-bold shadow-sm">
+                    แจ้งเคลมภายใน 4 เดือน
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 -mt-8 pb-12 relative z-10">
+        
+        <!-- Action Card -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6 card-hover text-center border-t-4 border-orange-500">
+            <h2 class="text-xl font-bold mb-2 text-gray-800">แบบฟอร์มส่งเรื่องพิจารณาเคลม</h2>
+            <p class="text-gray-600 mb-6">กรุณาเตรียมเอกสารให้ครบถ้วนก่อนกดลิงก์ด้านล่าง</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSe8tkUNVcYli03eCd1KcVl1fziMYOG7E5-tnw1hT7njGjkN-Q/viewform" target="_blank" 
+               class="inline-block bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+                <i class="fas fa-file-signature mr-2"></i> ไปที่แบบฟอร์มยื่นเรื่องเคลม
+            </a>
+        </div>
+
+        <!-- Required Documents Section -->
+        <section class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex items-center">
+                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-3">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h2 class="font-bold text-xl text-gray-800">ข้อมูลและหลักฐานที่ต้องใช้</h2>
+            </div>
+            <div class="p-6">
+                <!-- Reference Data Example Block -->
+                <div class="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6">
+                    <h3 class="font-bold text-blue-800 mb-3 text-sm uppercase tracking-wide">
+                        <i class="fas fa-search mr-2"></i>ตัวอย่างข้อมูลอ้างอิง (Reference Data)
+                    </h3>
+                    <div class="bg-white rounded-lg p-4 shadow-sm border border-blue-50">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="border-b md:border-b-0 md:border-r border-gray-100 pb-2 md:pb-0">
+                                <span class="block text-xs text-gray-400 mb-1">เลขเทรคพัสดุ (Example)</span>
+                                <span class="font-bold text-lg text-gray-800 tracking-wider">JM105695965TH</span>
+                            </div>
+                            <div class="border-b md:border-b-0 md:border-r border-gray-100 pb-2 md:pb-0 md:pl-4">
+                                <span class="block text-xs text-gray-400 mb-1">ชื่อเรียกสินค้า</span>
+                                <span class="font-medium text-gray-800">Momoko Popmat</span>
+                            </div>
+                            <div class="md:pl-4">
+                                <span class="block text-xs text-gray-400 mb-1">ราคาสินค้า</span>
+                                <span class="font-medium text-green-600">2,240 บาท</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-3 border-b pb-2"><i class="fas fa-info-circle text-orange-500 mr-2"></i>ข้อมูลเบื้องต้น</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-barcode text-gray-400 mt-1 mr-2"></i>
+                                <span><strong>เลขเทรคพัสดุ:</strong> (ตามใบเสร็จ)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-box text-gray-400 mt-1 mr-2"></i>
+                                <span><strong>ชื่อเรียกสินค้า:</strong> (ระบุชื่อรุ่น/ยี่ห้อ)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-tag text-gray-400 mt-1 mr-2"></i>
+                                <span><strong>ราคาสินค้า:</strong> (ตามมูลค่าจริง)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-3 border-b pb-2"><i class="fas fa-camera text-orange-500 mr-2"></i>รูปภาพและวิดีโอ</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>รูป/วิดีโอ สินค้าที่สมบูรณ์<strong>ก่อนนำส่ง</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>รูป/วิดีโอ ที่แสดง<strong>ความเสียหาย</strong>ของพัสดุ</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>รูป/วิดีโอ สภาพกล่องภายนอก <strong>(ทั้งก่อนส่ง และ หลังส่ง)</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>รูป/วิดีโอ การห่อหุ้มสินค้า <strong>ภายในกล่องก่อนส่ง</strong></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-gray-100">
+                    <h3 class="font-bold text-gray-700 mb-3"><i class="fas fa-folder-open text-orange-500 mr-2"></i>เอกสารประกอบอื่นๆ</h3>
+                    <div class="grid md:grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                            <i class="fas fa-receipt text-gray-500 mr-3"></i> สลิปหรือหลักฐานแสดงมูลค่าสินค้า
+                        </div>
+                        <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                            <i class="fas fa-comments text-gray-500 mr-3"></i> ประวัติแชทการซื้อ-ขาย (ถ้ามี)
+                        </div>
+                        <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                            <i class="fas fa-id-card text-gray-500 mr-3"></i> หน้าบัตรประชาชนผู้ยื่นเคลม
+                        </div>
+                        <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                            <i class="fas fa-book text-gray-500 mr-3"></i> หน้าสมุดบัญชีธนาคาร
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warning Section -->
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg mb-8 shadow-sm">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700 font-bold">
+                        เงื่อนไขสำคัญ: แจ้งเคลมได้ไม่เกิน 4 เดือน
+                    </p>
+                    <p class="text-xs text-red-600 mt-1">
+                        นับหลังจากการเซ็นรับพัสดุสำเร็จ หรือ สถานะล่าสุดที่ไม่มีการเคลื่อนไหว
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q&A Section -->
+        <section class="mb-8">
+            <h2 class="font-bold text-2xl text-gray-800 mb-4 px-2">คำถามที่พบบ่อย (Q&A)</h2>
+            
+            <div class="space-y-3">
+                <details class="group bg-white rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800 hover:bg-gray-50 rounded-xl transition">
+                        <span><i class="fas fa-question-circle text-orange-500 mr-2"></i> ถ้าไม่มีคลิปวิดีโอตอนแพ็คของ เคลมได้ไหม?</span>
+                        <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                    </summary>
+                    <div class="text-gray-600 mt-0 px-5 pb-5 border-t border-gray-100 pt-3 text-sm">
+                        สามารถยื่นเรื่องได้ แต่โอกาสได้รับการอนุมัติหรือวงเงินชดเชยอาจลดลง แนะนำให้รวบรวมหลักฐานภาพถ่ายที่มีให้มากที่สุดเพื่อประกอบการพิจารณาครับ
+                    </div>
+                </details>
+
+                <details class="group bg-white rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800 hover:bg-gray-50 rounded-xl transition">
+                        <span><i class="fas fa-clock text-orange-500 mr-2"></i> ใช้เวลาพิจารณานานเท่าไหร่?</span>
+                        <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                    </summary>
+                    <div class="text-gray-600 mt-0 px-5 pb-5 border-t border-gray-100 pt-3 text-sm">
+                        โดยปกติใช้เวลาตรวจสอบประมาณ 7-14 วันทำการ หลังจากได้รับเอกสารครบถ้วน ทั้งนี้ขึ้นอยู่กับความซับซ้อนของเคส
+                    </div>
+                </details>
+
+                <details class="group bg-white rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800 hover:bg-gray-50 rounded-xl transition">
+                        <span><i class="fas fa-user-check text-orange-500 mr-2"></i> ใครต้องเป็นคนยื่นเรื่องเคลม?</span>
+                        <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-gray-400"></i></span>
+                    </summary>
+                    <div class="text-gray-600 mt-0 px-5 pb-5 border-t border-gray-100 pt-3 text-sm">
+                        ผู้ส่งต้นทาง หรือ สาขาต้นทาง จะเป็นผู้รวบรวมข้อมูลยื่นเรื่องได้ดีที่สุด เนื่องจากมีข้อมูลการจัดส่งครบถ้วน
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Contact Admin Section -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 text-center border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-left">
+                <h3 class="font-bold text-gray-800 text-lg"><i class="fas fa-headset text-orange-500 mr-2"></i>ต้องการความช่วยเหลือเพิ่มเติม?</h3>
+                <p class="text-gray-500 text-sm mt-1">หากมีข้อสงสัย หรือต้องการติดตามสถานะการเคลม</p>
+            </div>
+            <a href="https://tuikub.github.io/paypoint/#contact" target="_blank" 
+               class="inline-flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-lg transition transform hover:scale-105 w-full md:w-auto">
+                <i class="fas fa-comment-dots mr-2"></i> ติดต่อแอดมิน (Admin)
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-8 text-gray-500 text-sm pb-8">
+            <p>&copy; 2024 PAYPOINT FAMILY SYSTEM SUPPORT. ALL RIGHTS RESERVED</p>
+            <p class="mt-1">Pratya Chatmontree</p>
+            <a href="https://tuikub.github.io/paypoint/" class="inline-block mt-2 text-orange-500 hover:text-orange-600 font-medium">กลับสู่หน้าหลัก</a>
+        </footer>
+
+    </main>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget-container" class="fixed bottom-4 right-4 flex flex-col items-end gap-4">
+        <div id="chat-window" class="chat-hidden chat-transition bg-white w-[350px] h-[500px] max-h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+            <div class="bg-gradient-to-r from-orange-600 to-red-600 p-4 flex items-center justify-between text-white shadow-md z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold relative">
+                        <i class="fa-solid fa-robot"></i>
+                        <div id="status-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-orange-600 rounded-full"></div>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base leading-tight">AI Assistant</h1>
+                        <p id="model-status" class="text-[10px] text-orange-100 opacity-90">Powered by Gemini</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="checkAdminAndToggle()" class="opacity-0 hover:opacity-100 text-white/80 hover:text-white p-1 rounded-full transition"><i class="fa-solid fa-gear"></i></button>
+                    <button onclick="toggleChat()" class="text-white/80 hover:text-white p-1 rounded-full transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+            </div>
+            <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 scrollbar-hide text-sm relative">
+                <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-[10px] font-bold shrink-0">AI</div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800">
+                        สวัสดีครับ หากมีข้อสงสัยเรื่องการเคลม Post Sabuy สอบถามได้เลยครับ
+                    </div>
+                </div>
+            </div>
+            <div id="loading" class="hidden px-4 pb-2">
+                <div class="flex items-center space-x-1 bg-white p-2 rounded-xl w-fit shadow-sm border border-gray-100">
+                    <div class="w-1.5 h-1.5 bg-orange-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-orange-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-orange-600 rounded-full typing-dot"></div>
+                </div>
+            </div>
+            <div class="p-3 bg-white border-t border-gray-100">
+                <form id="chat-form" class="flex gap-2 items-center">
+                    <input type="text" id="user-input" class="flex-1 bg-gray-100 border-0 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-orange-500 block w-full px-4 py-2.5 outline-none transition placeholder-gray-400" placeholder="พิมพ์คำถาม..." autocomplete="off">
+                    <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md transition transform hover:scale-105"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+                </form>
+            </div>
+            <div id="settings-panel" class="hidden absolute inset-0 bg-white z-20 flex flex-col p-5 animate-fade-in">
+                <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-sliders"></i> ตั้งค่าระบบ</h3>
+                <div class="space-y-3 flex-1 overflow-y-auto">
+                    <div><label class="text-xs font-semibold text-gray-600">Google Sheet ID:</label><input type="text" id="sheet-id-input" class="w-full border rounded p-2 text-xs mt-1 bg-gray-50"></div>
+                    <div><label class="text-xs font-semibold text-orange-600">Gemini Key:</label><input type="password" id="gemini-key-input" class="w-full border border-orange-200 rounded p-2 text-xs mt-1"></div>
+                    <div><label class="text-xs font-semibold text-purple-600">Together Key:</label><input type="password" id="together-key-input" class="w-full border border-purple-200 rounded p-2 text-xs mt-1"></div>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <button onclick="toggleSettings()" class="flex-1 py-2 text-gray-500 text-xs hover:bg-gray-100 rounded">ปิด</button>
+                    <button onclick="saveSettings()" class="flex-1 py-2 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 shadow">บันทึก</button>
+                </div>
+            </div>
+        </div>
+        <button onclick="toggleChat()" id="chat-toggle-btn" class="bg-orange-600 hover:bg-orange-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 group relative">
+            <i class="fa-solid fa-comment-dots text-2xl absolute transition-all duration-300 transform group-hover:rotate-12 scale-100 opacity-100" id="icon-closed"></i>
+            <i class="fa-solid fa-chevron-down text-xl absolute transition-all duration-300 transform rotate-180 scale-0 opacity-0" id="icon-opened"></i>
+        </button>
+    </div>
+
+    <script>
+        let sheetId = localStorage.getItem('chat_sheet_id') || '1darv2F3vLlv5hhULgRREzRXPkKy0L2GmTFeyfzNgo9k';
+        let geminiKey = localStorage.getItem('chat_gemini_key') || 'AIzaSyCBr6LjhCCkJVwkAJTqEIMuIekkjl3X6r4';
+        let togetherKey = localStorage.getItem('chat_together_key') || 'f1ab2db1ed0da368ff5d3001a70855fac21f2b161a12021e44c1e3e75f05e575';
+        let KNOWLEDGE_BASE = "";
+        let QA_DATA = []; // Store QA as objects
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('sheet-id-input').value = sheetId;
+            document.getElementById('gemini-key-input').value = geminiKey;
+            document.getElementById('together-key-input').value = togetherKey;
+            if(sheetId) fetchSheetData();
+        });
+
+        async function fetchSheetData() {
+            try {
+                // Fetch CSV from Sheet1 (default)
+                const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("เข้าถึงไฟล์ไม่ได้");
+                const csvText = await response.text();
+                parseCSVtoKnowledge(csvText);
+                addMessage('system', '✅ เชื่อมต่อฐานข้อมูลสำเร็จ!');
+            } catch (error) {
+                console.error(error);
+                addMessage('system', '❌ ไม่สามารถดึงข้อมูล Sheet ได้');
+                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-orange-600 rounded-full";
+            }
+        }
+
+        function parseCSVtoKnowledge(csv) {
+            const rows = csv.split('\n').map(row => row.split(','));
+            let textData = "# ข้อมูลถาม-ตอบ (Q&A Knowledge Base)\n";
+            QA_DATA = [];
+            rows.forEach((cols, index) => {
+                if(index === 0) return;
+                if(cols.length >= 2) {
+                    const q = cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : '';
+                    const a = cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : '';
+                    if(q && a) {
+                        textData += `- คำถาม: "${q}" \n  คำตอบ: "${a}"\n`;
+                        QA_DATA.push({ q, a });
+                    }
+                }
+            });
+            KNOWLEDGE_BASE = textData;
+        }
+
+        async function getAIResponse(userMessage) {
+            let errorMsg = "";
+
+            // 1. Try Gemini
+            if (geminiKey) {
+                document.getElementById('model-status').innerText = "Generating with Gemini...";
+                try { 
+                    return await callGemini(userMessage); 
+                } catch (error) { 
+                    console.warn("Gemini Error:", error);
+                    errorMsg += "Gemini: " + error.message + ". ";
+                }
+            }
+            
+            // 2. Try Together AI (Only if key exists)
+            if (togetherKey) {
+                document.getElementById('model-status').innerText = "Fallback: Together.ai";
+                try { 
+                    return await callTogetherAI(userMessage); 
+                } catch (error) { 
+                    console.warn("Together AI Error:", error);
+                    errorMsg += "Together: " + error.message + ". ";
+                }
+            }
+
+            // 3. Last Resort: Local Keyword Search
+            document.getElementById('model-status').innerText = "Offline Mode (Keyword Search)";
+            const localAns = localSearch(userMessage);
+            if (localAns) return `(ระบบค้นหาอัตโนมัติ): ${localAns}`;
+
+            return "ขออภัยครับ ระบบ AI ขัดข้องชั่วคราวและไม่พบข้อมูลในฐานข้อมูล (" + errorMsg + ")";
+        }
+
+        function localSearch(query) {
+            if (!QA_DATA.length) return null;
+            const words = query.toLowerCase().split(/\s+/);
+            let bestMatch = null;
+            let maxScore = 0;
+
+            for (const item of QA_DATA) {
+                let score = 0;
+                const qLower = item.q.toLowerCase();
+                for (const word of words) {
+                    if (qLower.includes(word)) score++;
+                }
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestMatch = item.a;
+                }
+            }
+            return maxScore > 0 ? bestMatch : null;
+        }
+
+        async function callGemini(message) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+            const prompt = `Role: AI Support. Context: ${KNOWLEDGE_BASE}. Question: ${message}. Answer in Thai.`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        async function callTogetherAI(message) {
+            const url = "https://api.together.xyz/v1/chat/completions";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${togetherKey}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+                    messages: [{ role: "system", content: `Context: ${KNOWLEDGE_BASE}` }, { role: "user", content: message }],
+                    max_tokens: 512
+                })
+            });
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            return data.choices[0].message.content;
+        }
+
+        const chatWindow = document.getElementById('chat-window');
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const loading = document.getElementById('loading');
+        const settingsPanel = document.getElementById('settings-panel');
+
+        function toggleChat() {
+            chatWindow.classList.toggle('chat-hidden');
+            chatWindow.classList.toggle('chat-visible');
+            document.getElementById('icon-closed').classList.toggle('scale-0');
+            document.getElementById('icon-opened').classList.toggle('scale-0');
+            if(chatWindow.classList.contains('chat-visible')) setTimeout(() => userInput.focus(), 100);
+        }
+
+        function checkAdminAndToggle() {
+            if (prompt("รหัสผ่าน Admin:") === "02817648++") toggleSettings();
+            else alert("รหัสผ่านไม่ถูกต้อง!");
+        }
+
+        function toggleSettings() { settingsPanel.classList.toggle('hidden'); }
+
+        function saveSettings() {
+            sheetId = document.getElementById('sheet-id-input').value.trim();
+            geminiKey = document.getElementById('gemini-key-input').value.trim();
+            togetherKey = document.getElementById('together-key-input').value.trim();
+            localStorage.setItem('chat_sheet_id', sheetId);
+            localStorage.setItem('chat_gemini_key', geminiKey);
+            localStorage.setItem('chat_together_key', togetherKey);
+            toggleSettings();
+            fetchSheetData();
+        }
+
+        function addMessage(role, text) {
+            const isUser = role === 'user';
+            const div = document.createElement('div');
+            div.className = `flex items-start gap-2 ${isUser ? 'flex-row-reverse' : ''}`;
+            const avatar = isUser ? '' : `<div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-[10px] font-bold shrink-0">AI</div>`;
+            const bubbleColor = isUser ? 'bg-orange-600 text-white' : 'bg-white text-gray-800 border border-gray-100';
+            div.innerHTML = `${avatar}<div class="max-w-[85%] p-2.5 px-3 ${role==='system'?'bg-yellow-50 text-xs italic':bubbleColor} rounded-2xl shadow-sm text-sm break-words">${text}</div>`;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        document.getElementById('chat-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = userInput.value.trim();
+            if (!text) return;
+            addMessage('user', text);
+            userInput.value = '';
+            loading.classList.remove('hidden');
+            const reply = await getAIResponse(text);
+            loading.classList.add('hidden');
+            addMessage('ai', reply);
+        });
+    </script>
+</body>
+</html>
