@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Sex Battle: ศึกแดงเดือด (ถุงยาง vs ยาคุม)</title>
+    <title>Safe Sex Challenge: ภารกิจพิชิต 8/10</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --condom-color: #00A8FF;
             --pill-color: #FF4757;
             --bg-color: #2F3542;
+            --success: #2ed573;
+            --fail: #ff4757;
         }
 
         body {
@@ -24,28 +26,40 @@
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
+            user-select: none;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 0px #000;
+            font-size: 2rem;
+            margin: 10px 0;
+            text-shadow: 2px 2px 0px #000;
             line-height: 1.2;
         }
 
-        .subtitle {
-            color: #dcdde1;
+        .scoreboard {
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.2rem;
             margin-bottom: 20px;
-            font-size: 1.1rem;
+            border: 2px solid #fff;
+            display: flex;
+            gap: 20px;
+        }
+
+        .score-item span {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #FFD700;
         }
 
         /* --- WHEEL STYLES --- */
         .game-container {
             position: relative;
-            width: 350px;
-            height: 350px;
-            margin-bottom: 30px;
+            width: 320px;
+            height: 320px;
+            margin-bottom: 20px;
         }
 
         .wheel-border {
@@ -53,7 +67,7 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 10px solid #fff;
+            border: 8px solid #fff;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
             overflow: hidden;
             z-index: 1;
@@ -64,8 +78,7 @@
             height: 100%;
             border-radius: 50%;
             position: relative;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            /* สร้าง 10 ช่อง ด้วย Conic Gradient */
+            transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             background: conic-gradient(
                 var(--condom-color) 0deg 36deg,
                 var(--pill-color) 36deg 72deg,
@@ -80,23 +93,18 @@
             );
         }
 
-        /* เส้นแบ่ง */
         .line {
             position: absolute;
-            top: 0;
-            left: 50%;
-            width: 2px;
-            height: 50%;
+            top: 0; left: 50%;
+            width: 2px; height: 50%;
             background: rgba(255,255,255,0.8);
             transform-origin: bottom center;
             z-index: 2;
         }
 
-        /* ตัวเลขในช่อง */
         .number {
             position: absolute;
-            top: 15px;
-            left: 50%;
+            top: 15px; left: 50%;
             transform: translateX(-50%);
             font-size: 1.2rem;
             font-weight: bold;
@@ -104,29 +112,33 @@
             text-shadow: 1px 1px 2px black;
         }
 
-        /* ลูกศรชี้ */
+        /* เครื่องหมายถูกผิดบนวงล้อ */
+        .status-mark {
+            position: absolute;
+            top: 40px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            z-index: 3;
+            display: none; /* ซ่อนก่อน */
+        }
+
         .pointer {
             position: absolute;
-            top: -25px;
-            left: 50%;
+            top: -20px; left: 50%;
             transform: translateX(-50%);
-            width: 0; 
-            height: 0; 
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 40px solid #FFD700; /* สีทอง */
+            width: 0; height: 0; 
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 35px solid #FFD700;
             z-index: 10;
             filter: drop-shadow(0 4px 2px rgba(0,0,0,0.5));
         }
 
-        /* ปุ่มกลางวงล้อ (ตกแต่ง) */
         .center-circle {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             background: white;
             border-radius: 50%;
             z-index: 5;
@@ -134,7 +146,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
         }
 
         /* --- CONTROLS --- */
@@ -142,15 +156,14 @@
             background: linear-gradient(to bottom, #FFD700, #FFA500);
             color: #333;
             border: none;
-            padding: 15px 50px;
-            font-size: 1.5rem;
+            padding: 15px 40px;
+            font-size: 1.3rem;
             font-family: 'Kanit', sans-serif;
             font-weight: 900;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 5px 0 #b36b00, 0 10px 20px rgba(0,0,0,0.4);
             transition: all 0.1s;
-            text-transform: uppercase;
         }
 
         .spin-btn:active {
@@ -165,79 +178,67 @@
             color: #bdc3c7;
         }
 
-        .music-btn {
-            margin-top: 15px;
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
         /* --- MODAL --- */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
             z-index: 100;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            animation: fadeIn 0.3s;
+            padding: 10px;
         }
 
         .modal-content {
             background: white;
             color: #333;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 500px;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 450px;
             width: 100%;
             text-align: center;
             position: relative;
-            box-shadow: 0 0 30px rgba(255,255,255,0.2);
-            transform: scale(0.8);
             animation: popIn 0.3s forwards;
+            border-top: 10px solid var(--condom-color);
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes popIn { from { transform: scale(0.8); } to { transform: scale(1); } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .team-badge {
-            display: inline-block;
-            padding: 5px 20px;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1rem;
-            text-transform: uppercase;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        /* Timer Bar */
+        .timer-container {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: #2ed573;
+            transition: width 1s linear, background-color 0.3s;
         }
 
         .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
             font-weight: bold;
-            line-height: 1.4;
         }
 
         .options-grid {
             display: grid;
-            gap: 12px;
+            gap: 10px;
         }
 
         .option-btn {
             background: #f1f2f6;
             border: 2px solid #dfe4ea;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
             font-family: 'Kanit', sans-serif;
             font-size: 1rem;
@@ -245,123 +246,145 @@
             text-align: left;
         }
 
-        .option-btn:hover {
+        .option-btn:hover:not(:disabled) {
             background: #e3f2fd;
             border-color: #70a1ff;
         }
 
-        .option-btn.correct {
-            background: #2ed573;
-            border-color: #26af61;
-            color: white;
-        }
-
-        .option-btn.wrong {
-            background: #ff6b81;
-            border-color: #ff4757;
-            color: white;
-        }
+        .option-btn.correct { background: #2ed573; color: white; border-color: #218c53; }
+        .option-btn.wrong { background: #ff4757; color: white; border-color: #c0392b; }
 
         .feedback-text {
-            margin-top: 20px;
+            margin-top: 15px;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             min-height: 20px;
         }
 
-        .close-btn {
-            margin-top: 20px;
-            padding: 10px 40px;
-            background: #2f3542;
+        .next-btn {
+            margin-top: 15px;
+            padding: 10px 30px;
+            background: #333;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
-            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
             display: none;
         }
 
-        .close-btn:hover { background: #57606f; }
-
-        /* Start Overlay */
-        .start-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
+        /* Result Modal */
+        .result-modal-content {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            color: #333;
         }
+
+        .result-score {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .result-status {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .pass { color: var(--success); }
+        .fail { color: var(--fail); }
+
     </style>
 </head>
 <body>
 
-    <div class="start-overlay" id="startScreen">
-        <h1>Safe Sex Battle</h1>
-        <p>ศึกแดงเดือด: ถุงยาง vs ยาคุม</p>
-        <button class="spin-btn" onclick="startGame()">เริ่มเกม (เปิดเสียง)</button>
+    <h1>🚀 Safe Sex Challenge</h1>
+    
+    <div class="scoreboard">
+        <div class="score-item">ข้อที่: <span id="qCount">0</span>/10</div>
+        <div class="score-item">คะแนน: <span id="scoreDisplay">0</span></div>
     </div>
-
-    <h1>🥊 Safe Sex Battle</h1>
-    <div class="subtitle">ทีมถุงยาง (ฟ้า) VS ทีมยาคุม (แดง)</div>
 
     <div class="game-container">
         <div class="pointer"></div>
         <div class="wheel-border">
             <div class="wheel" id="wheel">
-                </div>
+                <!-- Segments will be generated by JS -->
+            </div>
         </div>
-        <div class="center-circle">VS</div>
+        <div class="center-circle" id="centerText">VS</div>
     </div>
 
-    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">หมุนเลย!</button>
-    <button class="music-btn" onclick="toggleMusic()">🎵 ปิด/เปิด เพลง</button>
+    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">หมุนลุ้นโชค!</button>
 
+    <!-- Modal Quiz -->
     <div class="modal-overlay" id="quizModal">
-        <div class="modal-content">
-            <div id="teamBadge" class="team-badge">TEAM</div>
+        <div class="modal-content" id="modalContent">
+            <h3 id="timerText">เหลือเวลา: 30 วินาที</h3>
+            <div class="timer-container">
+                <div class="timer-bar" id="timerBar"></div>
+            </div>
+            
             <div id="questionText" class="question-text">Question Here</div>
             <div class="options-grid" id="optionsContainer"></div>
             <div id="feedback" class="feedback-text"></div>
-            <button class="close-btn" id="closeBtn" onclick="closeModal()">ไปต่อ >></button>
+            <button class="next-btn" id="nextBtn" onclick="closeModal()">ข้อต่อไป >></button>
+        </div>
+    </div>
+
+    <!-- Modal Result -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="result-modal-content">
+            <h2>จบเกม!</h2>
+            <div>คะแนนของคุณคือ</div>
+            <div class="result-score" id="finalScore">0</div>
+            <div id="resultStatus" class="result-status"></div>
+            <div id="resultMessage"></div>
+            <button class="spin-btn" onclick="location.reload()" style="margin-top:20px; font-size:1rem;">เล่นใหม่อีกครั้ง</button>
         </div>
     </div>
 
     <script>
-        // --- 1. ข้อมูลคำถาม 10 ข้อ (สลับ ฟ้า-แดง) ---
+        // --- DATA: 10 คำถาม ---
         const questions = [
-            { type: 'condom', q: "1. ฉีกซองถุงยางยังไง ให้โลกจำ (ในทางที่ดี)?", options: ["ใช้ฟันกัด โชว์ความดุดัน", "ใช้กรรไกรตัด ให้ขอบคม", "ใช้นิ้วมือฉีกเบาๆ แล้วดันถุงยางหนี", "ให้เพื่อนช่วยฉีก"], correct: 2, explain: "ถูกต้อง! ต้องใช้นิ้วฉีกและระวังเล็บ เพื่อไม่ให้ถุงยางขาด" },
-            { type: 'pill', q: "2. ยาคุมรายเดือน ป้องกันอะไรได้บ้าง?", options: ["ท้อง + เอดส์", "ท้อง ได้อย่างเดียว", "ท้อง + สิว + ความจน", "ป้องกันแฟนบ่น"], correct: 1, explain: "ใช่แล้ว! ยาคุมกันท้องได้ แต่กันโรคติดต่อไม่ได้นะจ๊ะ" },
-            { type: 'condom', q: "3. 'น้ำมันพืช' เอามาหล่อลื่นได้ไหม?", options: ["ได้ ลื่นหัวแตก", "ได้ แต่กลิ่นเหมือนผัดกะเพรา", "ไม่ได้! ถุงยางจะแตกทันที", "ได้เฉพาะน้ำมันถั่วเหลือง"], correct: 2, explain: "ถูกต้อง! น้ำมันจะทำลายเนื้อยางพารา ทำให้ถุงแตกทันที" },
-            { type: 'pill', q: "4. เริ่มกินยาคุมเม็ดแรก ตอนไหนดีสุด?", options: ["วันไหนก็ได้ที่ฤกษ์ดี", "ภายใน 5 วันแรกของประจำเดือน", "วันลอยกระทง", "หลังกินข้าวเย็นทันที"], correct: 1, explain: "ถูกต้อง! เริ่มภายใน 5 วันแรกของรอบเดือน ได้ผลคุมกำเนิดทันที" },
-            { type: 'condom', q: "5. ทำไมต้อง 'บีบกระเปาะ' ปลายถุงยาง?", options: ["ไล่ลม กันถุงยางแตก", "เช็คว่ามีรูรั่วไหม", "เพื่อความสวยงาม", "เป็นพิธีกรรม"], correct: 0, explain: "ใช่! ถ้ามีลมค้างอยู่ พอโดนแรงกระแทก ถุงยางอาจระเบิดได้" },
-            { type: 'pill', q: "6. ลืมกินยาคุม 1 วัน! ทำไงแม่?", options: ["ทำใจ รอเดือนหน้า", "รีบกินทันทีที่นึกได้ (กินรวม 2 เม็ดได้)", "เบิ้ล 3 เม็ดชดเชย", "จุดธูปขอขมา"], correct: 1, explain: "ถูกต้อง! รีบกินเม็ดที่ลืมทันที แล้วกินเม็ดต่อไปตามเวลาปกติ" },
-            { type: 'condom', q: "7. เก็บถุงยางใน 'กระเป๋าสตางค์' ได้ไหม?", options: ["ได้ หยิบง่าย", "ได้ เพราะมันอุ่น", "ไม่ได้! นั่งทับจนถุงยางพังหมด", "ได้ แต่ต้องใส่ช่องเหรียญ"], correct: 2, explain: "ถูกต้อง! แรงกดทับและความร้อนจะทำให้ถุงยางเสื่อมคุณภาพ" },
-            { type: 'pill', q: "8. ยาคุมฉุกเฉิน กินแทนขนมได้ไหม?", options: ["ได้ อร่อยดี", "ได้ ถ้ากินคู่น้ำอัดลม", "ไม่ได้! ใช้ยามฉุกเฉินเท่านั้น", "ได้ กินวันเว้นวัน"], correct: 2, explain: "ถูกต้อง! ยาคุมฉุกเฉินประสิทธิภาพต่ำกว่าและผลข้างเคียงเยอะ ห้ามกินพร่ำเพรื่อ" },
-            { type: 'condom', q: "9. ใส่ 2 ชั้น ปลอดภัยกว่าจริงป่ะ?", options: ["จริง หนาปึ้ก", "ไม่จริง! มันจะเสียดสีจนขาด", "จริง แต่ต้องคนละยี่ห้อ", "แล้วแต่ศรัทธา"], correct: 1, explain: "ถูกต้อง! ยางถูกับยาง จะเกิดความร้อนและขาดง่ายกว่าชั้นเดียว" },
-            { type: 'pill', q: "10. กินยาคุมนานๆ จะเป็นหมันจริงไหม?", options: ["จริง 100%", "ไม่จริง! หยุดกินก็ท้องได้ปกติ", "จริงเฉพาะยี่ห้อแพงๆ", "แล้วแต่ดวง"], correct: 1, explain: "ถูกต้อง! เป็นความเชื่อที่ผิด ยาคุมไม่ทำให้เป็นหมันจ้า" }
+            { id: 1, type: 'condom', q: "1. ก่อนฉีกซองถุงยาง ต้องเช็คอะไรเป็นอันดับแรก?", options: ["เขย่าว่ามีเสียงไหม", "ดูวันหมดอายุและเช็คว่าซองไม่รั่ว", "ดมกลิ่น", "ใช้ไฟส่อง"], correct: 1, explain: "ต้องดูวันหมดอายุและบีบดูว่าซองยังป่อง (ไม่รั่ว) ถึงจะปลอดภัย" },
+            { id: 2, type: 'condom', q: "2. ทำไมห้ามใช้ 'ฟัน' ฉีกซองถุงยาง?", options: ["ฟันจะหัก", "เสียภาพลักษณ์", "ฟันอาจไปโดนถุงยางขาด", "รสชาติไม่อร่อย"], correct: 2, explain: "ของมีคมและฟันอาจทำให้ถุงยางฉีกขาดหรือเป็นรูเล็กๆ ได้" },
+            { id: 3, type: 'condom', q: "3. ทำไมต้องบีบ 'กระเปาะ' ปลายถุงยางขณะใส่?", options: ["ไล่อากาศออก กันถุงแตก", "เพื่อความสวยงาม", "ให้ใส่แน่นขึ้น", "ทดสอบความยืดหยุ่น"], correct: 0, explain: "ถ้ามีอากาศค้างอยู่ แรงดันอาจทำให้ถุงยางแตกขณะใช้งานได้" },
+            { id: 4, type: 'pill', q: "4. ยาคุมรายเดือน ป้องกันอะไรได้บ้าง?", options: ["ท้อง + โรคติดต่อ", "ท้อง ได้อย่างเดียว", "ท้อง + สิว", "ไม่มีข้อถูก"], correct: 1, explain: "ยาคุมกันท้องได้ แต่กันโรค (HIV/ซิฟิลิส) ไม่ได้ ต้องใช้ถุงยาง!" },
+            { id: 5, type: 'condom', q: "5. สารหล่อลื่นแบบไหน 'ห้าม' ใช้กับถุงยาง?", options: ["เจลสูตรน้ำ", "น้ำลาย", "เบบี้ออยล์ / น้ำมัน", "เจลซิลิโคน"], correct: 2, explain: "น้ำมันจะทำลายยางพารา ทำให้ถุงยางเปื่อยและแตกทันที" },
+            { id: 6, type: 'condom', q: "6. ใส่ถุงยาง 2 ชั้น ปลอดภัยกว่าจริงไหม?", options: ["จริง หนาขึ้นดี", "ไม่จริง! มันจะเสียดสีจนขาด", "จริง แต่ต้องคนละยี่ห้อ", "ไม่จริง เพราะเปลือง"], correct: 1, explain: "การใส่ซ้อนกันทำให้เกิดแรงเสียดสีจนถุงยางขาดง่ายกว่าใส่ชั้นเดียว" },
+            { id: 7, type: 'pill', q: "7. ลืมกินยาคุม 1 วัน ทำไงดี?", options: ["รอเดือนหน้า", "กินทันทีที่นึกได้ (แม้ต้องกิน 2 เม็ด)", "เบิ้ล 3 เม็ด", "กินยาแก้ปวดแทน"], correct: 1, explain: "รีบกินเม็ดที่ลืมทันที แล้วกินเม็ดต่อไปตามเวลาปกติ" },
+            { id: 8, type: 'condom', q: "8. ควรถอดถุงยางออกตอนไหน?", options: ["ตอนไหนก็ได้", "รอให้อ่อนตัวก่อน", "ถอดทันทีหลังเสร็จกิจ (ขณะแข็งตัว)", "ก่อนเสร็จกิจ"], correct: 2, explain: "ต้องถอดตอนยังแข็งตัวและจับขอบให้แน่น เพื่อกันไม่ให้หลุดหรือหก" },
+            { id: 9, type: 'condom', q: "9. วิธีทิ้งถุงยางที่ถูกต้อง?", options: ["ทิ้งชักโครก", "ห่อทิชชู่ทิ้งถังขยะ", "โยนออกนอกหน้าต่าง", "วางทิ้งไว้"], correct: 1, explain: "ห้ามทิ้งชักโครกเด็ดขาด! ต้องห่อให้มิดชิดแล้วทิ้งขยะ" },
+            { id: 10, type: 'pill', q: "10. ยาคุมฉุกเฉิน กินบ่อยๆ ได้ไหม?", options: ["ได้ เหมือนวิตามิน", "ได้ ถ้าฉุกเฉินจริง", "ไม่ได้ ประสิทธิภาพต่ำกว่ารายเดือน", "ได้ ช่วยผิวสวย"], correct: 2, explain: "ใช้เฉพาะฉุกเฉินจริงๆ (เช่น ถุงแตก) เพราะประสิทธิภาพต่ำกว่าและมีผลข้างเคียง" }
         ];
 
-        // --- 2. สร้างวงล้อ ---
-        const wheel = document.getElementById('wheel');
-        const segmentAngle = 360 / 10; // 36 degrees per segment
+        // --- GAME STATE ---
+        let score = 0;
+        let answeredCount = 0;
+        let answeredQuestions = new Array(10).fill(false); // เก็บสถานะว่าข้อไหนตอบแล้ว
+        let timerInterval;
+        let timeLeft = 30;
+        const totalTime = 30;
 
-        // ใส่ตัวเลขและเส้นแบ่ง
+        // --- SETUP WHEEL ---
+        const wheel = document.getElementById('wheel');
+        const segmentAngle = 360 / 10;
+
         for(let i=0; i<10; i++) {
             const angle = i * segmentAngle;
-            // สร้างเส้น
+            // เส้นแบ่ง
             const line = document.createElement('div');
             line.className = 'line';
             line.style.transform = `rotate(${angle}deg)`;
             wheel.appendChild(line);
 
-            // สร้างตัวเลข (ต้องหมุนให้ตรงกลางช่อง)
+            // Container สำหรับตัวเลขและเครื่องหมาย
             const numContainer = document.createElement('div');
-            // หมุนไปที่ตำแหน่งเส้น + ครึ่งช่อง (18องศา)
             numContainer.style.position = 'absolute';
             numContainer.style.top = '0';
             numContainer.style.left = '50%';
@@ -369,79 +392,75 @@
             numContainer.style.height = '100%';
             numContainer.style.transform = `rotate(${angle + (segmentAngle/2)}deg)`;
             
+            // เลขข้อ
             const numText = document.createElement('div');
             numText.innerText = i + 1;
             numText.className = 'number';
             numContainer.appendChild(numText);
+
+            // เครื่องหมายถูก/ผิด (ซ่อนอยู่)
+            const mark = document.createElement('div');
+            mark.className = 'status-mark';
+            mark.id = `mark-${i}`;
+            numContainer.appendChild(mark);
             
             wheel.appendChild(numContainer);
         }
 
-        // --- 3. ระบบเสียง (ใช้ Link Online) ---
-        // หมายเหตุ: ใช้เสียงฟรีจากแหล่งต่างๆ หากลิ้งค์ตายสามารถเปลี่ยน URL ได้
-        const bgm = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=fun-life-112188.mp3'); 
-        bgm.loop = true;
-        bgm.volume = 0.3;
-
-        const sfxSpin = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3'); // เสียงคลิกตอนหมุน (จำลอง)
-        const sfxCorrect = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
-        const sfxWrong = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3');
-
-        function startGame() {
-            document.getElementById('startScreen').style.display = 'none';
-            bgm.play().catch(e => console.log("Audio autoplay blocked"));
-        }
-
-        function toggleMusic() {
-            if (bgm.paused) bgm.play();
-            else bgm.pause();
-        }
-
-        // --- 4. Logic เกม ---
+        // --- GAME LOGIC ---
         let currentRotation = 0;
         const spinBtn = document.getElementById('spinBtn');
-        const modal = document.getElementById('quizModal');
 
         function spinWheel() {
+            if (answeredCount >= 10) return; // จบเกมแล้ว
+
             spinBtn.disabled = true;
             spinBtn.innerText = "กำลังหมุน...";
-            sfxSpin.play();
 
-            // สุ่ม 0-9
-            const selectedIndex = Math.floor(Math.random() * 10);
-            
-            // คำนวณองศา
-            const targetAngleInSegment = (selectedIndex * segmentAngle) + (segmentAngle / 2);
-            // เพื่อให้ช่องที่เลือกมาหยุดที่ 0 องศา (ด้านบน)
+            // หาข้อที่ยังไม่ได้ตอบ
+            let availableIndices = [];
+            questions.forEach((q, index) => {
+                if (!answeredQuestions[index]) availableIndices.push(index);
+            });
+
+            if (availableIndices.length === 0) {
+                endGame();
+                return;
+            }
+
+            // สุ่มเลือกจากข้อที่เหลือ
+            const randomIndex = Math.floor(Math.random() * availableIndices.length);
+            const targetIndex = availableIndices[randomIndex];
+
+            // คำนวณองศาให้หยุดที่ข้อนั้น
+            const targetAngleInSegment = (targetIndex * segmentAngle) + (segmentAngle / 2);
             const adjustRotation = 360 - targetAngleInSegment;
-            
-            const extraSpins = 360 * 5; // หมุน 5 รอบ
+            const extraSpins = 360 * 4; // หมุน 4 รอบ
             const totalDegree = currentRotation + extraSpins + adjustRotation;
-            
+
             wheel.style.transform = `rotate(${totalDegree}deg)`;
-            
+
             setTimeout(() => {
                 currentRotation = totalDegree % 360;
-                showQuestion(selectedIndex);
-            }, 4000);
+                showQuestion(targetIndex);
+            }, 3000);
         }
 
         function showQuestion(index) {
             const data = questions[index];
-            const badge = document.getElementById('teamBadge');
+            const modal = document.getElementById('quizModal');
+            const modalContent = document.getElementById('modalContent');
             
-            // ตั้งค่าสีตามทีม
-            if(data.type === 'condom') {
-                badge.innerText = "TEAM: ถุงยาง (ป้องกันโรค+ท้อง)";
-                badge.style.backgroundColor = "#00A8FF";
+            // Set Color Theme based on type
+            if (data.type === 'condom') {
+                modalContent.style.borderTopColor = '#00A8FF';
             } else {
-                badge.innerText = "TEAM: ยาคุม (ป้องกันท้อง)";
-                badge.style.backgroundColor = "#FF4757";
+                modalContent.style.borderTopColor = '#FF4757';
             }
 
             document.getElementById('questionText').innerText = data.q;
             document.getElementById('feedback').innerText = "";
-            document.getElementById('closeBtn').style.display = "none";
+            document.getElementById('nextBtn').style.display = "none";
             
             const optionsDiv = document.getElementById('optionsContainer');
             optionsDiv.innerHTML = "";
@@ -450,40 +469,135 @@
                 const btn = document.createElement('button');
                 btn.className = "option-btn";
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(btn, i, data.correct, data.explain);
+                btn.onclick = () => checkAnswer(btn, i, data.correct, data.explain, index);
                 optionsDiv.appendChild(btn);
             });
 
             modal.style.display = "flex";
+            
+            // Start Timer
+            startTimer(index);
         }
 
-        function checkAnswer(btn, selectedIndex, correctIndex, explanation) {
+        function startTimer(questionIndex) {
+            timeLeft = 30;
+            updateTimerUI();
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerUI();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout(questionIndex);
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timerText').innerText = `เหลือเวลา: ${timeLeft} วินาที`;
+            const percentage = (timeLeft / totalTime) * 100;
+            const bar = document.getElementById('timerBar');
+            bar.style.width = percentage + "%";
+            
+            if (percentage < 30) {
+                bar.style.backgroundColor = "#ff4757"; // แดงเมื่อเวลาน้อย
+            } else if (percentage < 60) {
+                bar.style.backgroundColor = "#ffa502"; // เหลือง
+            } else {
+                bar.style.backgroundColor = "#2ed573"; // เขียว
+            }
+        }
+
+        function handleTimeout(questionIndex) {
+            // หมดเวลา = ตอบผิด
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach(btn => btn.disabled = true);
+            
+            const feedback = document.getElementById('feedback');
+            feedback.style.color = "#ff4757";
+            feedback.innerText = "⏰ หมดเวลา! เฉลย: " + questions[questionIndex].explain;
+            
+            document.getElementById('nextBtn').style.display = "inline-block";
+            
+            updateGameState(questionIndex, false);
+        }
+
+        function checkAnswer(btn, selectedIndex, correctIndex, explanation, questionIndex) {
+            clearInterval(timerInterval); // หยุดเวลา
+
             const allBtns = document.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.disabled = true);
 
             const feedback = document.getElementById('feedback');
+            let isCorrect = false;
 
             if (selectedIndex === correctIndex) {
                 btn.classList.add('correct');
                 feedback.style.color = "#2ed573";
-                feedback.innerText = "🎉 " + explanation;
-                sfxCorrect.play();
-                sfxCorrect.volume = 1.0;
+                feedback.innerText = "🎉 ถูกต้อง! " + explanation;
+                isCorrect = true;
+                score++;
+                document.getElementById('scoreDisplay').innerText = score;
             } else {
                 btn.classList.add('wrong');
                 allBtns[correctIndex].classList.add('correct');
                 feedback.style.color = "#ff4757";
-                feedback.innerText = "❌ ผิดจ้า! " + explanation;
-                sfxWrong.play();
+                feedback.innerText = "❌ ผิด! " + explanation;
             }
 
-            document.getElementById('closeBtn').style.display = "inline-block";
+            document.getElementById('nextBtn').style.display = "inline-block";
+            updateGameState(questionIndex, isCorrect);
+        }
+
+        function updateGameState(index, isCorrect) {
+            answeredQuestions[index] = true;
+            answeredCount++;
+            document.getElementById('qCount').innerText = answeredCount;
+
+            // Mark on Wheel
+            const mark = document.getElementById(`mark-${index}`);
+            mark.style.display = 'block';
+            if (isCorrect) {
+                mark.innerText = "✅";
+            } else {
+                mark.innerText = "❌";
+            }
         }
 
         function closeModal() {
-            modal.style.display = "none";
-            spinBtn.disabled = false;
-            spinBtn.innerText = "หมุนเลย!";
+            document.getElementById('quizModal').style.display = "none";
+            
+            if (answeredCount >= 10) {
+                endGame();
+            } else {
+                spinBtn.disabled = false;
+                spinBtn.innerText = "หมุนข้อต่อไป!";
+            }
+        }
+
+        function endGame() {
+            const resultModal = document.getElementById('resultModal');
+            const scoreText = document.getElementById('finalScore');
+            const statusText = document.getElementById('resultStatus');
+            const messageText = document.getElementById('resultMessage');
+
+            scoreText.innerText = score + "/10";
+            
+            if (score >= 8) {
+                statusText.innerText = "🏆 MISSION COMPLETE!";
+                statusText.className = "result-status pass";
+                messageText.innerText = "สุดยอด! คุณมีความรู้เรื่อง Safe Sex ระดับเทพ!";
+                // Effect พลุ หรือเสียงดีใจ
+            } else {
+                statusText.innerText = "💀 MISSION FAILED";
+                statusText.className = "result-status fail";
+                messageText.innerText = "ยังไม่ผ่านนะ (ต้องได้ 8 คะแนนขึ้นไป) ลองศึกษาแล้วมาแก้ตัวใหม่!";
+            }
+
+            resultModal.style.display = "flex";
         }
     </script>
 </body>
