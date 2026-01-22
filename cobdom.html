@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>วงล้อวัดกึ๋น: เรื่องถุงยาง (ฉบับวัยรุ่น)</title>
+    <title>Safe Sex Battle: ศึกแดงเดือด (ถุงยาง vs ยาคุม)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap');
+        :root {
+            --condom-color: #00A8FF;
+            --pill-color: #FF4757;
+            --bg-color: #2F3542;
+        }
 
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #f0f2f5;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, #4b4b4b 0%, #2F3542 100%);
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,116 +27,156 @@
         }
 
         h1 {
-            color: #333;
             text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0px #fff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0px #000;
+            line-height: 1.2;
         }
 
-        /* Container สำหรับวงล้อ */
+        .subtitle {
+            color: #dcdde1;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* --- WHEEL STYLES --- */
         .game-container {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 350px;
+            height: 350px;
             margin-bottom: 30px;
         }
 
-        /* ตัววงล้อ */
+        .wheel-border {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+            z-index: 1;
+        }
+
         .wheel {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 5px solid #fff;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             position: relative;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); /* เอฟเฟกต์หมุนแบบสมจริง */
-        }
-
-        /* สร้างสีแต่ละช่องด้วย Conic Gradient */
-        .wheel-segments {
-            width: 100%;
-            height: 100%;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            /* สร้าง 10 ช่อง ด้วย Conic Gradient */
             background: conic-gradient(
-                #FF5252 0deg 60deg,    /* แดง: เช็คของ */
-                #FF9800 60deg 120deg,  /* ส้ม: สารหล่อลื่น */
-                #FFEB3B 120deg 180deg, /* เหลือง: อย่าหาทำ */
-                #4CAF50 180deg 240deg, /* เขียว: การทิ้ง */
-                #2196F3 240deg 300deg, /* ฟ้า: ความเชื่อ */
-                #9C27B0 300deg 360deg  /* ม่วง: จังหวะ */
+                var(--condom-color) 0deg 36deg,
+                var(--pill-color) 36deg 72deg,
+                var(--condom-color) 72deg 108deg,
+                var(--pill-color) 108deg 144deg,
+                var(--condom-color) 144deg 180deg,
+                var(--pill-color) 180deg 216deg,
+                var(--condom-color) 216deg 252deg,
+                var(--pill-color) 252deg 288deg,
+                var(--condom-color) 288deg 324deg,
+                var(--pill-color) 324deg 360deg
             );
-            border-radius: 50%;
         }
 
-        /* เส้นแบ่งช่อง */
+        /* เส้นแบ่ง */
         .line {
             position: absolute;
             top: 0;
             left: 50%;
             width: 2px;
             height: 50%;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.8);
             transform-origin: bottom center;
+            z-index: 2;
         }
 
-        /* ไอคอน/ตัวเลขในแต่ละช่อง */
-        .segment-content {
+        /* ตัวเลขในช่อง */
+        .number {
             position: absolute;
-            top: 0;
+            top: 15px;
             left: 50%;
-            width: 100%;
-            height: 50%;
-            transform-origin: bottom left;
-            text-align: center;
-            padding-top: 20px;
-            font-size: 24px;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
             font-weight: bold;
             color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            pointer-events: none;
+            text-shadow: 1px 1px 2px black;
         }
 
         /* ลูกศรชี้ */
         .pointer {
             position: absolute;
-            top: -20px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
             width: 0; 
             height: 0; 
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 30px solid #333;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 40px solid #FFD700; /* สีทอง */
             z-index: 10;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 2px rgba(0,0,0,0.5));
         }
 
-        /* ปุ่มกด */
+        /* ปุ่มกลางวงล้อ (ตกแต่ง) */
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        /* --- CONTROLS --- */
         .spin-btn {
-            background-color: #ff4757;
-            color: white;
+            background: linear-gradient(to bottom, #FFD700, #FFA500);
+            color: #333;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 50px;
             font-size: 1.5rem;
             font-family: 'Kanit', sans-serif;
+            font-weight: 900;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 0 #c0392b;
-            transition: transform 0.1s;
+            box-shadow: 0 5px 0 #b36b00, 0 10px 20px rgba(0,0,0,0.4);
+            transition: all 0.1s;
+            text-transform: uppercase;
         }
 
         .spin-btn:active {
             transform: translateY(5px);
-            box-shadow: none;
+            box-shadow: 0 0 0 #b36b00;
         }
 
         .spin-btn:disabled {
-            background-color: #ccc;
+            background: #7f8c8d;
             box-shadow: none;
             cursor: not-allowed;
+            color: #bdc3c7;
         }
 
-        /* Modal (กล่องคำถาม) */
+        .music-btn {
+            margin-top: 15px;
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* --- MODAL --- */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -137,274 +184,280 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             z-index: 100;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            animation: fadeIn 0.3s;
         }
 
         .modal-content {
             background: white;
+            color: #333;
             padding: 30px;
             border-radius: 20px;
             max-width: 500px;
             width: 100%;
             text-align: center;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: popIn 0.3s ease-out;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+            transform: scale(0.8);
+            animation: popIn 0.3s forwards;
         }
 
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.8); } to { transform: scale(1); } }
 
-        .category-badge {
+        .team-badge {
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 15px;
+            padding: 5px 20px;
+            border-radius: 50px;
             color: white;
             font-weight: bold;
             margin-bottom: 15px;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
 
         .question-text {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 25px;
-            color: #333;
+            font-weight: bold;
+            line-height: 1.4;
         }
 
         .options-grid {
             display: grid;
-            gap: 10px;
+            gap: 12px;
         }
 
         .option-btn {
-            background: #f8f9fa;
-            border: 2px solid #eee;
+            background: #f1f2f6;
+            border: 2px solid #dfe4ea;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             font-family: 'Kanit', sans-serif;
             font-size: 1rem;
             transition: all 0.2s;
+            text-align: left;
         }
 
         .option-btn:hover {
             background: #e3f2fd;
-            border-color: #2196f3;
+            border-color: #70a1ff;
         }
 
         .option-btn.correct {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
+            background: #2ed573;
+            border-color: #26af61;
+            color: white;
         }
 
         .option-btn.wrong {
-            background: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
+            background: #ff6b81;
+            border-color: #ff4757;
+            color: white;
+        }
+
+        .feedback-text {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-height: 20px;
         }
 
         .close-btn {
             margin-top: 20px;
-            padding: 10px 30px;
-            background: #333;
+            padding: 10px 40px;
+            background: #2f3542;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            display: none; /* ซ่อนก่อน จะโชว์ตอนตอบเสร็จ */
+            font-size: 1.1rem;
+            font-family: 'Kanit', sans-serif;
+            display: none;
+        }
+
+        .close-btn:hover { background: #57606f; }
+
+        /* Start Overlay */
+        .start-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-    <h1>🎡 วงล้อวัดกึ๋น: เรื่องถุงยาง</h1>
-    <p style="text-align: center; color: #666;">หมุนวงล้อแล้วตอบคำถามให้ถูก!</p>
+    <div class="start-overlay" id="startScreen">
+        <h1>Safe Sex Battle</h1>
+        <p>ศึกแดงเดือด: ถุงยาง vs ยาคุม</p>
+        <button class="spin-btn" onclick="startGame()">เริ่มเกม (เปิดเสียง)</button>
+    </div>
+
+    <h1>🥊 Safe Sex Battle</h1>
+    <div class="subtitle">ทีมถุงยาง (ฟ้า) VS ทีมยาคุม (แดง)</div>
 
     <div class="game-container">
         <div class="pointer"></div>
-        <div class="wheel" id="wheel">
-            <div class="wheel-segments"></div>
-            <div class="segment-content" style="transform: rotate(30deg) skewY(-30deg);">1</div>
-            <div class="segment-content" style="transform: rotate(90deg) skewY(-30deg);">2</div>
-            <div class="segment-content" style="transform: rotate(150deg) skewY(-30deg);">3</div>
-            <div class="segment-content" style="transform: rotate(210deg) skewY(-30deg);">4</div>
-            <div class="segment-content" style="transform: rotate(270deg) skewY(-30deg);">5</div>
-            <div class="segment-content" style="transform: rotate(330deg) skewY(-30deg);">6</div>
+        <div class="wheel-border">
+            <div class="wheel" id="wheel">
+                </div>
         </div>
+        <div class="center-circle">VS</div>
     </div>
 
     <button class="spin-btn" id="spinBtn" onclick="spinWheel()">หมุนเลย!</button>
+    <button class="music-btn" onclick="toggleMusic()">🎵 ปิด/เปิด เพลง</button>
 
     <div class="modal-overlay" id="quizModal">
         <div class="modal-content">
-            <span id="categoryBadge" class="category-badge">หมวดหมู่</span>
-            <h3 id="questionText" class="question-text">คำถามจะปรากฏที่นี่</h3>
-            <div class="options-grid" id="optionsContainer">
-                </div>
-            <div id="feedback" style="margin-top:15px; font-weight:bold;"></div>
-            <button class="close-btn" id="closeBtn" onclick="closeModal()">เล่นต่อ</button>
+            <div id="teamBadge" class="team-badge">TEAM</div>
+            <div id="questionText" class="question-text">Question Here</div>
+            <div class="options-grid" id="optionsContainer"></div>
+            <div id="feedback" class="feedback-text"></div>
+            <button class="close-btn" id="closeBtn" onclick="closeModal()">ไปต่อ >></button>
         </div>
     </div>
 
     <script>
-        // ข้อมูลคำถามตามหมวดหมู่ (6 สี)
-        const segments = [
-            {
-                color: "#FF5252", // แดง
-                name: "นักสืบสายตาดี (Checking)",
-                question: "ก่อนฉีกซองถุงยาง ต้อง 'เช็ค' อะไรเป็นอันดับแรก?",
-                options: [
-                    "เขย่าซองดูว่ามีเสียงไหม",
-                    "ดูวันหมดอายุและบีบดูฟองอากาศ",
-                    "ดมกลิ่นว่าหอมไหม",
-                    "ใช้ไฟส่องดูเนื้อยาง"
-                ],
-                correct: 1, // Index ของคำตอบที่ถูก
-                explanation: "ถูกต้อง! ต้องดูวันหมดอายุและเช็คว่าซองไม่รั่ว (มีลมป่องๆ) ถึงจะปลอดภัย"
-            },
-            {
-                color: "#FF9800", // ส้ม
-                name: "คู่สร้างคู่สม (Lubricant)",
-                question: "ถ้าถุงยางฝืด อยากใช้น้ำยาหล่อลื่น ต้องเลือกแบบไหน?",
-                options: [
-                    "เบบี้ออยล์ (Baby Oil)",
-                    "วาสลีน (Vaseline)",
-                    "โลชั่นทาผิว",
-                    "เจลสูตรน้ำ (Water-based)"
-                ],
-                correct: 3,
-                explanation: "ถูกต้อง! ห้ามใช้น้ำมันเด็ดขาดเพราะจะทำให้ยางแตก ต้องใช้สูตรน้ำเท่านั้น"
-            },
-            {
-                color: "#FFEB3B", // เหลือง
-                name: "อย่าหาทำ (Don'ts)",
-                question: "อุปกรณ์ใด 'ห้าม' ใช้แกะซองถุงยางเด็ดขาด?",
-                options: [
-                    "นิ้วมือ",
-                    "สายตา",
-                    "ฟัน หรือ กรรไกร",
-                    "เล็บ (ที่ตัดสั้น)"
-                ],
-                correct: 2,
-                explanation: "ถูกต้อง! ฟันหรือของมีคมอาจไปเกี่ยวโดนเนื้อถุงยางขาดได้โดยไม่รู้ตัว"
-            },
-            {
-                color: "#4CAF50", // เขียว
-                name: "ภารกิจกู้โลก (Disposal)",
-                question: "ใช้เสร็จแล้ว ทิ้งถุงยางยังไงให้ดูเป็นคนมีความรับผิดชอบ?",
-                options: [
-                    "ทิ้งลงชักโครกแล้วกดน้ำ",
-                    "ผูกปม ห่อทิชชู่ แล้วทิ้งลงถังขยะ",
-                    "วางไว้ใต้เตียง",
-                    "โยนออกนอกหน้าต่าง"
-                ],
-                correct: 1,
-                explanation: "ถูกต้อง! ห้ามทิ้งลงชักโครกเพราะจะทำให้อุดตัน ต้องห่อให้มิดชิดแล้วลงถังขยะ"
-            },
-            {
-                color: "#2196F3", // ฟ้า
-                name: "คณิตศาสตร์พาสยิว (Myths)",
-                question: "ใส่ถุงยาง 2 ชั้น ปลอดภัยกว่าจริงไหม?",
-                options: [
-                    "จริง เพราะมันหนาขึ้น",
-                    "ไม่จริง เพราะมันจะเสียดสีจนขาดง่าย",
-                    "จริง แต่ต้องใช้คนละยี่ห้อ",
-                    "ไม่จริง เพราะจะใส่นานเกินไป"
-                ],
-                correct: 1,
-                explanation: "ถูกต้อง! ใส่ 2 ชั้นอันตรายกว่ามาก เพราะยางจะถูกันเองจนขาด"
-            },
-            {
-                color: "#9C27B0", // ม่วง
-                name: "นาทีชีวิต (Timing)",
-                question: "ควร 'ถอด' ถุงยางออกตอนไหนดีที่สุด?",
-                options: [
-                    "ตอนไหนก็ได้ที่ว่าง",
-                    "รอให้หายเหนื่อย (อ่อนตัว) แล้วค่อยถอด",
-                    "ถอดหลังเสร็จกิจทันที ตอนยังแข็งตัว",
-                    "ถอดก่อนจะเสร็จ"
-                ],
-                correct: 2,
-                explanation: "ถูกต้อง! ต้องรีบถอดตอนยังแข็งตัว เพื่อกันไม่ให้ถุงหลุดหรือน้ำหกเลอะเทอะ"
-            }
+        // --- 1. ข้อมูลคำถาม 10 ข้อ (สลับ ฟ้า-แดง) ---
+        const questions = [
+            { type: 'condom', q: "1. ฉีกซองถุงยางยังไง ให้โลกจำ (ในทางที่ดี)?", options: ["ใช้ฟันกัด โชว์ความดุดัน", "ใช้กรรไกรตัด ให้ขอบคม", "ใช้นิ้วมือฉีกเบาๆ แล้วดันถุงยางหนี", "ให้เพื่อนช่วยฉีก"], correct: 2, explain: "ถูกต้อง! ต้องใช้นิ้วฉีกและระวังเล็บ เพื่อไม่ให้ถุงยางขาด" },
+            { type: 'pill', q: "2. ยาคุมรายเดือน ป้องกันอะไรได้บ้าง?", options: ["ท้อง + เอดส์", "ท้อง ได้อย่างเดียว", "ท้อง + สิว + ความจน", "ป้องกันแฟนบ่น"], correct: 1, explain: "ใช่แล้ว! ยาคุมกันท้องได้ แต่กันโรคติดต่อไม่ได้นะจ๊ะ" },
+            { type: 'condom', q: "3. 'น้ำมันพืช' เอามาหล่อลื่นได้ไหม?", options: ["ได้ ลื่นหัวแตก", "ได้ แต่กลิ่นเหมือนผัดกะเพรา", "ไม่ได้! ถุงยางจะแตกทันที", "ได้เฉพาะน้ำมันถั่วเหลือง"], correct: 2, explain: "ถูกต้อง! น้ำมันจะทำลายเนื้อยางพารา ทำให้ถุงแตกทันที" },
+            { type: 'pill', q: "4. เริ่มกินยาคุมเม็ดแรก ตอนไหนดีสุด?", options: ["วันไหนก็ได้ที่ฤกษ์ดี", "ภายใน 5 วันแรกของประจำเดือน", "วันลอยกระทง", "หลังกินข้าวเย็นทันที"], correct: 1, explain: "ถูกต้อง! เริ่มภายใน 5 วันแรกของรอบเดือน ได้ผลคุมกำเนิดทันที" },
+            { type: 'condom', q: "5. ทำไมต้อง 'บีบกระเปาะ' ปลายถุงยาง?", options: ["ไล่ลม กันถุงยางแตก", "เช็คว่ามีรูรั่วไหม", "เพื่อความสวยงาม", "เป็นพิธีกรรม"], correct: 0, explain: "ใช่! ถ้ามีลมค้างอยู่ พอโดนแรงกระแทก ถุงยางอาจระเบิดได้" },
+            { type: 'pill', q: "6. ลืมกินยาคุม 1 วัน! ทำไงแม่?", options: ["ทำใจ รอเดือนหน้า", "รีบกินทันทีที่นึกได้ (กินรวม 2 เม็ดได้)", "เบิ้ล 3 เม็ดชดเชย", "จุดธูปขอขมา"], correct: 1, explain: "ถูกต้อง! รีบกินเม็ดที่ลืมทันที แล้วกินเม็ดต่อไปตามเวลาปกติ" },
+            { type: 'condom', q: "7. เก็บถุงยางใน 'กระเป๋าสตางค์' ได้ไหม?", options: ["ได้ หยิบง่าย", "ได้ เพราะมันอุ่น", "ไม่ได้! นั่งทับจนถุงยางพังหมด", "ได้ แต่ต้องใส่ช่องเหรียญ"], correct: 2, explain: "ถูกต้อง! แรงกดทับและความร้อนจะทำให้ถุงยางเสื่อมคุณภาพ" },
+            { type: 'pill', q: "8. ยาคุมฉุกเฉิน กินแทนขนมได้ไหม?", options: ["ได้ อร่อยดี", "ได้ ถ้ากินคู่น้ำอัดลม", "ไม่ได้! ใช้ยามฉุกเฉินเท่านั้น", "ได้ กินวันเว้นวัน"], correct: 2, explain: "ถูกต้อง! ยาคุมฉุกเฉินประสิทธิภาพต่ำกว่าและผลข้างเคียงเยอะ ห้ามกินพร่ำเพรื่อ" },
+            { type: 'condom', q: "9. ใส่ 2 ชั้น ปลอดภัยกว่าจริงป่ะ?", options: ["จริง หนาปึ้ก", "ไม่จริง! มันจะเสียดสีจนขาด", "จริง แต่ต้องคนละยี่ห้อ", "แล้วแต่ศรัทธา"], correct: 1, explain: "ถูกต้อง! ยางถูกับยาง จะเกิดความร้อนและขาดง่ายกว่าชั้นเดียว" },
+            { type: 'pill', q: "10. กินยาคุมนานๆ จะเป็นหมันจริงไหม?", options: ["จริง 100%", "ไม่จริง! หยุดกินก็ท้องได้ปกติ", "จริงเฉพาะยี่ห้อแพงๆ", "แล้วแต่ดวง"], correct: 1, explain: "ถูกต้อง! เป็นความเชื่อที่ผิด ยาคุมไม่ทำให้เป็นหมันจ้า" }
         ];
 
-        let currentRotation = 0;
+        // --- 2. สร้างวงล้อ ---
         const wheel = document.getElementById('wheel');
+        const segmentAngle = 360 / 10; // 36 degrees per segment
+
+        // ใส่ตัวเลขและเส้นแบ่ง
+        for(let i=0; i<10; i++) {
+            const angle = i * segmentAngle;
+            // สร้างเส้น
+            const line = document.createElement('div');
+            line.className = 'line';
+            line.style.transform = `rotate(${angle}deg)`;
+            wheel.appendChild(line);
+
+            // สร้างตัวเลข (ต้องหมุนให้ตรงกลางช่อง)
+            const numContainer = document.createElement('div');
+            // หมุนไปที่ตำแหน่งเส้น + ครึ่งช่อง (18องศา)
+            numContainer.style.position = 'absolute';
+            numContainer.style.top = '0';
+            numContainer.style.left = '50%';
+            numContainer.style.width = '100%';
+            numContainer.style.height = '100%';
+            numContainer.style.transform = `rotate(${angle + (segmentAngle/2)}deg)`;
+            
+            const numText = document.createElement('div');
+            numText.innerText = i + 1;
+            numText.className = 'number';
+            numContainer.appendChild(numText);
+            
+            wheel.appendChild(numContainer);
+        }
+
+        // --- 3. ระบบเสียง (ใช้ Link Online) ---
+        // หมายเหตุ: ใช้เสียงฟรีจากแหล่งต่างๆ หากลิ้งค์ตายสามารถเปลี่ยน URL ได้
+        const bgm = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=fun-life-112188.mp3'); 
+        bgm.loop = true;
+        bgm.volume = 0.3;
+
+        const sfxSpin = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3'); // เสียงคลิกตอนหมุน (จำลอง)
+        const sfxCorrect = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
+        const sfxWrong = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3');
+
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            bgm.play().catch(e => console.log("Audio autoplay blocked"));
+        }
+
+        function toggleMusic() {
+            if (bgm.paused) bgm.play();
+            else bgm.pause();
+        }
+
+        // --- 4. Logic เกม ---
+        let currentRotation = 0;
         const spinBtn = document.getElementById('spinBtn');
         const modal = document.getElementById('quizModal');
 
         function spinWheel() {
-            // ปิดปุ่มกด
             spinBtn.disabled = true;
             spinBtn.innerText = "กำลังหมุน...";
+            sfxSpin.play();
 
-            // สุ่มว่าจะไปตกที่ช่องไหน (0-5)
-            // หมายเหตุ: ช่อง 0 (แดง) อยู่ที่ 0-60 องศา, แต่ลูกศรอยู่ข้างบน (0 องศา)
-            // การหมุนต้องคำนวณให้ช่องที่ต้องการมาหยุดที่ด้านบน
-            
-            const selectedIndex = Math.floor(Math.random() * 6);
+            // สุ่ม 0-9
+            const selectedIndex = Math.floor(Math.random() * 10);
             
             // คำนวณองศา
-            // หมุนอย่างน้อย 5 รอบ (360 * 5)
-            // แต่ละช่องกว้าง 60 องศา
-            // เพื่อให้ช่อง selectedIndex มาหยุดที่เข็ม (0 องศา) เราต้องหมุนสวนทาง
-            // สูตร: 360 - (center of segment)
+            const targetAngleInSegment = (selectedIndex * segmentAngle) + (segmentAngle / 2);
+            // เพื่อให้ช่องที่เลือกมาหยุดที่ 0 องศา (ด้านบน)
+            const adjustRotation = 360 - targetAngleInSegment;
             
-            const segmentAngle = 60;
-            const targetAngleInSegment = (selectedIndex * segmentAngle) + (segmentAngle / 2); // จุดกึ่งกลางของช่อง
-            const adjustRotation = 360 - targetAngleInSegment; // หมุนเพื่อให้จุดนั้นมาอยู่ข้างบน
+            const extraSpins = 360 * 5; // หมุน 5 รอบ
+            const totalDegree = currentRotation + extraSpins + adjustRotation;
             
-            // เพิ่มรอบการหมุน + การสุ่มตำแหน่งเล็กน้อยในช่องเพื่อความสมจริง
-            const extraSpins = 360 * 5; 
-            const randomOffset = Math.floor(Math.random() * 40) - 20; // +/- 20 องศา
-            
-            const totalDegree = currentRotation + extraSpins + adjustRotation + randomOffset;
-            
-            // สั่งหมุน
             wheel.style.transform = `rotate(${totalDegree}deg)`;
             
-            // รอให้หมุนเสร็จ (4 วินาทีตาม CSS transition)
             setTimeout(() => {
+                currentRotation = totalDegree % 360;
                 showQuestion(selectedIndex);
-                currentRotation = totalDegree % 360; // เก็บค่าไว้หมุนต่อรอบหน้า
             }, 4000);
         }
 
         function showQuestion(index) {
-            const data = segments[index];
+            const data = questions[index];
+            const badge = document.getElementById('teamBadge');
             
-            // Set Modal Content
-            document.getElementById('categoryBadge').innerText = data.name;
-            document.getElementById('categoryBadge').style.backgroundColor = data.color;
-            document.getElementById('questionText').innerText = data.question;
+            // ตั้งค่าสีตามทีม
+            if(data.type === 'condom') {
+                badge.innerText = "TEAM: ถุงยาง (ป้องกันโรค+ท้อง)";
+                badge.style.backgroundColor = "#00A8FF";
+            } else {
+                badge.innerText = "TEAM: ยาคุม (ป้องกันท้อง)";
+                badge.style.backgroundColor = "#FF4757";
+            }
+
+            document.getElementById('questionText').innerText = data.q;
             document.getElementById('feedback').innerText = "";
             document.getElementById('closeBtn').style.display = "none";
             
             const optionsDiv = document.getElementById('optionsContainer');
-            optionsDiv.innerHTML = ""; // Clear old options
+            optionsDiv.innerHTML = "";
 
             data.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
                 btn.className = "option-btn";
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(btn, i, data.correct, data.explanation);
+                btn.onclick = () => checkAnswer(btn, i, data.correct, data.explain);
                 optionsDiv.appendChild(btn);
             });
 
-            // Show Modal
             modal.style.display = "flex";
         }
 
         function checkAnswer(btn, selectedIndex, correctIndex, explanation) {
-            // Disable all buttons
             const allBtns = document.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.disabled = true);
 
@@ -412,14 +465,16 @@
 
             if (selectedIndex === correctIndex) {
                 btn.classList.add('correct');
-                feedback.style.color = "#155724";
-                feedback.innerText = "🎉 เย้! " + explanation;
+                feedback.style.color = "#2ed573";
+                feedback.innerText = "🎉 " + explanation;
+                sfxCorrect.play();
+                sfxCorrect.volume = 1.0;
             } else {
                 btn.classList.add('wrong');
-                // Highlight correct one
                 allBtns[correctIndex].classList.add('correct');
-                feedback.style.color = "#721c24";
+                feedback.style.color = "#ff4757";
                 feedback.innerText = "❌ ผิดจ้า! " + explanation;
+                sfxWrong.play();
             }
 
             document.getElementById('closeBtn').style.display = "inline-block";
@@ -428,7 +483,7 @@
         function closeModal() {
             modal.style.display = "none";
             spinBtn.disabled = false;
-            spinBtn.innerText = "หมุนอีกรอบ!";
+            spinBtn.innerText = "หมุนเลย!";
         }
     </script>
 </body>
