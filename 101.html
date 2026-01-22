@@ -49,28 +49,39 @@
         }
         .card-hover {
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
+        /* Animation classes */
+        .shake { animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .pop { animation: pop 0.3s; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body class="bg-slate-50 text-dark overflow-x-hidden">
 
+    <!-- Sound Toggle Button (Floating) -->
+    <button id="sound-toggle" onclick="toggleSound()" class="fixed bottom-6 right-6 z-50 bg-white text-dark p-4 rounded-full shadow-xl border-2 border-primary hover:bg-primary hover:text-white transition-all transform hover:scale-110">
+        <i class="fa-solid fa-volume-high text-xl" id="sound-icon"></i>
+    </button>
+
     <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-primary flex items-center gap-2">
+            <a href="#" class="text-2xl font-bold text-primary flex items-center gap-2" onmouseenter="playHover()">
                 <i class="fa-solid fa-capsules"></i> TeenHealth
             </a>
             <div class="hidden md:flex gap-6 text-gray-600 font-medium">
-                <a href="#types" class="hover:text-primary transition">ประเภท</a>
-                <a href="#howto" class="hover:text-primary transition">วิธีเริ่ม</a>
-                <a href="#forgot" class="hover:text-primary transition">ลืมกินยา?</a>
-                <a href="#myths" class="hover:text-primary transition">ความเชื่อ</a>
+                <a href="#types" class="hover:text-primary transition" onmouseenter="playHover()" onclick="playClick()">ประเภท</a>
+                <a href="#howto" class="hover:text-primary transition" onmouseenter="playHover()" onclick="playClick()">วิธีเริ่ม</a>
+                <a href="#forgot" class="hover:text-primary transition" onmouseenter="playHover()" onclick="playClick()">ลืมกินยา?</a>
+                <a href="#myths" class="hover:text-primary transition" onmouseenter="playHover()" onclick="playClick()">ความเชื่อ</a>
             </div>
-            <a href="#quiz" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-red-500 transition shadow-md">
+            <a href="#quiz" onclick="playClick()" onmouseenter="playHover()" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-red-500 transition shadow-md">
                 ทดสอบความรู้
             </a>
         </div>
@@ -94,15 +105,30 @@
                 และจริงไหมที่กินแล้วอ้วน? มาหาคำตอบกันที่นี่
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#types" class="bg-dark text-white px-8 py-3 rounded-xl hover:bg-gray-800 transition font-semibold shadow-lg">
+                <a href="#types" onmouseenter="playHover()" onclick="playClick()" class="bg-dark text-white px-8 py-3 rounded-xl hover:bg-gray-800 transition font-semibold shadow-lg hover:-translate-y-1">
                     เริ่มเรียนรู้เลย
                 </a>
-                <a href="#howto" class="bg-white text-dark border-2 border-dark px-8 py-3 rounded-xl hover:bg-gray-50 transition font-semibold">
+                <a href="#howto" onmouseenter="playHover()" onclick="playClick()" class="bg-white text-dark border-2 border-dark px-8 py-3 rounded-xl hover:bg-gray-50 transition font-semibold hover:-translate-y-1">
                     ดูวิธีใช้ด่วน
                 </a>
             </div>
         </div>
     </header>
+
+    <!-- Infographic Section (Added Image) -->
+    <section class="py-12 bg-orange-50/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-dark">📌 สรุปวิธีใช้แบบเข้าใจง่าย</h2>
+            </div>
+            <div class="max-w-5xl mx-auto bg-white p-2 rounded-3xl shadow-xl transform hover:scale-[1.01] transition duration-500">
+                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiiqcTL7iu_bOdOWzq2UCFE2gM4YydK1KLXcRcm8-YL5WFRu6n-8ZHEYeRN_z1HtysXzqyXA9RP9f3Qwgn5iu3-lWfpjzClDyAzDPdYAsK1GQPT8-d1MQDODyfYlrs4VH2baFcDH_NKbeVkKFhEEMhcHR38_GMdcHVMMP2kCitegCbXzgSZiXf9ftyyv8I=s16000" 
+                     alt="Infographic การใช้ยาคุมกำเนิด" 
+                     class="w-full h-auto rounded-2xl"
+                     loading="lazy">
+            </div>
+        </div>
+    </section>
 
     <!-- Types Section -->
     <section id="types" class="py-20 bg-white">
@@ -114,7 +140,7 @@
 
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- Type 21 -->
-                <div class="bg-blue-50 rounded-3xl p-8 card-hover border border-blue-100 relative overflow-hidden">
+                <div class="bg-blue-50 rounded-3xl p-8 card-hover border border-blue-100 relative overflow-hidden" onmouseenter="playHover()">
                     <div class="absolute top-0 right-0 bg-blue-200 text-blue-800 px-4 py-1 rounded-bl-xl font-bold text-sm">ยอดฮิต</div>
                     <div class="text-5xl text-blue-500 mb-6"><i class="fa-regular fa-calendar-minus"></i></div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">แบบ 21 เม็ด</h3>
@@ -126,7 +152,7 @@
                 </div>
 
                 <!-- Type 28 -->
-                <div class="bg-green-50 rounded-3xl p-8 card-hover border border-green-100 relative overflow-hidden">
+                <div class="bg-green-50 rounded-3xl p-8 card-hover border border-green-100 relative overflow-hidden" onmouseenter="playHover()">
                     <div class="absolute top-0 right-0 bg-green-200 text-green-800 px-4 py-1 rounded-bl-xl font-bold text-sm">สำหรับคนขี้ลืม</div>
                     <div class="text-5xl text-green-500 mb-6"><i class="fa-regular fa-calendar-check"></i></div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">แบบ 28 เม็ด</h3>
@@ -150,7 +176,7 @@
 
             <div class="flex flex-col md:flex-row justify-center items-center gap-6 max-w-5xl mx-auto">
                 <!-- Step 1 -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full relative">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full relative card-hover" onmouseenter="playHover()">
                     <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
                     <h4 class="font-bold text-lg mb-2">วันแรกของประจำเดือน</h4>
                     <p class="text-sm text-gray-500">ดีที่สุด! ให้เริ่มกินเม็ดแรกภายในวันที่ 1-5 ที่ประจำเดือนมา</p>
@@ -160,7 +186,7 @@
                 <i class="fa-solid fa-arrow-down text-2xl text-gray-300 md:hidden"></i>
 
                 <!-- Step 2 -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full card-hover" onmouseenter="playHover()">
                     <div class="w-12 h-12 bg-secondary text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
                     <h4 class="font-bold text-lg mb-2">กินเวลาเดิมเสมอ</h4>
                     <p class="text-sm text-gray-500">ตั้งนาฬิกาปลุกไว้เลย (เช่น ก่อนนอน 4 ทุ่ม) เพื่อประสิทธิภาพสูงสุด</p>
@@ -170,15 +196,15 @@
                 <i class="fa-solid fa-arrow-down text-2xl text-gray-300 md:hidden"></i>
 
                 <!-- Step 3 -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full card-hover" onmouseenter="playHover()">
                     <div class="w-12 h-12 bg-accent text-dark rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
                     <h4 class="font-bold text-lg mb-2">ห้ามหยุดกิน</h4>
                     <p class="text-sm text-gray-500">กินตามลูกศรบนแผง ห้ามหยุดกินกลางคันแม้จะทะเลาะกับแฟน!</p>
                 </div>
             </div>
             
-            <div class="mt-10 bg-white border-l-4 border-red-500 p-6 rounded-r-xl max-w-3xl mx-auto shadow-md flex items-start gap-4">
-                <i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl"></i>
+            <div class="mt-10 bg-white border-l-4 border-red-500 p-6 rounded-r-xl max-w-3xl mx-auto shadow-md flex items-start gap-4 hover:shadow-lg transition">
+                <i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl animate-pulse"></i>
                 <div>
                     <h4 class="font-bold text-red-600">คำเตือนสำคัญ!</h4>
                     <p class="text-gray-700">หากไม่ได้เริ่มกินภายใน 5 วันแรกของประจำเดือน ต้องใช้ถุงยางอนามัยร่วมด้วยใน 7 วันแรกของการกินยา</p>
@@ -194,13 +220,13 @@
         </div>
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-12">
-                <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Emergency</span>
+                <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider animate-pulse">Emergency</span>
                 <h2 class="text-3xl md:text-4xl font-bold mt-2">😱 ตายแล้ว! ลืมกินยา ทำไงดี?</h2>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- Case 1 -->
-                <div class="bg-gray-800 p-8 rounded-3xl border border-gray-700">
+                <div class="bg-gray-800 p-8 rounded-3xl border border-gray-700 hover:border-yellow-500 transition cursor-pointer" onmouseenter="playHover()">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="bg-yellow-500 w-10 h-10 rounded-full flex items-center justify-center text-dark font-bold"><i class="fa-solid fa-1"></i></div>
                         <h3 class="text-xl font-bold">ลืม 1 เม็ด (หรือไม่เกิน 24 ชม.)</h3>
@@ -213,7 +239,7 @@
                 </div>
 
                 <!-- Case 2 -->
-                <div class="bg-gray-800 p-8 rounded-3xl border border-gray-700">
+                <div class="bg-gray-800 p-8 rounded-3xl border border-gray-700 hover:border-red-500 transition cursor-pointer" onmouseenter="playHover()">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="bg-red-500 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"><i class="fa-solid fa-2"></i></div>
                         <h3 class="text-xl font-bold">ลืม 2 เม็ดขึ้นไป</h3>
@@ -241,10 +267,10 @@
 
             <div class="space-y-4">
                 <!-- Question 1 -->
-                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans1')">
-                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center">
+                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans1')" onmouseenter="playHover()">
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center group-hover:bg-slate-50">
                         <div class="flex items-center gap-4">
-                            <span class="text-2xl">🐷</span>
+                            <span class="text-2xl animate-bounce">🐷</span>
                             <h3 class="font-bold text-lg">กินยาคุมแล้วจะ "อ้วน" ขึ้น?</h3>
                         </div>
                         <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-secondary"></i>
@@ -255,10 +281,10 @@
                 </div>
 
                 <!-- Question 2 -->
-                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans2')">
-                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center">
+                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans2')" onmouseenter="playHover()">
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center group-hover:bg-slate-50">
                         <div class="flex items-center gap-4">
-                            <span class="text-2xl">🦠</span>
+                            <span class="text-2xl animate-bounce">🦠</span>
                             <h3 class="font-bold text-lg">ยาคุมป้องกัน HIV / โรคติดต่อได้?</h3>
                         </div>
                         <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-secondary"></i>
@@ -270,10 +296,10 @@
                 </div>
 
                 <!-- Question 3 -->
-                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans3')">
-                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center">
+                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans3')" onmouseenter="playHover()">
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center group-hover:bg-slate-50">
                         <div class="flex items-center gap-4">
-                            <span class="text-2xl">✨</span>
+                            <span class="text-2xl animate-bounce">✨</span>
                             <h3 class="font-bold text-lg">กินยาคุมช่วยลดสิว หน้าใส?</h3>
                         </div>
                         <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-secondary"></i>
@@ -291,20 +317,26 @@
     <section id="quiz" class="py-20 bg-secondary/10">
         <div class="container mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold mb-8">🎯 ทดสอบความเข้าใจกันหน่อย</h2>
-            <div id="quiz-container" class="bg-white max-w-2xl mx-auto p-8 rounded-3xl shadow-lg">
+            <div id="quiz-container" class="bg-white max-w-2xl mx-auto p-8 rounded-3xl shadow-lg border-4 border-transparent hover:border-primary/20 transition duration-500">
                 <div id="question-box">
                     <h3 class="text-xl font-bold mb-6" id="q-text">1. ควรเริ่มกินยาคุมเม็ดแรกเมื่อไหร่ดีที่สุด?</h3>
                     <div class="grid gap-4">
-                        <button onclick="checkAnswer(1, false)" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition text-left">ก. วันที่หายจากประจำเดือนแล้ว</button>
-                        <button onclick="checkAnswer(1, true)" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition text-left">ข. ภายในวันที่ 1-5 ของการมีประจำเดือน</button>
-                        <button onclick="checkAnswer(1, false)" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition text-left">ค. วันไหนก็ได้ที่อยากกิน</button>
+                        <button onclick="checkAnswer(1, false, this)" onmouseenter="playHover()" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-primary transition text-left group">
+                            ก. วันที่หายจากประจำเดือนแล้ว
+                        </button>
+                        <button onclick="checkAnswer(1, true, this)" onmouseenter="playHover()" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-primary transition text-left group">
+                            ข. ภายในวันที่ 1-5 ของการมีประจำเดือน
+                        </button>
+                        <button onclick="checkAnswer(1, false, this)" onmouseenter="playHover()" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-primary transition text-left group">
+                            ค. วันไหนก็ได้ที่อยากกิน
+                        </button>
                     </div>
                 </div>
                 <div id="result-box" class="hidden text-center py-8">
-                    <div class="text-6xl mb-4">🎉</div>
+                    <div class="text-6xl mb-4 animate-bounce">🎉</div>
                     <h3 class="text-2xl font-bold text-primary mb-2">ยอดเยี่ยม!</h3>
                     <p class="text-gray-600">คุณพร้อมดูแลตัวเองอย่างปลอดภัยแล้ว</p>
-                    <button onclick="location.reload()" class="mt-6 text-sm text-gray-400 underline">เริ่มใหม่</button>
+                    <button onclick="location.reload()" class="mt-6 text-sm text-gray-400 underline hover:text-primary transition" onmouseenter="playHover()">เริ่มใหม่</button>
                 </div>
             </div>
         </div>
@@ -316,19 +348,165 @@
             <p class="mb-2">Website นี้จัดทำเพื่อการศึกษาสำหรับนักเรียนชั้นมัธยมศึกษาปีที่ 5</p>
             <p>*** หากมีข้อสงสัยหรืออาการผิดปกติ ควรปรึกษาแพทย์หรือเภสัชกรทันที ***</p>
             <div class="mt-6 flex justify-center gap-4 text-xl">
-                <i class="fa-brands fa-facebook hover:text-white cursor-pointer"></i>
-                <i class="fa-brands fa-instagram hover:text-white cursor-pointer"></i>
-                <i class="fa-brands fa-twitter hover:text-white cursor-pointer"></i>
+                <i class="fa-brands fa-facebook hover:text-white cursor-pointer hover:scale-125 transition" onmouseenter="playHover()"></i>
+                <i class="fa-brands fa-instagram hover:text-white cursor-pointer hover:scale-125 transition" onmouseenter="playHover()"></i>
+                <i class="fa-brands fa-twitter hover:text-white cursor-pointer hover:scale-125 transition" onmouseenter="playHover()"></i>
             </div>
         </div>
     </footer>
 
     <script>
+        // --- Sound System (Web Audio API) ---
+        // สร้างเสียงแบบ Retro/Game โดยไม่ต้องใช้ไฟล์ MP3
+        
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('sound-icon');
+            const btn = document.getElementById('sound-toggle');
+            
+            if (isMuted) {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+                btn.classList.add('bg-gray-300', 'border-gray-400');
+                btn.classList.remove('bg-white', 'border-primary', 'text-dark');
+            } else {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+                btn.classList.remove('bg-gray-300', 'border-gray-400');
+                btn.classList.add('bg-white', 'border-primary', 'text-dark');
+                // Play sound to confirm unmute
+                initAudio();
+                playClick();
+            }
+        }
+
+        function createOscillator(type, freq, duration, type2 = null) {
+            if (!audioCtx || isMuted) return;
+            initAudio();
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        function playHover() {
+            // เสียง Pop เบาๆ สั้นๆ
+            if (!audioCtx) initAudio();
+            if (isMuted) return;
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playClick() {
+            // เสียง Click แบบ UI
+            if (!audioCtx) initAudio();
+            if (isMuted) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playCorrect() {
+            // เสียง Win! (Arpeggio C major)
+            if (!audioCtx) initAudio();
+            if (isMuted) return;
+
+            const now = audioCtx.currentTime;
+            
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.type = 'square'; // เสียงแบบเกม 8-bit
+                osc.frequency.setValueAtTime(freq, now + (i * 0.1));
+                
+                gain.gain.setValueAtTime(0.05, now + (i * 0.1));
+                gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.1) + 0.2);
+                
+                osc.start(now + (i * 0.1));
+                osc.stop(now + (i * 0.1) + 0.2);
+            });
+        }
+
+        function playWrong() {
+            // เสียง Fail (เสียงต่ำลง)
+            if (!audioCtx) initAudio();
+            if (isMuted) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.4);
+            
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
+
+        // --- Existing Logic ---
+
         // Myth Accordion Logic
         function toggleAnswer(id) {
+            playClick(); // Add sound
             const el = document.getElementById(id);
             if (el.classList.contains('hidden')) {
                 el.classList.remove('hidden');
+                playHover(); // Extra sound for reveal
             } else {
                 el.classList.add('hidden');
             }
@@ -367,6 +545,7 @@
             if (index >= questions.length) {
                 document.getElementById('question-box').classList.add('hidden');
                 document.getElementById('result-box').classList.remove('hidden');
+                playCorrect(); // Victory sound at end
                 return;
             }
             const q = questions[index];
@@ -374,23 +553,41 @@
             document.getElementById('q-text').innerText = q.q;
             btns.forEach((btn, i) => {
                 btn.innerText = q.options[i].text;
-                btn.onclick = () => checkAnswer(index, q.options[i].correct);
-                btn.classList.remove('bg-green-100', 'bg-red-100', 'border-green-500', 'border-red-500');
+                // Update onclick to include element reference for animation
+                btn.onclick = function() { checkAnswer(index, q.options[i].correct, this); };
+                btn.classList.remove('bg-green-100', 'bg-red-100', 'border-green-500', 'border-red-500', 'shake', 'pop');
                 btn.classList.add('border-gray-200');
             });
         }
 
-        function checkAnswer(qIndex, isCorrect) {
+        function checkAnswer(qIndex, isCorrect, btnElement) {
+            initAudio(); // Ensure context is ready
+            
             if (isCorrect) {
-                alert("ถูกต้อง! เก่งมาก 👍");
-                loadQuestion(qIndex + 1);
+                playCorrect();
+                btnElement.classList.remove('bg-gray-50', 'hover:bg-gray-50');
+                btnElement.classList.add('bg-green-100', 'border-green-500', 'pop');
+                // Delay alert slightly to let sound/animation play
+                setTimeout(() => {
+                    alert("ถูกต้อง! เก่งมาก 👍");
+                    loadQuestion(qIndex + 1);
+                }, 300);
             } else {
-                alert("ยังไม่ถูกนะ ลองใหม่อีกที! 😅");
+                playWrong();
+                btnElement.classList.add('bg-red-100', 'border-red-500', 'shake');
+                setTimeout(() => {
+                     alert("ยังไม่ถูกนะ ลองใหม่อีกที! 😅");
+                     btnElement.classList.remove('shake'); // Reset shake
+                }, 300);
             }
         }
 
         // Initialize Quiz
         loadQuestion(0);
+        
+        // Initialize Audio on first click anywhere (browser policy)
+        document.body.addEventListener('click', initAudio, { once: true });
+
     </script>
 </body>
 </html>
