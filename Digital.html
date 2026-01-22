@@ -7,7 +7,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Sarabun & Prompt -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -96,7 +96,7 @@
     <header class="gradient-bg text-white pb-12 pt-6 px-4 shadow-lg rounded-b-3xl relative z-10">
         <div class="max-w-3xl mx-auto">
             <!-- Back to Home Link -->
-            <a href="https://tuikub.github.io/paypoint/" class="inline-flex items-center text-white text-opacity-90 hover:text-opacity-100 hover:bg-white hover:bg-opacity-10 px-3 py-1.5 rounded-lg transition mb-2">
+            <a href="#" onclick="alert('กลับหน้าหลัก')" class="inline-flex items-center text-white text-opacity-90 hover:text-opacity-100 hover:bg-white hover:bg-opacity-10 px-3 py-1.5 rounded-lg transition mb-2">
                 <i class="fas fa-chevron-left mr-2"></i> กลับหน้าหลัก
             </a>
 
@@ -133,7 +133,7 @@
         <!-- 3 Golden Rules -->
         <div class="grid md:grid-cols-3 gap-4 mb-8">
             <div class="bg-white p-5 rounded-xl shadow-sm text-center card-hover">
-                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-3">
                     <i class="fas fa-calendar-alt text-xl"></i>
                 </div>
                 <h4 class="font-bold text-lg mb-2">5 วันทำการ</h4>
@@ -243,7 +243,7 @@
             <h2 class="font-bold text-xl mb-4"><i class="fas fa-video mr-2"></i>สื่อการเรียนรู้เพิ่มเติม</h2>
             
             <div class="grid md:grid-cols-2 gap-4">
-                <a href="https://youtu.be/LpfwEJ-AtUM" target="_blank" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
+                <a href="#" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
                     <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
                         <i class="fas fa-play text-white"></i>
                     </div>
@@ -253,7 +253,7 @@
                     </div>
                 </a>
 
-                <a href="https://youtu.be/xcSDlgpNEOY" target="_blank" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
+                <a href="#" class="block bg-gray-700 hover:bg-gray-600 transition p-4 rounded-lg flex items-center">
                     <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mr-4">
                         <i class="fas fa-play text-white"></i>
                     </div>
@@ -265,10 +265,10 @@
             </div>
 
             <div class="mt-4 pt-4 border-t border-gray-700 flex flex-col md:flex-row gap-3">
-                <a href="https://shorturl.asia/RT04Z" target="_blank" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition font-medium">
+                <a href="#" class="flex-1 text-center bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg transition font-medium">
                     <i class="fas fa-book-open mr-2"></i>คู่มือการใช้งาน (PDF)
                 </a>
-                <a href="https://drive.google.com/drive/folders/1n07S7mnoAJP59cjj6AVQsNFe1JsXX30c" target="_blank" class="flex-1 text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition font-medium">
+                <a href="#" class="flex-1 text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition font-medium">
                     <i class="fab fa-google-drive mr-2"></i>คลังข้อมูล (Drive)
                 </a>
             </div>
@@ -278,7 +278,7 @@
         <footer class="text-center mt-8 text-gray-500 text-sm pb-8">
             <p>&copy; 2024 PAYPOINT FAMILY SYSTEM SUPPORT. ALL RIGHTS RESERVED</p>
             <p class="mt-1">Pratya Chatmontree</p>
-            <a href="https://tuikub.github.io/paypoint/" class="inline-block mt-2 text-orange-500 hover:text-orange-600 font-medium">กลับสู่หน้าหลัก</a>
+            <a href="#" class="inline-block mt-2 text-orange-500 hover:text-orange-600 font-medium">กลับสู่หน้าหลัก</a>
         </footer>
 
     </main>
@@ -292,20 +292,20 @@
         <div id="chat-window" class="chat-hidden chat-transition bg-white w-[350px] h-[500px] max-h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
             
             <!-- Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex items-center justify-between text-white shadow-md z-10">
+            <div class="bg-gradient-to-r from-orange-600 to-red-600 p-4 flex items-center justify-between text-white shadow-md z-10">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold relative">
                         <i class="fa-solid fa-robot"></i>
                         <!-- Status Dot: Green=Ready, Red=Error -->
-                        <div id="status-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-blue-600 rounded-full"></div>
+                        <div id="status-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-orange-600 rounded-full"></div>
                     </div>
                     <div>
                         <h1 class="font-bold text-base leading-tight">AI Assistant</h1>
-                        <p id="model-status" class="text-[10px] text-blue-100 opacity-90">Powered by Gemini</p>
+                        <p id="model-status" class="text-[10px] text-orange-100 opacity-90">Powered by Gemini</p>
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="toggleSettings()" class="text-white/80 hover:text-white p-1 rounded-full transition" title="ตั้งค่า API">
+                    <button onclick="checkAdminAndToggle()" class="opacity-0 hover:opacity-100 text-white/80 hover:text-white p-1 rounded-full transition" title="ตั้งค่า API">
                         <i class="fa-solid fa-gear"></i>
                     </button>
                     <button onclick="toggleChat()" class="text-white/80 hover:text-white p-1 rounded-full transition">
@@ -317,9 +317,9 @@
             <!-- Chat Box -->
             <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 scrollbar-hide text-sm relative">
                 <div class="flex items-start gap-2">
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-[10px] font-bold shrink-0">AI</div>
+                    <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-[10px] font-bold shrink-0">AI</div>
                     <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800">
-                        สวัสดีครับ ยิดดีให้บริการ สักครู่นะครับ...
+                        สวัสดีครับ ยินดีให้บริการ หากมีคำถามเกี่ยวกับการโต้แย้งค่าปรับ พิมพ์ถามได้เลยครับ ()
                     </div>
                 </div>
             </div>
@@ -327,9 +327,9 @@
             <!-- Loading -->
             <div id="loading" class="hidden px-4 pb-2">
                 <div class="flex items-center space-x-1 bg-white p-2 rounded-xl w-fit shadow-sm border border-gray-100">
-                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full typing-dot"></div>
-                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full typing-dot"></div>
-                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-orange-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-orange-600 rounded-full typing-dot"></div>
+                    <div class="w-1.5 h-1.5 bg-orange-600 rounded-full typing-dot"></div>
                 </div>
             </div>
 
@@ -337,10 +337,10 @@
             <div class="p-3 bg-white border-t border-gray-100">
                 <form id="chat-form" class="flex gap-2 items-center">
                     <input type="text" id="user-input" 
-                        class="flex-1 bg-gray-100 border-0 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-blue-500 block w-full px-4 py-2.5 outline-none transition placeholder-gray-400" 
+                        class="flex-1 bg-gray-100 border-0 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-orange-500 block w-full px-4 py-2.5 outline-none transition placeholder-gray-400" 
                         placeholder="พิมพ์คำถาม..." autocomplete="off">
                     <button type="submit" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md transition transform hover:scale-105">
+                        class="bg-orange-600 hover:bg-orange-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md transition transform hover:scale-105">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </form>
@@ -360,8 +360,8 @@
                     <hr class="border-gray-100 my-2">
 
                     <div>
-                        <label class="text-xs font-semibold text-blue-600">Primary: Gemini API Key</label>
-                        <input type="password" id="gemini-key-input" class="w-full border border-blue-200 rounded p-2 text-xs mt-1" placeholder="AIzaSy...">
+                        <label class="text-xs font-semibold text-orange-600">Primary: Gemini API Key</label>
+                        <input type="password" id="gemini-key-input" class="w-full border border-orange-200 rounded p-2 text-xs mt-1" placeholder="วาง API Key ที่นี่ (AIzaSy...)">
                     </div>
 
                     <div>
@@ -373,45 +373,31 @@
 
                 <div class="mt-4 flex gap-2">
                     <button onclick="toggleSettings()" class="flex-1 py-2 text-gray-500 text-xs hover:bg-gray-100 rounded">ปิด</button>
-                    <button onclick="saveSettings()" class="flex-1 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 shadow">บันทึก & รีโหลด</button>
+                    <button onclick="saveSettings()" class="flex-1 py-2 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 shadow">บันทึก & รีโหลด</button>
                 </div>
             </div>
         </div>
 
         <!-- Toggle Button -->
         <button onclick="toggleChat()" id="chat-toggle-btn" 
-            class="bg-blue-600 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 group relative">
+            class="bg-orange-600 hover:bg-orange-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 group relative">
             <i class="fa-solid fa-comment-dots text-2xl absolute transition-all duration-300 transform group-hover:rotate-12 scale-100 opacity-100" id="icon-closed"></i>
             <i class="fa-solid fa-chevron-down text-xl absolute transition-all duration-300 transform rotate-180 scale-0 opacity-0" id="icon-opened"></i>
         </button>
     </div>
 
     <script>
-        // --- ฟังก์ชันเข้ารหัส/ถอดรหัส Key แบบง่าย (Simple Obfuscation) ---
-        // ใช้ Base64 encoding เพื่อไม่ให้เห็น Key เป็น Plain text
-        // (ไม่ได้กัน Hacker เก่งๆ ได้ 100% แต่กันคนทั่วไปได้ดี)
-        function getKey(encodedKey) {
-            try {
-                return atob(encodedKey);
-            } catch (e) {
-                console.error("Decoding error");
-                return "";
-            }
-        }
-
         // --- 1. ตัวแปรระบบ ---
         let sheetId = localStorage.getItem('chat_sheet_id') || '1darv2F3vLlv5hhULgRREzRXPkKy0L2GmTFeyfzNgo9k';
         
         // =========================================================================
-        // 🔑 ใส่ API KEY (เข้ารหัสแล้ว หรือ ใส่ตรงๆ ก็ได้แต่ไม่แนะนำ)
+        // 🔑 ใส่ API KEY (แนะนำให้ใส่ผ่านหน้า UI Settings เพื่อความปลอดภัย)
         // =========================================================================
         
-        // Gemini Key: 'AIzaSyAnqjmk-VxP-XAVVnddpua394Pw71NtVfU' (Encoded: QUl6YVN5QW5xam1rLVZ4UC1YQVZWbmRkcHVhMzk0UHc3MU50VmZV)
+        // Clear default keys to avoid invalid key errors
         let geminiKey = localStorage.getItem('chat_gemini_key') || 'AIzaSyAnqjmk-VxP-XAVVnddpua394Pw71NtVfU'; 
         
-        // Together Key: 'f1ab2db1ed0da368ff5d3001a70855fac21f2b161a12021e44c1e3e75f05e575' 
         let togetherKey = localStorage.getItem('chat_together_key') || 'f1ab2db1ed0da368ff5d3001a70855fac21f2b161a12021e44c1e3e75f05e575'; 
-
         
         let KNOWLEDGE_BASE = "";
         let isKnowledgeLoaded = false;
@@ -439,13 +425,13 @@
                 parseCSVtoKnowledge(csvText);
                 
                 addMessage('system', '✅ เชื่อมต่อฐานข้อมูลสำเร็จ! พร้อมตอบคำถามครับ');
-                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-blue-600 rounded-full";
+                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border-2 border-orange-600 rounded-full";
                 isKnowledgeLoaded = true;
 
             } catch (error) {
                 console.error(error);
                 addMessage('system', '❌ ไม่สามารถดึงข้อมูล Sheet ได้: กรุณาตรวจสอบ ID หรือทำการ "Publish to Web" (File > Share > Publish to web)');
-                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-blue-600 rounded-full";
+                document.getElementById('status-dot').className = "absolute bottom-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-orange-600 rounded-full";
             }
         }
 
@@ -458,8 +444,8 @@
                 if(index === 0) return; // ข้าม Header
                 if(cols.length >= 2) {
                     // ตัดเครื่องหมายคำพูดออก (Clean CSV quotes)
-                    const q = cols[0].replace(/^"|"$/g, '').trim();
-                    const a = cols[1].replace(/^"|"$/g, '').trim();
+                    const q = cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : '';
+                    const a = cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : '';
                     if(q && a) {
                         textData += `- คำถาม: "${q}" \n  คำตอบ: "${a}"\n`;
                     }
@@ -471,7 +457,7 @@
         // --- 4. Logic การเรียก AI (Chain: Gemini -> Together) ---
         async function getAIResponse(userMessage) {
             if (!geminiKey && !togetherKey) {
-                return "กรุณาตั้งค่า API Key ในเมนูตั้งค่าก่อนครับ";
+                return "API";
             }
 
             // ลอง Gemini ก่อน (Priority 1)
@@ -483,9 +469,9 @@
                     console.warn("Gemini Failed:", error);
                     // ถ้ามี Together Key ให้ไปต่อ
                     if (togetherKey) {
-                        addMessage('system', '⚠️ สักครู่จ้า');
+                        addMessage('system', '⚠️ สักครู่นนะ');
                     } else {
-                        return "ขออภัย Gemini ขัดข้องและไม่มี Key สำรองครับ";
+                        return "ขออภัย Gemini ขัดข้องและไม่มี Key สำรองครับ (" + error.message + ")";
                     }
                 }
             }
@@ -578,6 +564,15 @@
             }
         }
 
+        function checkAdminAndToggle() {
+            const password = prompt("กรุณาใส่รหัสผ่าน Admin:");
+            if (password === "02817648++") {
+                toggleSettings();
+            } else {
+                alert("รหัสผ่านไม่ถูกต้อง!");
+            }
+        }
+
         function toggleSettings() {
             settingsPanel.classList.toggle('hidden');
         }
@@ -601,8 +596,8 @@
             const div = document.createElement('div');
             div.className = `flex items-start gap-2 ${isUser ? 'flex-row-reverse' : ''}`;
             
-            const avatar = isUser ? '' : `<div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-[10px] font-bold shrink-0">AI</div>`;
-            const bubbleColor = isUser ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 border border-gray-100';
+            const avatar = isUser ? '' : `<div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-[10px] font-bold shrink-0">AI</div>`;
+            const bubbleColor = isUser ? 'bg-orange-600 text-white' : 'bg-white text-gray-800 border border-gray-100';
             const systemStyle = role === 'system' ? 'bg-yellow-50 text-yellow-800 border-yellow-100 text-xs italic' : '';
 
             div.innerHTML = `
