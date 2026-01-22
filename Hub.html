@@ -22,7 +22,7 @@
             background-color: #f8fafc; /* Slate-50: สบายตา */
         }
         .glass-nav {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #e2e8f0;
         }
@@ -31,7 +31,7 @@
         }
         .card-hover:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
         }
         /* Animation for Chat Button */
         @keyframes pulse-custom {
@@ -47,19 +47,22 @@
 <body class="text-slate-700 flex flex-col min-h-screen">
 
     <!-- Navigation Bar -->
-    <nav class="glass-nav fixed w-full z-50 top-0">
+    <nav class="glass-nav fixed w-full z-50 top-0 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo / Brand -->
-                <div class="flex-shrink-0 flex items-center gap-2">
+                <div class="flex-shrink-0 flex items-center gap-3">
                     <img src="https://tuikub.github.io/tracking//paypoint.png" alt="Paypoint Logo" class="h-10 w-auto">
-                    <span class="font-semibold text-xl text-slate-800 tracking-tight">Paypoint Manual</span>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-lg text-slate-800 leading-tight">Paypoint Service</span>
+                        <span class="text-xs text-slate-500">คู่มือปฏิบัติงานสาขา</span>
+                    </div>
                 </div>
 
                 <!-- Back to Main Link -->
                 <div>
-                    <a href="https://tuikub.github.io/paypoint/" class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> กลับไปหน้าหลัก
+                    <a href="https://tuikub.github.io/paypoint/" class="hidden md:inline-flex items-center px-4 py-2 border border-slate-300 rounded-full shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none transition-colors">
+                        <i class="fa-solid fa-house mr-2"></i> หน้าหลัก
                     </a>
                 </div>
             </div>
@@ -70,86 +73,97 @@
     <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         
         <!-- Hero Section -->
-        <div class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-                คู่มือการปฏิบัติงานสาขา
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+                คลังความรู้แฟรนไชส์
             </h1>
-            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                รวมข้อมูลขั้นตอนการทำงาน กฎระเบียบ และวิธีแก้ปัญหาเบื้องต้น <br class="hidden md:inline">สำหรับแฟรนไชส์ Paypoint Service
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto">
+                เลือกหัวข้อที่ต้องการศึกษา หรือกดปุ่ม Chatbot เพื่อสอบถามทันที
             </p>
         </div>
 
         <!-- Quick Access Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             
-            <!-- Card 1: เริ่มต้น -->
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 card-hover cursor-pointer">
-                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 text-xl">
-                    <i class="fa-solid fa-store"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">การเปิดร้าน & อุปกรณ์</h3>
-                <p class="text-slate-500 text-sm">ตรวจสอบความพร้อมอุปกรณ์ Checklist ก่อนเปิดให้บริการประจำวัน</p>
-            </div>
-
-            <!-- Card 2: รับพัสดุ -->
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 card-hover cursor-pointer">
-                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4 text-xl">
-                    <i class="fa-solid fa-box-open"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">ขั้นตอนรับฝากส่ง</h3>
-                <p class="text-slate-500 text-sm">Flow การทำงาน การวัดขนาด ชั่งน้ำหนัก และการคีย์ข้อมูลเข้าระบบ</p>
-            </div>
-
-            <!-- Card 3: กฎระเบียบ -->
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 card-hover cursor-pointer">
-                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4 text-xl">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">สิ่งของต้องห้าม</h3>
-                <p class="text-slate-500 text-sm">รายการสินค้าห้ามรับฝากส่งตามกฎหมายและกฎระเบียบขนส่ง</p>
-            </div>
-
-            <!-- Card 4: KYC -->
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 card-hover cursor-pointer">
-                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 text-xl">
-                    <i class="fa-solid fa-id-card"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">มาตรฐาน KYC</h3>
-                <p class="text-slate-500 text-sm">ขั้นตอนการตรวจสอบบัตรประชาชนผู้ส่งตามกฎ ปปง.</p>
-            </div>
-
-             <!-- Card 5: ปิดรอบ -->
-             <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 card-hover cursor-pointer">
-                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4 text-xl">
-                    <i class="fa-solid fa-clock"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">การปิดรอบนำส่ง</h3>
-                <p class="text-slate-500 text-sm">ตารางเวลา Cut-off ของแต่ละขนส่งและการจัดการเอกสาร</p>
-            </div>
-
-            <!-- Card 6: AI Helper (Highlight) -->
-            <a href="https://tuikub.github.io/tracking/chatbot_paypoint_red.html" target="_blank" class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl p-6 shadow-md card-hover group relative overflow-hidden text-white">
-                <div class="relative z-10">
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-4 text-xl backdrop-blur-sm">
-                        <i class="fa-solid fa-robot"></i>
+            <!-- Group 1: ข้อมูลการส่ง (สีน้ำเงิน/ฟ้า) -->
+            <a href="https://drive.google.com/drive/folders/14DsJpG__tflMG6U79IUbEYPsUMUNxTgk" target="_blank" class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-500 card-hover group relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-truck-fast"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">ถาม-ตอบ อัตโนมัติ</h3>
-                    <p class="text-blue-100 text-sm">สงสัยขั้นตอนไหน? สอบถาม AI Chatbot ได้ตลอด 24 ชม.</p>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">สำคัญ</span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">ข้อมูลขนส่ง & Cut-off</h3>
+                <p class="text-slate-500 text-sm">ตารางเวลาตัดรอบของแต่ละขนส่ง (Prompt Speed)</p>
+            </a>
+
+            <a href="https://drive.google.com/drive/folders/14DsJpG__tflMG6U79IUbEYPsUMUNxTgk" target="_blank" class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-400 card-hover group">
+                <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-xl">
+                    <i class="fa-solid fa-ruler-combined"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1 group-hover:text-blue-500 transition-colors">การวัดขนาดพัสดุ</h3>
+                <p class="text-slate-500 text-sm">วิธีวัด กว้าง+ยาว+สูง และการคำนวณน้ำหนัก</p>
+            </a>
+
+            <!-- Group 2: ความคุ้มครอง & ติดต่อ (สีเขียว/ส้ม) -->
+            <a href="https://drive.google.com/drive/folders/14DsJpG__tflMG6U79IUbEYPsUMUNxTgk" target="_blank" class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-emerald-500 card-hover group">
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+                    <i class="fa-solid fa-shield-heart"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1 group-hover:text-emerald-600 transition-colors">ประกันพัสดุ</h3>
+                <p class="text-slate-500 text-sm">เงื่อนไขความคุ้มครองและการเคลมสินค้าเสียหาย</p>
+            </a>
+
+            <a href="https://drive.google.com/drive/folders/14DsJpG__tflMG6U79IUbEYPsUMUNxTgk" target="_blank" class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-orange-400 card-hover group">
+                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-lg flex items-center justify-center mb-4 text-xl">
+                    <i class="fa-solid fa-address-book"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1 group-hover:text-orange-500 transition-colors">ช่องทางติดต่อขนส่ง</h3>
+                <p class="text-slate-500 text-sm">เบอร์โทรและไลน์ของ DHL, Flash, Kerry ฯลฯ</p>
+            </a>
+
+            <!-- Group 3: กฎระเบียบ (สีแดง) -->
+            <a href="https://drive.google.com/drive/folders/14DsJpG__tflMG6U79IUbEYPsUMUNxTgk" target="_blank" class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-red-500 card-hover group">
+                <div class="w-12 h-12 bg-red-50 text-red-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1 group-hover:text-red-600 transition-colors">สิ่งของต้องห้าม</h3>
+                <p class="text-slate-500 text-sm">กฎหมายยาเสพติด ใบกระท่อม กัญชา และของผิดกฎหมาย</p>
+            </a>
+
+            <!-- Group 4: AI Assistant (สีพิเศษ) -->
+            <a href="https://tuikub.github.io/tracking/chatbot_paypoint_red.html" target="_blank" class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-6 shadow-md card-hover group relative overflow-hidden text-white border-0">
+                <div class="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4 text-xl backdrop-blur-sm">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">ถาม-ตอบ อัตโนมัติ</h3>
+                        <p class="text-indigo-100 text-sm">สงสัยขั้นตอนไหน? ถาม AI ได้เลย</p>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm font-medium bg-white/20 w-fit px-3 py-1 rounded-full backdrop-blur-md">
+                        คลิกเพื่อคุย <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </div>
                 </div>
                 <!-- Decorate circle -->
-                <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
             </a>
 
         </div>
 
-        <!-- Help Section Text -->
-        <div class="bg-blue-50 border border-blue-100 rounded-xl p-8 text-center">
-            <h2 class="text-2xl font-bold text-blue-800 mb-3">ต้องการความช่วยเหลือด่วน?</h2>
-            <p class="text-blue-600 mb-6">หากคุณไม่พบข้อมูลในคู่มือ หรือต้องการสอบถามปัญหาระบบ</p>
-            
-            <a href="https://tuikub.github.io/tracking/chatbot_paypoint_red.html" target="_blank"
-               class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-red-500 hover:bg-red-600 md:py-4 md:text-lg md:px-10 shadow-lg transition-all hover:shadow-xl transform hover:-translate-y-1">
-                <i class="fa-solid fa-comments mr-2"></i> ปรึกษา Chatbot
+        <!-- Drive Link Section -->
+        <div class="bg-slate-100 rounded-2xl p-6 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-yellow-500 text-2xl">
+                    <i class="fa-brands fa-google-drive"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800">คลังเอกสาร Google Drive</h4>
+                    <p class="text-sm text-slate-500">เข้าดูไฟล์ต้นฉบับ ประกาศ และรูปภาพประกอบทั้งหมดได้ที่นี่</p>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/14DsJpG__tflMG6U79IUbEYPsUMUNxTgk" target="_blank" class="w-full md:w-auto text-center px-6 py-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded-lg shadow-sm transition-colors">
+                <i class="fa-solid fa-folder-open mr-2"></i> เปิด Google Drive
             </a>
         </div>
 
@@ -158,13 +172,12 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-auto">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-slate-500 text-sm mb-4 md:mb-0">
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                <div class="mb-2 md:mb-0">
                     &copy; 2023 Paypoint Service. สงวนลิขสิทธิ์.
                 </div>
-                <div class="flex space-x-6 text-slate-400">
-                    <a href="#" class="hover:text-slate-600"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#" class="hover:text-slate-600"><i class="fa-brands fa-line"></i></a>
+                <div>
+                   ติดปัญหาติดต่อ Support: 02-xxx-xxxx
                 </div>
             </div>
         </div>
@@ -174,12 +187,12 @@
     <a href="https://tuikub.github.io/tracking/chatbot_paypoint_red.html" target="_blank"
        class="fixed bottom-6 right-6 z-50 group">
         <!-- Tooltip -->
-        <div class="absolute bottom-full right-0 mb-2 w-max px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <div class="absolute bottom-full right-0 mb-2 w-max px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-lg">
             คลิกเพื่อคุยกับ Chatbot
         </div>
         <!-- Button -->
-        <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-white shadow-2xl cursor-pointer hover:bg-red-600 transition-colors chat-btn-pulse">
-            <i class="fa-solid fa-comment-dots text-2xl"></i>
+        <div class="w-14 h-14 md:w-16 md:h-16 bg-red-600 rounded-full flex items-center justify-center text-white shadow-2xl cursor-pointer hover:bg-red-700 transition-all transform hover:scale-105 chat-btn-pulse">
+            <i class="fa-solid fa-comment-dots text-2xl md:text-3xl"></i>
         </div>
     </a>
 
