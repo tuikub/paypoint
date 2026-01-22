@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birth Control 101: เรื่องยาคุมที่วัยรุ่นต้องรู้</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#FF6B6B',
+                        'secondary': '#4ECDC4',
+                        'accent': '#FFE66D',
+                        'dark': '#292F36',
+                        'light': '#F7FFF7'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .blob {
+            position: absolute;
+            filter: blur(40px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: move 10s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(20px, -20px) scale(1.1); }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-dark overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-primary flex items-center gap-2">
+                <i class="fa-solid fa-capsules"></i> TeenHealth
+            </a>
+            <div class="hidden md:flex gap-6 text-gray-600 font-medium">
+                <a href="#types" class="hover:text-primary transition">ประเภท</a>
+                <a href="#howto" class="hover:text-primary transition">วิธีเริ่ม</a>
+                <a href="#forgot" class="hover:text-primary transition">ลืมกินยา?</a>
+                <a href="#myths" class="hover:text-primary transition">ความเชื่อ</a>
+            </div>
+            <a href="#quiz" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-red-500 transition shadow-md">
+                ทดสอบความรู้
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 px-6 overflow-hidden">
+        <div class="blob bg-secondary w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="blob bg-accent w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3"></div>
+
+        <div class="container mx-auto text-center relative z-10">
+            <span class="inline-block bg-white text-primary px-4 py-1 rounded-full text-sm font-bold shadow-sm mb-4 animate-bounce">
+                💡 คู่มือฉบับวัยใส เข้าใจง่าย ไม่ปวดหัว
+            </span>
+            <h1 class="text-4xl md:text-6xl font-bold text-dark mb-6 leading-tight">
+                ยาคุมกำเนิด <span class="text-primary">101</span> <br>
+                เรื่องที่โรงเรียนอาจสอนไม่ทัน
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
+                รวมทุกเรื่องที่วัยรุ่น ม.5 ต้องรู้! วิธีกินที่ถูกต้อง ลืมกินต้องทำไง 
+                และจริงไหมที่กินแล้วอ้วน? มาหาคำตอบกันที่นี่
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#types" class="bg-dark text-white px-8 py-3 rounded-xl hover:bg-gray-800 transition font-semibold shadow-lg">
+                    เริ่มเรียนรู้เลย
+                </a>
+                <a href="#howto" class="bg-white text-dark border-2 border-dark px-8 py-3 rounded-xl hover:bg-gray-50 transition font-semibold">
+                    ดูวิธีใช้ด่วน
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Types Section -->
+    <section id="types" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">💊 ยาคุมมีกี่แบบ? ต่างกันยังไง?</h2>
+                <p class="text-gray-500">หลักๆ ที่ขายในร้านขายยาจะมี 2 แบบ คือแบบ 21 เม็ด และ 28 เม็ด</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Type 21 -->
+                <div class="bg-blue-50 rounded-3xl p-8 card-hover border border-blue-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-200 text-blue-800 px-4 py-1 rounded-bl-xl font-bold text-sm">ยอดฮิต</div>
+                    <div class="text-5xl text-blue-500 mb-6"><i class="fa-regular fa-calendar-minus"></i></div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">แบบ 21 เม็ด</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-500 mt-1"></i> กินวันละ 1 เม็ด จนหมดแผง</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-pause text-orange-500 mt-1"></i> <strong>เว้น 7 วัน</strong> ให้ประจำเดือนมา</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-play text-blue-500 mt-1"></i> ครบ 7 วัน เริ่มแผงใหม่ทันที (ไม่ต้องรอเมนส์หมด)</li>
+                    </ul>
+                </div>
+
+                <!-- Type 28 -->
+                <div class="bg-green-50 rounded-3xl p-8 card-hover border border-green-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-green-200 text-green-800 px-4 py-1 rounded-bl-xl font-bold text-sm">สำหรับคนขี้ลืม</div>
+                    <div class="text-5xl text-green-500 mb-6"><i class="fa-regular fa-calendar-check"></i></div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">แบบ 28 เม็ด</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-500 mt-1"></i> กินวันละ 1 เม็ด <strong>ทุกวัน</strong></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-pills text-gray-400 mt-1"></i> 7 เม็ดสุดท้ายคือ "เม็ดแป้ง" (ไม่มีฮอร์โมน) กินกันลืม</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-forward text-green-500 mt-1"></i> กินหมดแผง เริ่มแผงใหม่วันต่อไปเลย</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Start Section -->
+    <section id="howto" class="py-20 bg-gradient-to-br from-pink-50 to-orange-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">🏁 เริ่มกินเม็ดแรกตอนไหน?</h2>
+                <p class="text-gray-500">กฎเหล็ก 5 วันแรกของการมีประจำเดือน</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 max-w-5xl mx-auto">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full relative">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
+                    <h4 class="font-bold text-lg mb-2">วันแรกของประจำเดือน</h4>
+                    <p class="text-sm text-gray-500">ดีที่สุด! ให้เริ่มกินเม็ดแรกภายในวันที่ 1-5 ที่ประจำเดือนมา</p>
+                </div>
+                
+                <i class="fa-solid fa-arrow-right text-2xl text-gray-300 hidden md:block"></i>
+                <i class="fa-solid fa-arrow-down text-2xl text-gray-300 md:hidden"></i>
+
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full">
+                    <div class="w-12 h-12 bg-secondary text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
+                    <h4 class="font-bold text-lg mb-2">กินเวลาเดิมเสมอ</h4>
+                    <p class="text-sm text-gray-500">ตั้งนาฬิกาปลุกไว้เลย (เช่น ก่อนนอน 4 ทุ่ม) เพื่อประสิทธิภาพสูงสุด</p>
+                </div>
+
+                <i class="fa-solid fa-arrow-right text-2xl text-gray-300 hidden md:block"></i>
+                <i class="fa-solid fa-arrow-down text-2xl text-gray-300 md:hidden"></i>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center flex-1 w-full">
+                    <div class="w-12 h-12 bg-accent text-dark rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
+                    <h4 class="font-bold text-lg mb-2">ห้ามหยุดกิน</h4>
+                    <p class="text-sm text-gray-500">กินตามลูกศรบนแผง ห้ามหยุดกินกลางคันแม้จะทะเลาะกับแฟน!</p>
+                </div>
+            </div>
+            
+            <div class="mt-10 bg-white border-l-4 border-red-500 p-6 rounded-r-xl max-w-3xl mx-auto shadow-md flex items-start gap-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl"></i>
+                <div>
+                    <h4 class="font-bold text-red-600">คำเตือนสำคัญ!</h4>
+                    <p class="text-gray-700">หากไม่ได้เริ่มกินภายใน 5 วันแรกของประจำเดือน ต้องใช้ถุงยางอนามัยร่วมด้วยใน 7 วันแรกของการกินยา</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Section (Highlights) -->
+    <section id="forgot" class="py-20 bg-dark text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 opacity-10 text-9xl transform translate-x-10 -translate-y-10">
+            <i class="fa-regular fa-clock"></i>
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12">
+                <span class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider">Emergency</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">😱 ตายแล้ว! ลืมกินยา ทำไงดี?</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Case 1 -->
+                <div class="bg-gray-800 p-8 rounded-3xl border border-gray-700">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-yellow-500 w-10 h-10 rounded-full flex items-center justify-center text-dark font-bold"><i class="fa-solid fa-1"></i></div>
+                        <h3 class="text-xl font-bold">ลืม 1 เม็ด (หรือไม่เกิน 24 ชม.)</h3>
+                    </div>
+                    <div class="pl-14 space-y-3 text-gray-300">
+                        <p>✅ <strong>กินทันที</strong> ที่นึกได้</p>
+                        <p>✅ เม็ดต่อไปกินตามเวลาปกติ</p>
+                        <p class="text-green-400 text-sm">* ไม่ต้องคุมกำเนิดวิธีอื่นเสริม</p>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="bg-gray-800 p-8 rounded-3xl border border-gray-700">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-red-500 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"><i class="fa-solid fa-2"></i></div>
+                        <h3 class="text-xl font-bold">ลืม 2 เม็ดขึ้นไป</h3>
+                    </div>
+                    <div class="pl-14 space-y-3 text-gray-300">
+                        <p>✅ <strong>กินเม็ดล่าสุดทันที</strong> (ทิ้งเม็ดก่อนหน้านั้นไป)</p>
+                        <p>✅ กินเม็ดต่อไปตามเวลาปกติ</p>
+                        <p class="bg-red-500/20 text-red-300 p-3 rounded-lg text-sm border border-red-500/30">
+                            🚨 <strong>ต้องใช้ถุงยาง</strong> ร่วมด้วย 7 วัน
+                            <br>ถ้ามี พสพ. ไปแล้ว ให้กินยาคุมฉุกเฉิน
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Myth Busters (Interactive) -->
+    <section id="myths" class="py-20 bg-white">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">🤔 ชัวร์หรือมั่ว? ความเชื่อเรื่องยาคุม</h2>
+                <p class="text-gray-500">คลิกที่การ์ดเพื่อดูคำตอบ</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Question 1 -->
+                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans1')">
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">🐷</span>
+                            <h3 class="font-bold text-lg">กินยาคุมแล้วจะ "อ้วน" ขึ้น?</h3>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-secondary"></i>
+                    </div>
+                    <div id="ans1" class="hidden bg-gray-50 p-6 rounded-b-2xl border-x-2 border-b-2 border-gray-100 mt-[-10px] pt-8">
+                        <p class="text-gray-700"><strong>❌ ไม่จริงเสมอไป:</strong> ยาคุมรุ่นใหม่ๆ มีปริมาณฮอร์โมนต่ำ ทำให้อ้วนหรือบวมน้ำน้อยมาก หากกังวลควรปรึกษาเภสัชกรเลือกยี่ห้อที่ช่วยลดอาการบวมน้ำ</p>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans2')">
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">🦠</span>
+                            <h3 class="font-bold text-lg">ยาคุมป้องกัน HIV / โรคติดต่อได้?</h3>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-secondary"></i>
+                    </div>
+                    <div id="ans2" class="hidden bg-gray-50 p-6 rounded-b-2xl border-x-2 border-b-2 border-gray-100 mt-[-10px] pt-8">
+                        <p class="text-red-500 font-bold">❌ ผิดมหันต์!</p>
+                        <p class="text-gray-700 mt-2">ยาคุมป้องกันแค่การตั้งครรภ์เท่านั้น <strong>ถุงยางอนามัย</strong> เป็นวิธีเดียวที่ป้องกันโรคติดต่อทางเพศสัมพันธ์ได้</p>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="group cursor-pointer perspective" onclick="toggleAnswer('ans3')">
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-secondary transition shadow-sm flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">✨</span>
+                            <h3 class="font-bold text-lg">กินยาคุมช่วยลดสิว หน้าใส?</h3>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-gray-400 group-hover:text-secondary"></i>
+                    </div>
+                    <div id="ans3" class="hidden bg-gray-50 p-6 rounded-b-2xl border-x-2 border-b-2 border-gray-100 mt-[-10px] pt-8">
+                        <p class="text-green-600 font-bold">✅ จริง (บางยี่ห้อ)</p>
+                        <p class="text-gray-700 mt-2">ยาคุมบางชนิดมีฤทธิ์ต้านฮอร์โมนเพศชาย ช่วยลดความมันบนใบหน้าและลดสิวได้ แต่ควรปรึกษาแพทย์ก่อนใช้เพื่อรักษาสิวโดยเฉพาะ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Quiz -->
+    <section id="quiz" class="py-20 bg-secondary/10">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-8">🎯 ทดสอบความเข้าใจกันหน่อย</h2>
+            <div id="quiz-container" class="bg-white max-w-2xl mx-auto p-8 rounded-3xl shadow-lg">
+                <div id="question-box">
+                    <h3 class="text-xl font-bold mb-6" id="q-text">1. ควรเริ่มกินยาคุมเม็ดแรกเมื่อไหร่ดีที่สุด?</h3>
+                    <div class="grid gap-4">
+                        <button onclick="checkAnswer(1, false)" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition text-left">ก. วันที่หายจากประจำเดือนแล้ว</button>
+                        <button onclick="checkAnswer(1, true)" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition text-left">ข. ภายในวันที่ 1-5 ของการมีประจำเดือน</button>
+                        <button onclick="checkAnswer(1, false)" class="quiz-btn w-full p-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition text-left">ค. วันไหนก็ได้ที่อยากกิน</button>
+                    </div>
+                </div>
+                <div id="result-box" class="hidden text-center py-8">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h3 class="text-2xl font-bold text-primary mb-2">ยอดเยี่ยม!</h3>
+                    <p class="text-gray-600">คุณพร้อมดูแลตัวเองอย่างปลอดภัยแล้ว</p>
+                    <button onclick="location.reload()" class="mt-6 text-sm text-gray-400 underline">เริ่มใหม่</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-gray-400 py-10 text-center text-sm">
+        <div class="container mx-auto px-6">
+            <p class="mb-2">Website นี้จัดทำเพื่อการศึกษาสำหรับนักเรียนชั้นมัธยมศึกษาปีที่ 5</p>
+            <p>*** หากมีข้อสงสัยหรืออาการผิดปกติ ควรปรึกษาแพทย์หรือเภสัชกรทันที ***</p>
+            <div class="mt-6 flex justify-center gap-4 text-xl">
+                <i class="fa-brands fa-facebook hover:text-white cursor-pointer"></i>
+                <i class="fa-brands fa-instagram hover:text-white cursor-pointer"></i>
+                <i class="fa-brands fa-twitter hover:text-white cursor-pointer"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Myth Accordion Logic
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Simple Quiz Logic
+        let currentQuestion = 1;
+        const questions = [
+            {
+                q: "1. ควรเริ่มกินยาคุมเม็ดแรกเมื่อไหร่ดีที่สุด?",
+                options: [
+                    { text: "ก. วันที่หายจากประจำเดือนแล้ว", correct: false },
+                    { text: "ข. ภายในวันที่ 1-5 ของการมีประจำเดือน", correct: true },
+                    { text: "ค. วันไหนก็ได้ที่อยากกิน", correct: false }
+                ]
+            },
+            {
+                q: "2. ยาคุมแบบ 28 เม็ด เม็ดที่ 22-28 คืออะไร?",
+                options: [
+                    { text: "ก. ยาบำรุงเลือด", correct: false },
+                    { text: "ข. ยาฮอร์โมนเข้มข้น", correct: false },
+                    { text: "ค. เม็ดแป้ง (ไม่มีฮอร์โมน) กินกันลืม", correct: true }
+                ]
+            },
+            {
+                q: "3. ถ้าลืมกินยา 1 เม็ด ต้องทำอย่างไร?",
+                options: [
+                    { text: "ก. กินทันทีที่นึกได้", correct: true },
+                    { text: "ข. ข้ามไปกินวันถัดไปเลย", correct: false },
+                    { text: "ค. หยุดกินทั้งแผง", correct: false }
+                ]
+            }
+        ];
+
+        function loadQuestion(index) {
+            if (index >= questions.length) {
+                document.getElementById('question-box').classList.add('hidden');
+                document.getElementById('result-box').classList.remove('hidden');
+                return;
+            }
+            const q = questions[index];
+            const btns = document.querySelectorAll('.quiz-btn');
+            document.getElementById('q-text').innerText = q.q;
+            btns.forEach((btn, i) => {
+                btn.innerText = q.options[i].text;
+                btn.onclick = () => checkAnswer(index, q.options[i].correct);
+                btn.classList.remove('bg-green-100', 'bg-red-100', 'border-green-500', 'border-red-500');
+                btn.classList.add('border-gray-200');
+            });
+        }
+
+        function checkAnswer(qIndex, isCorrect) {
+            if (isCorrect) {
+                alert("ถูกต้อง! เก่งมาก 👍");
+                loadQuestion(qIndex + 1);
+            } else {
+                alert("ยังไม่ถูกนะ ลองใหม่อีกที! 😅");
+            }
+        }
+
+        // Initialize Quiz
+        loadQuestion(0);
+    </script>
+</body>
+</html>
