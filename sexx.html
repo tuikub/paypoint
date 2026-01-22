@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sex Ed Learning Hub | ศูนย์การเรียนรู้เพศศึกษา</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        'hub-primary': '#6C63FF',
+                        'hub-secondary': '#FF6584',
+                        'hub-accent': '#FFD93D',
+                        'hub-dark': '#2D2D2D'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F3F4F6;
+            background-image: radial-gradient(#E5E7EB 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .menu-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .menu-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .icon-box {
+            transition: transform 0.3s ease;
+        }
+        .menu-card:hover .icon-box {
+            transform: rotate(10deg) scale(1.1);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Header / Hero -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-hub-primary rounded-xl flex items-center justify-center text-white text-xl shadow-lg">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-hub-dark leading-none">Sex Ed Hub</h1>
+                    <p class="text-xs text-gray-500">สื่อการสอนเพศศึกษายุคใหม่</p>
+                </div>
+            </div>
+            <div class="hidden md:block text-sm text-gray-500">
+                <i class="fa-solid fa-user-graduate mr-2"></i>สื่อการเรียนรู้สำหรับวัยรุ่น
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-6 py-12">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                เลือกบทเรียนที่สนใจ <span class="text-hub-secondary">🚀</span>
+            </h2>
+            <p class="text-gray-600 max-w-xl mx-auto">
+                รวมรวบความรู้ เกม และแบบทดสอบเกี่ยวกับเพศศึกษาที่เข้าใจง่าย สนุก และนำไปใช้ได้จริง
+            </p>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+            <!-- Card 1: Condom / Protection -->
+            <a href="https://tuikub.github.io/paypoint/cobdom.html" target="_blank" class="menu-card bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:border-hub-primary group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-blue-100"></div>
+                
+                <div class="icon-box w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner relative z-10">
+                    <i class="fa-solid fa-shield-virus"></i>
+                </div>
+                
+                <h3 class="text-2xl font-bold mb-3 group-hover:text-blue-600 transition-colors">วิธีป้องกัน & ถุงยาง</h3>
+                <p class="text-gray-500 mb-6 line-clamp-2">
+                    เรียนรู้วิธีการคุมกำเนิด การใช้ถุงยางอนามัยอย่างถูกวิธี และการป้องกันโรคติดต่อทางเพศสัมพันธ์
+                </p>
+                
+                <div class="flex items-center text-blue-600 font-semibold text-sm">
+                    เข้าสู่บทเรียน <i class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+            <!-- Card 2: Basics 101 -->
+            <a href="https://tuikub.github.io/paypoint/101.html" target="_blank" class="menu-card bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:border-hub-secondary group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-pink-50 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-pink-100"></div>
+                
+                <div class="icon-box w-16 h-16 bg-pink-100 text-pink-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner relative z-10">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                
+                <h3 class="text-2xl font-bold mb-3 group-hover:text-pink-500 transition-colors">เพศศึกษา 101</h3>
+                <p class="text-gray-500 mb-6 line-clamp-2">
+                    ปูพื้นฐานความเข้าใจเรื่องเพศ การเปลี่ยนแปลงของร่างกาย และความรู้เบื้องต้นที่วัยรุ่นต้องรู้
+                </p>
+                
+                <div class="flex items-center text-pink-500 font-semibold text-sm">
+                    เข้าสู่บทเรียน <i class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+            <!-- Card 3: Advanced / Quiz 102 -->
+            <a href="https://tuikub.github.io/paypoint/102.html" target="_blank" class="menu-card bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:border-hub-accent group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-50 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-yellow-100"></div>
+                
+                <div class="icon-box w-16 h-16 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner relative z-10">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                
+                <h3 class="text-2xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">ทดสอบความรู้ (Level Up)</h3>
+                <p class="text-gray-500 mb-6 line-clamp-2">
+                    วัดระดับความเข้าใจด้วยแบบทดสอบ ทบทวนความรู้ และเนื้อหาที่เข้มข้นขึ้นสำหรับเตรียมพร้อม
+                </p>
+                
+                <div class="flex items-center text-yellow-600 font-semibold text-sm">
+                    เริ่มทำแบบทดสอบ <i class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="mt-16 flex justify-center gap-4 opacity-50">
+            <div class="w-3 h-3 rounded-full bg-hub-primary animate-bounce" style="animation-delay: 0s;"></div>
+            <div class="w-3 h-3 rounded-full bg-hub-secondary animate-bounce" style="animation-delay: 0.2s;"></div>
+            <div class="w-3 h-3 rounded-full bg-hub-accent animate-bounce" style="animation-delay: 0.4s;"></div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600 font-medium mb-2">
+                © 2024 Sex Ed Learning Hub. All rights reserved.
+            </p>
+            <div class="inline-block bg-gray-100 rounded-full px-6 py-2 mt-2">
+                <span class="text-gray-500 text-sm">จัดทำโดย:</span>
+                <span class="text-hub-primary font-bold ml-1">นายอนุภาพ เวียงคำ</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
