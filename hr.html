@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SABUY SPEED & WSOL - ศูนย์ข้อมูลและสวัสดิการ</title>
+    <title>SABUY SPEED & WSOL - HR Smart Assistant</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
@@ -13,12 +13,13 @@
         :root {
             --primary-color: #0056b3;
             --secondary-color: #00a8ff;
-            --accent-color: #ff9f43; /* สีส้มสำหรับประกันสังคม */
+            --accent-color: #ff9f43;
             --bg-color: #f4f7f6;
             --chat-bg: #ffffff;
             --user-msg-bg: #0056b3;
             --bot-msg-bg: #e9ecef;
-            --line-color: #06C755; /* สีเขียว LINE */
+            --line-color: #06C755;
+            --ai-color: #8e44ad; /* สีม่วงสำหรับ AI */
         }
 
         body {
@@ -33,59 +34,67 @@
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             position: relative;
         }
-        header h1 { margin: 0; font-size: 1.8em; }
-        header p { margin: 10px 0 0; opacity: 0.9; }
+        header h1 { margin: 0; font-size: 1.6em; }
+        header p { margin: 5px 0 0; opacity: 0.9; font-size: 0.9em; }
 
         /* Internal Warning Badge */
         .internal-warning {
             background-color: #ffc107;
             color: #856404;
-            padding: 5px 15px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             font-weight: bold;
             display: inline-block;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
             border: 1px solid #ffeeba;
         }
 
-        /* LINE Button */
-        .line-btn {
+        /* Button Group */
+        .header-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background-color: var(--line-color);
+            gap: 6px;
             color: white;
             text-decoration: none;
-            padding: 10px 25px;
-            border-radius: 30px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
             font-weight: bold;
-            margin-top: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .line-btn:hover {
-            transform: translateY(-2px);
-            background-color: #05a546;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-        }
-        .line-btn i {
-            font-size: 1.3em;
-        }
+        .btn-line { background-color: var(--line-color); }
+        .btn-line:hover { background-color: #05a546; }
+        
+        .btn-mol { background-color: #e67e22; }
+        .btn-mol:hover { background-color: #d35400; }
+
+        .btn-key { background-color: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); }
+        .btn-key:hover { background-color: rgba(255,255,255,0.3); }
 
         .container {
             max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
+            margin: 20px auto;
+            padding: 0 15px;
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
+            gap: 20px;
         }
 
         /* Card Styles */
@@ -93,14 +102,12 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 25px;
+            padding: 20px;
             overflow: hidden;
             border-top: 5px solid var(--primary-color);
         }
-        
-        .card.sso-card {
-            border-top-color: var(--accent-color);
-        }
+        .card.sso-card { border-top-color: var(--accent-color); }
+        .card.ai-card { border-top-color: var(--ai-color); }
 
         .section-header {
             display: flex;
@@ -108,38 +115,18 @@
             justify-content: space-between;
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-        }
-        .section-header i {
-            font-size: 1.5em;
-            color: var(--primary-color);
-            margin-right: 15px;
-        }
-        .sso-card .section-header i {
-            color: var(--accent-color);
-        }
-        .section-header h2 {
-            margin: 0;
-            color: var(--primary-color);
-            font-size: 1.4em;
-        }
-        .sso-card .section-header h2 {
-            color: #d35400;
-        }
-
-        /* AI Chat Interface */
-        .ai-interface {
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .section-header i { font-size: 1.4em; color: var(--primary-color); }
+        .sso-card .section-header i { color: var(--accent-color); }
+        .ai-card .section-header i { color: var(--ai-color); }
         
+        .section-header h2 { margin: 0; color: #333; font-size: 1.2em; }
+        
+        /* Chat Interface */
         .chat-window {
-            flex: 1;
+            height: 400px;
             overflow-y: auto;
             padding: 15px;
             background-color: #f8f9fa;
@@ -152,436 +139,343 @@
             margin-bottom: 15px;
             display: flex;
             align-items: flex-start;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .message.user {
-            flex-direction: row-reverse;
-        }
+        .message.user { flex-direction: row-reverse; }
+        
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 35px; height: 35px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 0.9em;
             flex-shrink: 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .bot .avatar { background-color: #2ecc71; margin-right: 10px; }
+        .bot .avatar { background-color: var(--ai-color); margin-right: 10px; }
         .user .avatar { background-color: var(--primary-color); margin-left: 10px; }
 
         .bubble {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            position: relative;
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
             font-size: 0.95em;
             line-height: 1.5;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .bot .bubble {
-            background-color: var(--bot-msg-bg);
-            color: #333;
-            border-top-left-radius: 4px;
-        }
-        .user .bubble {
-            background-color: var(--user-msg-bg);
-            color: white;
-            border-top-right-radius: 4px;
-        }
-        
-        .bubble ul {
-            margin: 5px 0 5px 20px;
-            padding: 0;
-        }
-        .bubble li {
-            margin-bottom: 5px;
-        }
-
-        /* Search/Input Area */
-        .input-area {
-            display: flex;
-            gap: 10px;
             position: relative;
+            word-wrap: break-word;
         }
+        .bot .bubble { background-color: var(--bot-msg-bg); color: #333; border-top-left-radius: 2px; }
+        .user .bubble { background-color: var(--user-msg-bg); color: white; border-top-right-radius: 2px; }
+
+        /* Input Area */
+        .input-area { display: flex; gap: 10px; position: relative; }
         .input-area input {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 30px;
-            outline: none;
+            flex: 1; padding: 12px 15px; padding-right: 50px;
+            border: 2px solid #ddd; border-radius: 25px; outline: none;
             transition: border-color 0.3s;
-            font-family: 'Sarabun', sans-serif;
-            padding-right: 50px; 
         }
-        .input-area input:focus {
-            border-color: var(--primary-color);
-        }
+        .input-area input:focus { border-color: var(--ai-color); }
         .send-btn {
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
+            position: absolute; right: 5px; top: 5px;
+            width: 38px; height: 38px; border-radius: 50%;
+            background-color: var(--ai-color); color: white;
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
-        .send-btn:hover { background-color: #004494; }
+        .send-btn:hover { background-color: #7d3c98; }
 
-        /* Chips / Suggestions */
-        .suggestions {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .chip {
-            background-color: #e3f2fd;
-            color: var(--primary-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-        }
-        .chip:hover {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        .chip.sso {
-            background-color: #fff3e0;
-            color: #e67e22;
-        }
-        .chip.sso:hover {
-            background-color: #e67e22;
-            color: white;
-            border-color: #e67e22;
-        }
-        
-        .clear-btn {
-            font-size: 0.8em;
-            color: #888;
-            background: none;
-            border: 1px solid #ddd;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .clear-btn:hover {
-            background-color: #f0f0f0;
-            color: #d9534f;
-            border-color: #d9534f;
-        }
-
-        /* Info Grid Styles */
+        /* Info Grid */
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;
         }
         .info-item {
-            background: #fff;
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
+            background: #fff; border-left: 4px solid #ddd; padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .sso-card .info-item {
-            border-left-color: var(--accent-color);
-        }
-        .info-item:hover {
-            transform: translateY(-2px);
-        }
-        .info-item h3 { margin-top: 0; font-size: 1.1em; color: #444; }
-        .info-item p { margin: 5px 0; color: #666; font-size: 0.9em; }
+        .card .info-item { border-left-color: var(--primary-color); }
+        .sso-card .info-item { border-left-color: var(--accent-color); }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .container { padding: 10px; }
-            .chat-window { height: 400px; }
+        .info-item h3 { margin: 0 0 5px; font-size: 1em; color: #444; display: flex; align-items: center; gap: 8px; }
+        .info-item p { margin: 0; color: #666; font-size: 0.9em; }
+
+        /* API Key Modal */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
         }
+        .modal-content {
+            background-color: white; padding: 25px; border-radius: 10px;
+            width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal h3 { margin-top: 0; color: var(--ai-color); }
+        .modal input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
+        .modal-btn { padding: 8px 16px; border-radius: 5px; border: none; cursor: pointer; }
+        .btn-save { background-color: var(--ai-color); color: white; }
+        .btn-cancel { background-color: #ddd; color: #333; }
+
+        /* Status Indicator */
+        .api-status { font-size: 0.8em; margin-left: 10px; }
+        .status-ok { color: #2ecc71; }
+        .status-off { color: #e74c3c; }
+
+        /* Suggestions */
+        .suggestions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip {
+            background-color: #f0ebf8; color: var(--ai-color);
+            padding: 5px 10px; border-radius: 15px; font-size: 0.8em;
+            cursor: pointer; transition: 0.2s;
+        }
+        .chip:hover { background-color: var(--ai-color); color: white; }
     </style>
 </head>
 <body>
 
 <header>
-    <!-- Internal Use Only Badge -->
-    <div class="internal-warning">
-        <i class="fas fa-lock"></i> ข้อมูลภายในสำหรับพนักงานเท่านั้น (Internal Use Only)
+    <div class="internal-warning"><i class="fas fa-lock"></i> ข้อมูลภายใน (Internal Only)</div>
+    <h1><i class="fas fa-brain"></i> HR Smart Assistant</h1>
+    <p>ผู้ช่วยอัจฉริยะ ตอบคำถามระเบียบและกฎหมายแรงงาน</p>
+
+    <div class="header-buttons">
+        <a href="https://lin.ee/g7U9w4i" target="_blank" class="action-btn btn-line">
+            <i class="fab fa-line"></i> แอดไลน์ HR
+        </a>
+        <a href="https://apigateway.mol.go.th/" target="_blank" class="action-btn btn-mol">
+            <i class="fas fa-external-link-alt"></i> เว็บกระทรวงแรงงาน
+        </a>
+        <button onclick="openKeyModal()" class="action-btn btn-key">
+            <i class="fas fa-key"></i> ตั้งค่า API Key <span id="apiStatus" class="api-status status-off">●</span>
+        </button>
     </div>
-
-    <h1><i class="fas fa-robot"></i> HR Assistant & Info Hub</h1>
-    <p>ระบบข้อมูลระเบียบพนักงาน และสิทธิประกันสังคม</p>
-
-    <!-- LINE Button -->
-    <a href="https://lin.ee/g7U9w4i" target="_blank" class="line-btn">
-        <i class="fab fa-line"></i> แอดไลน์ HR Support
-    </a>
 </header>
 
 <div class="container">
 
-    <!-- ส่วนที่ 1: AI Chat Interface -->
-    <div class="card">
+    <!-- AI Chat Section -->
+    <div class="card ai-card">
         <div class="section-header">
             <div class="header-left">
-                <i class="fas fa-comments"></i>
-                <h2>ถาม-ตอบ ทันใจ (Smart AI)</h2>
+                <i class="fas fa-robot"></i>
+                <h2>ถาม-ตอบ กฎหมาย & ประกันสังคม (AI)</h2>
             </div>
-            <button class="clear-btn" onclick="clearChat()" title="ล้างประวัติการแชท"><i class="fas fa-trash-alt"></i> ล้างแชท</button>
+            <button onclick="clearChat()" style="border:none; background:none; color:#999; cursor:pointer;">
+                <i class="fas fa-trash"></i> ล้างแชท
+            </button>
         </div>
         
-        <div class="ai-interface">
-            <div class="chat-window" id="chatWindow">
-                <!-- Welcome Message -->
-                <div class="message bot">
-                    <div class="avatar"><i class="fas fa-robot"></i></div>
-                    <div class="bubble">
-                        สวัสดีครับ! ผมคือผู้ช่วยอัจฉริยะ 🤖<br>
-                        ผมมีความรู้เพิ่มเกี่ยวกับ <strong>ประกันสังคม</strong> และ <strong>กฎหมายแรงงาน</strong> แล้วนะครับ ถามมาได้เลย!
-                    </div>
+        <div class="chat-window" id="chatWindow">
+            <div class="message bot">
+                <div class="avatar"><i class="fas fa-robot"></i></div>
+                <div class="bubble">
+                    สวัสดีครับ! ผมคือ HR AI Assistant 🤖<br>
+                    ผมรู้ระเบียบภายในบริษัท และเชื่อมต่อความรู้กฎหมายแรงงาน/ประกันสังคมให้แล้ว<br>
+                    <small style="color: #666;">*กรุณากดปุ่ม <b>"ตั้งค่า API Key"</b> ด้านบน และใส่คีย์ Gemini ของคุณเพื่อให้ผมฉลาดขึ้นครับ!</small>
                 </div>
             </div>
+        </div>
 
-            <div class="input-area">
-                <input type="text" id="userInput" placeholder="พิมพ์คำถาม... (เช่น ค่าทำฟัน, เงินว่างงาน, เกษียณอายุ)" onkeypress="handleKeyPress(event)">
-                <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-            </div>
-            
-            <div class="suggestions">
-                <!-- SSO Suggestions -->
-                <span class="chip sso" onclick="quickAsk('สิทธิทำฟันประกันสังคม')">🦷 ค่าทำฟันเท่าไหร่?</span>
-                <span class="chip sso" onclick="quickAsk('เงินว่างงานลาออก')">💼 ลาออกได้เงินไหม?</span>
-                <span class="chip sso" onclick="quickAsk('เงินชราภาพ')">👴 เงินเกษียณ</span>
-                <span class="chip sso" onclick="quickAsk('เจ็บป่วยฉุกเฉิน')">🚑 เจ็บป่วยฉุกเฉิน</span>
-                <!-- Internal Rules -->
-                <span class="chip" onclick="quickAsk('ลืมลงเวลาเข้างาน')">⏰ ลืมสแกนนิ้ว</span>
-                <span class="chip" onclick="quickAsk('ลาป่วยต้องแจ้งกี่โมง')">🤒 ลาป่วยแจ้งกี่โมง</span>
-            </div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="พิมพ์คำถาม... (เช่น กฎหมายแรงงานเลิกจ้าง, สิทธิประกันสังคมว่างงาน)" onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        
+        <div class="suggestions">
+            <span class="chip" onclick="quickAsk('เลิกจ้างจ่ายชดเชยยังไงตามกฎหมาย')">⚖️ ค่าชดเชยตามกฎหมาย</span>
+            <span class="chip" onclick="quickAsk('สิทธิประกันสังคมม.33 มีอะไรบ้าง')">🏥 สิทธิ ม.33</span>
+            <span class="chip" onclick="quickAsk('ลาคลอดได้กี่วันและได้เงินไหม')">👶 ลาคลอด & เงินช่วย</span>
+            <span class="chip" onclick="quickAsk('ลืมลงเวลาเข้างานต้องทำไง')">⏰ ลืมสแกนนิ้ว (ภายใน)</span>
         </div>
     </div>
 
-    <!-- ส่วนที่ 2: ข้อมูลประกันสังคม (New Section) -->
+    <!-- ข้อมูลประกันสังคม (Static) -->
     <div class="card sso-card">
         <div class="section-header">
             <div class="header-left">
                 <i class="fas fa-shield-alt"></i>
-                <h2>สิทธิประโยชน์ประกันสังคม (Social Security)</h2>
+                <h2>สิทธิประโยชน์ (ข้อมูลพื้นฐาน)</h2>
             </div>
         </div>
         <div class="info-grid">
             <div class="info-item">
-                <h3><i class="fas fa-tooth"></i> ทันตกรรม (ทำฟัน)</h3>
-                <p>เบิกได้จริงไม่เกิน <strong>900 บาท/ปี</strong></p>
-                <p>(ขูดหินปูน, อุดฟัน, ถอนฟัน, ผ่าฟันคุด)</p>
+                <h3><i class="fas fa-tooth"></i> ทันตกรรม</h3>
+                <p>900 บาท/ปี (ไม่ต้องสำรองจ่าย)</p>
             </div>
             <div class="info-item">
-                <h3><i class="fas fa-user-md"></i> เจ็บป่วย/อุบัติเหตุ</h3>
-                <p>รักษาฟรี ณ <strong>โรงพยาบาลตามสิทธิ</strong></p>
-                <p>กรณีฉุกเฉินเข้า รพ.อื่นได้ สำรองจ่ายก่อน (เบิกคืนตามเกณฑ์)</p>
+                <h3><i class="fas fa-briefcase"></i> ว่างงาน (ลาออก)</h3>
+                <p>รับ 30% ของเงินเดือน (90 วัน)</p>
             </div>
             <div class="info-item">
-                <h3><i class="fas fa-briefcase"></i> กรณีว่างงาน</h3>
-                <p><strong>ลาออก:</strong> รับ 30% ของค่าจ้าง (สูงสุด 90 วัน)</p>
-                <p><strong>เลิกจ้าง:</strong> รับ 50% ของค่าจ้าง (สูงสุด 180 วัน)</p>
+                <h3><i class="fas fa-user-injured"></i> ว่างงาน (เลิกจ้าง)</h3>
+                <p>รับ 50% ของเงินเดือน (180 วัน)</p>
             </div>
-            <div class="info-item">
-                <h3><i class="fas fa-piggy-bank"></i> เงินชราภาพ</h3>
-                <p><strong>บำเหน็จ:</strong> ส่งเงินสมทบ < 180 เดือน</p>
-                <p><strong>บำนาญ:</strong> ส่งเงินสมทบ ≥ 180 เดือน (รับรายเดือนตลอดชีพ)</p>
+             <div class="info-item">
+                <h3><i class="fas fa-baby"></i> คลอดบุตร</h3>
+                <p>เหมาจ่าย 15,000 + 50% เงินเดือน (90วัน)</p>
             </div>
         </div>
     </div>
 
-    <!-- ส่วนที่ 3: ภาพรวมระเบียบภายใน (Existing) -->
+    <!-- ระเบียบภายใน -->
     <div class="card">
         <div class="section-header">
             <div class="header-left">
                 <i class="fas fa-building"></i>
-                <h2>ระเบียบภายในบริษัท (Internal Rules)</h2>
+                <h2>ระเบียบภายใน (Internal Rules)</h2>
             </div>
         </div>
         <div class="info-grid">
             <div class="info-item">
                 <h3><i class="far fa-clock"></i> เวลาทำงาน</h3>
-                <p><strong>สนง.:</strong> จ-ศ (08.30-17.30)</p>
-                <p><strong>ปฏิบัติการ:</strong> จ-ส (08.30-17.30)</p>
+                <p>จ-ศ (08.30-17.30)</p>
             </div>
             <div class="info-item">
-                <h3><i class="far fa-calendar-alt"></i> วันหยุด</h3>
-                <p><strong>พักร้อน:</strong> เริ่มต้น 6 วัน/ปี (ครบ 1 ปี)</p>
-                <p><strong>นักขัตฤกษ์:</strong> ≥ 13 วัน/ปี</p>
+                <h3><i class="fas fa-fingerprint"></i> ลืมสแกนนิ้ว</h3>
+                <p>แจ้ง HR ในระบบ รับรองเวลา</p>
             </div>
-            <div class="info-item">
-                <h3><i class="fas fa-money-bill-wave"></i> ค่าตอบแทน</h3>
-                <p><strong>จ่ายเงิน:</strong> สิ้นเดือน</p>
-                <p><strong>OT:</strong> 1.5 เท่า (เย็น), 3 เท่า (วันหยุด)</p>
+             <div class="info-item">
+                <h3><i class="fas fa-envelope-open-text"></i> ลาป่วย</h3>
+                <p>แจ้งก่อน 10.00 น.</p>
             </div>
         </div>
     </div>
 
 </div>
 
+<!-- API Key Modal -->
+<div id="keyModal" class="modal">
+    <div class="modal-content">
+        <h3>🔑 ตั้งค่า Google Gemini API Key</h3>
+        <p style="font-size: 0.9em; color: #666;">ใส่ API Key เพื่อเปิดใช้งานระบบ AI ตอบกฎหมายแรงงาน (ฟรี)</p>
+        <input type="password" id="apiKeyInput" placeholder="วาง API Key ที่นี่ (AIzaSy...)">
+        <div class="modal-btns">
+            <button class="modal-btn btn-cancel" onclick="closeKeyModal()">ปิด</button>
+            <button class="modal-btn btn-save" onclick="saveApiKey()">บันทึก</button>
+        </div>
+        <p style="font-size: 0.8em; margin-top:10px;"><a href="https://aistudio.google.com/app/apikey" target="_blank">รับ Key ฟรีที่นี่</a></p>
+    </div>
+</div>
+
 <script>
-    // ฐานข้อมูลคำถาม-คำตอบ (เพิ่มหมวดประกันสังคม)
-    const qaDatabase = [
-        // --- หมวดประกันสังคม (Social Security) ---
-        {
-            keywords: ["ทำฟัน", "ทันตกรรม", "ขูดหินปูน", "ถอนฟัน", "900"],
-            answer: "🦷 **สิทธิทันตกรรม**: ผู้ประกันตนมีสิทธิได้รับค่าบริการทางการแพทย์เท่าที่จ่ายจริง ไม่เกิน **900 บาท/ปี** สำหรับการขูดหินปูน, อุดฟัน, ถอนฟัน และผ่าฟันคุดครับ ไม่ต้องสำรองจ่ายหากคลินิกเข้าร่วมโครงการ",
-            category: "sso"
-        },
-        {
-            keywords: ["ว่างงาน", "ตกงาน", "ลาออกได้เงินไหม", "เลิกจ้างได้เงินไหม"],
-            answer: "💼 **สิทธิกรณีว่างงาน** (ต้องขึ้นทะเบียนที่กรมการจัดหางานภายใน 30 วัน):\n- **กรณีลาออก**: รับเงินทดแทน 30% ของค่าจ้าง (ไม่เกิน 90 วัน)\n- **กรณีถูกเลิกจ้าง**: รับเงินทดแทน 50% ของค่าจ้าง (ไม่เกิน 180 วัน)",
-            category: "sso"
-        },
-        {
-            keywords: ["ชราภาพ", "เกษียณ", "บำเหน็จ", "บำนาญ"],
-            answer: "👴 **เงินชราภาพ** (เมื่ออายุ 55 ปีบริบูรณ์ และสิ้นสุดความเป็นผู้ประกันตน):\n- **บำเหน็จ (เงินก้อน)**: จ่ายสมทบไม่ถึง 180 เดือน\n- **บำนาญ (รายเดือน)**: จ่ายสมทบตั้งแต่ 180 เดือนขึ้นไป (ได้รับ 20% ของค่าจ้างเฉลี่ย 60 เดือนสุดท้าย + เพิ่มอีก 1.5% ทุกๆ 12 เดือนที่ส่งเกิน)",
-            category: "sso"
-        },
-        {
-            keywords: ["เจ็บป่วย", "รักษาฟรี", "โรงพยาบาล", "หาหมอ"],
-            answer: "🏥 **เจ็บป่วยปกติ**: รักษาฟรีที่โรงพยาบาลตามสิทธิที่เลือกไว้\n🚨 **เจ็บป่วยฉุกเฉินวิกฤต**: เข้าโรงพยาบาลที่ใกล้ที่สุดได้ฟรี 72 ชั่วโมง (ตามสิทธิ UCEP)",
-            category: "sso"
-        },
-        {
-            keywords: ["คลอดบุตร", "ฝากครรภ์"],
-            answer: "👶 **คลอดบุตร**:\n1. ค่าฝากครรภ์ 1,500 บาท\n2. ค่าคลอดบุตรเหมาจ่าย 15,000 บาท/ครั้ง\n3. เงินสงเคราะห์การหยุดงาน 50% ของค่าจ้างเฉลี่ย เป็นเวลา 90 วัน",
-            category: "sso"
-        },
-        {
-            keywords: ["สงเคราะห์บุตร", "เงินลูก"],
-            answer: "🧸 **เงินสงเคราะห์บุตร**: ได้รับเดือนละ 800 บาท/บุตร 1 คน (ตั้งแต่แรกเกิดจนถึง 6 ปีบริบูรณ์) สำหรับผู้ประกันตนที่ส่งเงินสมทบมาแล้วไม่น้อยกว่า 12 เดือน",
-            category: "sso"
-        },
-        {
-            keywords: ["มาตรา 33", "ม.33"],
-            answer: "🏢 **ผู้ประกันตนมาตรา 33** คือ พนักงานเอกชนทั่วไป (อย่างพวกเรา) ที่นายจ้างขึ้นทะเบียนให้ โดยจะถูกหักเงินสมทบ 5% ของเงินเดือน (สูงสุดไม่เกิน 750 บาท/เดือน) ครับ",
-            category: "sso"
-        },
-        
-        // --- หมวดระเบียบภายใน (Existing) ---
-        {
-            keywords: ["แก้ไขเวลา", "ลงเวลาผิด", "แก้เวลา"],
-            answer: "ต้องตรวจสอบและแก้ไขเวลาทำงานให้เสร็จภายใน **วันที่ 21 ของเดือนนั้นๆ** มิฉะนั้นจะคำนวณเงินตามเวลาจริงครับ (Ref: HR017-2568)",
-            category: "time"
-        },
-        {
-            keywords: ["ลืมลงเวลา", "ลืมสแกน", "ลืมตอกบัตร", "เข้างาน"],
-            answer: "กรณีลืมลงเวลาเข้า-ออกงาน ให้ทำรายการ **'ขอรับรองเวลาการทำงาน'** ในระบบ และต้องให้หัวหน้าอนุมัติครับ (Ref: HR017-2568)",
-            category: "time"
-        },
-        {
-            keywords: ["จ่ายค่าจ้าง", "วิธีจ่าย", "no work no pay"],
-            answer: "บริษัทจ่ายตามหลัก **'No Work No Pay'** (ไม่ทำงานไม่ได้รับค่าจ้าง) ยกเว้นวันลาที่ได้รับสิทธิ์ตามระเบียบครับ",
-            category: "money"
-        },
-        {
-            keywords: ["ลากิจไม่รับค่าจ้าง", "unpaid leave"],
-            answer: "ลากิจ 'ไม่รับค่าจ้าง' ได้ **4 วันต่อปี** (ต้องแจ้งล่วงหน้า 3 วัน) ครับ",
-            category: "leave"
-        },
-        {
-            keywords: ["แจ้งลาป่วย", "ลาป่วยกี่โมง"],
-            answer: "ต้องแจ้งหัวหน้าภายใน **10.00 น.** ของวันที่ลา และบันทึกในระบบย้อนหลังไม่เกิน 1 วันครับ",
-            category: "leave"
-        },
-        {
-            keywords: ["ลาคลอด บริษัท"],
-            answer: "ลาคลอดบุตรตามระเบียบบริษัท ต้องแจ้งล่วงหน้า **อย่างน้อย 5 วัน** ครับ (สิทธิ 98 วัน จ่ายค่าจ้าง 45 วัน) *ส่วนที่เหลือสามารถเบิกประกันสังคมได้ตามเงื่อนไข*",
-            category: "leave"
-        },
-        {
-            keywords: ["ชดเชย", "เลิกจ้าง 10 ปี"],
-            answer: "ตามกฎหมายแรงงาน: ทำงานครบ 10 ปีขึ้นไป หากถูกเลิกจ้างจะได้รับค่าชดเชย **300 วัน** (อัตราค่าจ้างสุดท้าย) ครับ",
-            category: "benefit"
-        },
-        {
-            keywords: ["ชดเชย", "เลิกจ้าง 20 ปี"],
-            answer: "ตามกฎหมายแรงงานใหม่: ทำงานครบ 20 ปีขึ้นไป หากถูกเลิกจ้างจะได้รับค่าชดเชย **400 วัน** ครับ",
-            category: "benefit"
-        },
-        {
-            keywords: ["hr", "ติดต่อ", "เบอร์โทร"],
-            answer: "สามารถติดต่อฝ่ายบุคคลได้ที่ชั้น 2 หรือโทรภายใน 1234 หรือแอดไลน์ HR ที่ปุ่มด้านบนได้เลยครับ",
-            category: "contact"
-        }
+    // Local Knowledge Base (ข้อมูลภายในบริษัท)
+    const localDatabase = [
+        { keywords: ["ลงเวลา", "สแกนนิ้ว", "ลืมตอกบัตร"], answer: "📌 **ระเบียบภายใน**: กรณีลืมลงเวลาเข้า-ออกงาน ให้ทำรายการ **'ขอรับรองเวลาการทำงาน'** ในระบบ และต้องให้หัวหน้าอนุมัติครับ" },
+        { keywords: ["เวลาทำงาน", "เข้างานกี่โมง"], answer: "📌 **ระเบียบภายใน**: เวลาทำงานสำนักงาน จันทร์-ศุกร์ 08.30 - 17.30 น. ครับ" },
+        { keywords: ["ลาป่วย", "ป่วย"], answer: "📌 **ระเบียบภายใน**: ลาป่วยต้องแจ้งหัวหน้าภายใน 10.00 น. และบันทึกในระบบ หากลา 3 วันขึ้นไปต้องมีใบรับรองแพทย์ครับ" },
+        { keywords: ["ติดต่อ hr", "เบอร์ hr"], answer: "📌 **ติดต่อ**: ฝ่ายบุคคล ชั้น 2 หรือแอดไลน์ที่ปุ่มด้านบนได้เลยครับ" }
     ];
 
-    // ฟังก์ชันจัดการข้อความ
-    function sendMessage() {
+    let geminiApiKey = "";
+
+    // Load API Key from LocalStorage
+    window.onload = function() {
+        const storedKey = localStorage.getItem("gemini_api_key");
+        if (storedKey) {
+            geminiApiKey = storedKey;
+            updateApiStatus(true);
+        }
+    };
+
+    function updateApiStatus(active) {
+        const statusDot = document.getElementById("apiStatus");
+        if (active) {
+            statusDot.classList.remove("status-off");
+            statusDot.classList.add("status-ok");
+            statusDot.style.color = "#2ecc71";
+        } else {
+            statusDot.classList.remove("status-ok");
+            statusDot.classList.add("status-off");
+            statusDot.style.color = "#e74c3c";
+        }
+    }
+
+    function openKeyModal() { document.getElementById("keyModal").style.display = "flex"; }
+    function closeKeyModal() { document.getElementById("keyModal").style.display = "none"; }
+    
+    function saveApiKey() {
+        const input = document.getElementById("apiKeyInput").value.trim();
+        if (input) {
+            geminiApiKey = input;
+            localStorage.setItem("gemini_api_key", input);
+            updateApiStatus(true);
+            alert("บันทึก API Key เรียบร้อย! ตอนนี้ระบบ AI พร้อมทำงานเต็มรูปแบบครับ");
+            closeKeyModal();
+        }
+    }
+
+    async function sendMessage() {
         const inputField = document.getElementById("userInput");
         const message = inputField.value.trim();
-        
-        if (message) {
-            addMessage(message, 'user');
-            inputField.value = '';
+        if (!message) return;
 
-            setTimeout(() => {
-                const response = findAnswer(message);
-                addMessage(response, 'bot');
-                scrollToBottom();
-            }, 500);
-            
-            scrollToBottom();
+        addMessage(message, 'user');
+        inputField.value = '';
+        
+        // 1. Check Local DB First (Priority to Internal Rules)
+        const localMatch = checkLocalDB(message);
+        if (localMatch) {
+            setTimeout(() => addMessage(localMatch, 'bot'), 500);
+            return;
+        }
+
+        // 2. Use Gemini AI for General/Law Questions
+        if (geminiApiKey) {
+            addMessage("... กำลังค้นหากฎหมายและเรียบเรียงคำตอบ ...", 'bot', true); // Loading state
+            try {
+                const aiResponse = await callGeminiAPI(message);
+                removeLoadingMessage();
+                addMessage(aiResponse, 'bot');
+            } catch (error) {
+                removeLoadingMessage();
+                addMessage("ขออภัย เกิดข้อผิดพลาดในการเชื่อมต่อ AI (ตรวจสอบ API Key หรือเน็ตของคุณ)", 'bot');
+            }
+        } else {
+            addMessage("⚠️ **ยังไม่ได้ใส่ API Key**: ผมตอบได้เฉพาะกฎระเบียบพื้นฐาน หากต้องการคำตอบกฎหมายแรงงาน/ประกันสังคมเชิงลึก กรุณากดปุ่ม **'ตั้งค่า API Key'** ด้านบนครับ", 'bot');
         }
     }
 
-    // ฟังก์ชันค้นหาคำตอบ (ปรับปรุง Logic ให้หาได้แม่นขึ้น)
-    function findAnswer(query) {
+    function checkLocalDB(query) {
         const lowerQuery = query.toLowerCase();
-        let bestMatch = null;
-        let maxMatches = 0;
-
-        qaDatabase.forEach(item => {
-            let matches = 0;
-            item.keywords.forEach(keyword => {
-                if (lowerQuery.includes(keyword)) {
-                    matches++;
-                }
-            });
-
-            if (matches > maxMatches) {
-                maxMatches = matches;
-                bestMatch = item;
+        for (let item of localDatabase) {
+            if (item.keywords.some(k => lowerQuery.includes(k))) {
+                return item.answer;
             }
+        }
+        return null;
+    }
+
+    async function callGeminiAPI(userPrompt) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+        
+        const systemPrompt = "คุณคือผู้เชี่ยวชาญด้านกฎหมายแรงงานไทยและประกันสังคม ให้คำปรึกษากับพนักงานบริษัท SABUY SPEED ตอบคำถามสั้นกระชับ เข้าใจง่าย และถูกต้องตามกฎหมายแรงงานไทยล่าสุด ถ้าเป็นเรื่องกฎหมายให้ระบุว่าเป็น 'ตามกฎหมายแรงงาน'";
+        
+        const requestBody = {
+            contents: [{
+                parts: [{ text: systemPrompt + "\n\nUser Question: " + userPrompt }]
+            }]
+        };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
         });
 
-        if (bestMatch) {
-            return bestMatch.answer;
-        } else {
-            return "ขออภัยครับ ผมยังไม่มีข้อมูลในส่วนนี้ 🤔 คุณอาจลองถามเกี่ยวกับ: **ค่าทำฟัน, เงินว่างงาน, เงินเกษียณ, หรือการลาป่วย** ดูนะครับ";
-        }
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
     }
 
-    function addMessage(text, sender) {
+    function addMessage(text, sender, isLoading = false) {
         const chatWindow = document.getElementById("chatWindow");
         const msgDiv = document.createElement("div");
         msgDiv.className = `message ${sender}`;
+        if (isLoading) msgDiv.id = "loadingMsg";
         
         let avatarIcon = sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
         
-        // แปลง Markdown ง่ายๆ
-        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Bold
-        formattedText = formattedText.replace(/\n/g, '<br>'); // New line
+        // Format Markdown Bold
+        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
 
         msgDiv.innerHTML = `
             <div class="avatar">${avatarIcon}</div>
@@ -589,32 +483,22 @@
         `;
         
         chatWindow.appendChild(msgDiv);
-    }
-
-    function scrollToBottom() {
-        const chatWindow = document.getElementById("chatWindow");
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    function handleKeyPress(e) {
-        if (e.key === 'Enter') sendMessage();
+    function removeLoadingMessage() {
+        const loadingMsg = document.getElementById("loadingMsg");
+        if (loadingMsg) loadingMsg.remove();
     }
 
-    function quickAsk(question) {
-        document.getElementById("userInput").value = question;
-        sendMessage();
-    }
-
+    function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+    function quickAsk(q) { document.getElementById("userInput").value = q; sendMessage(); }
     function clearChat() {
         document.getElementById("chatWindow").innerHTML = `
             <div class="message bot">
                 <div class="avatar"><i class="fas fa-robot"></i></div>
-                <div class="bubble">
-                    สวัสดีครับ! ผมคือผู้ช่วยอัจฉริยะ 🤖<br>
-                    ผมมีความรู้เพิ่มเกี่ยวกับ <strong>ประกันสังคม</strong> และ <strong>กฎหมายแรงงาน</strong> แล้วนะครับ ถามมาได้เลย!
-                </div>
-            </div>
-        `;
+                <div class="bubble">พร้อมตอบคำถามแล้วครับ!</div>
+            </div>`;
     }
 </script>
 
