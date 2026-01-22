@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sex Ed Survivor: ภารกิจรักพิทักษ์วัยใส</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Prompt:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'pixel': ['"Press Start 2P"', 'cursive'],
+                        'sans': ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        'neon-pink': '#FF0099',
+                        'neon-blue': '#00F0FF',
+                        'neon-green': '#00FF66',
+                        'neon-yellow': '#FAFF00',
+                        'dark-bg': '#120428'
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #120428;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 153, 0.2) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.2) 0%, transparent 20%);
+            touch-action: manipulation;
+            overflow: hidden; /* Prevent scroll on mobile game */
+        }
+        .pixel-border {
+            box-shadow: 
+                -4px 0 0 0 white,
+                4px 0 0 0 white,
+                0 -4px 0 0 white,
+                0 4px 0 0 white;
+            margin: 4px;
+        }
+        .pixel-btn {
+            box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.5);
+        }
+        .pixel-btn:active {
+            box-shadow: inset 4px 4px 0px 0px rgba(0,0,0,0.5);
+            transform: translateY(2px);
+        }
+        /* CRT Effect */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .item-card { transition: all 0.2s; }
+        .item-card.selected { border: 4px solid #00FF66; transform: scale(1.05); }
+    </style>
+</head>
+<body class="text-white h-screen flex flex-col font-sans select-none">
+
+    <!-- CRT Overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Audio Controls -->
+    <div class="absolute top-4 right-4 z-50">
+        <button id="mute-btn" onclick="toggleMute()" class="bg-gray-800 p-2 rounded border border-white text-xs opacity-70 hover:opacity-100">
+            🔊 SOUND: ON
+        </button>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-app" class="relative w-full max-w-md mx-auto h-full bg-gray-900 border-x-2 border-gray-700 flex flex-col shadow-2xl overflow-hidden">
+        
+        <!-- Header / HUD -->
+        <div class="bg-black p-3 border-b-2 border-neon-pink flex justify-between items-center z-20">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-neon-green rounded-full animate-pulse"></div>
+                <span class="font-pixel text-xs text-neon-green">SEX ED SURVIVOR</span>
+            </div>
+            <div class="flex gap-3 text-xs font-bold">
+                <span class="text-neon-yellow">❤️ <span id="lives">3</span></span>
+                <span class="text-neon-blue">SCORE: <span id="score">0</span></span>
+            </div>
+        </div>
+
+        <!-- MAIN SCREENS -->
+        
+        <!-- 1. Start Screen -->
+        <div id="screen-start" class="absolute inset-0 flex flex-col items-center justify-center bg-dark-bg z-30 p-6 text-center">
+            <h1 class="font-pixel text-4xl text-neon-pink mb-2 animate-float leading-tight">SEX ED<br><span class="text-neon-blue">SURVIVOR</span></h1>
+            <p class="text-gray-400 mb-8 font-pixel text-xs">M.5 EDITION</p>
+            
+            <div class="space-y-4 w-full max-w-xs">
+                <button onclick="startGame()" class="pixel-btn w-full bg-neon-green text-black font-bold py-4 px-6 rounded text-xl hover:bg-green-400 transition">
+                    ▶ START GAME
+                </button>
+                <button onclick="showHowTo()" class="pixel-btn w-full bg-gray-700 text-white font-bold py-3 px-6 rounded hover:bg-gray-600 transition">
+                    ? HOW TO PLAY
+                </button>
+            </div>
+            <p class="mt-8 text-xs text-gray-500">ใส่หูฟังเพื่อความมันส์ 🎧</p>
+        </div>
+
+        <!-- 2. Story/Dialogue Screen -->
+        <div id="screen-story" class="absolute inset-0 bg-gray-800 hidden flex flex-col z-10">
+            <!-- Scene Image/Emoji -->
+            <div class="flex-1 flex items-center justify-center bg-gradient-to-b from-purple-900 to-gray-900 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                <div id="story-visual" class="text-9xl animate-bounce-slow filter drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                    👩‍❤️‍👨
+                </div>
+            </div>
+            
+            <!-- Dialogue Box -->
+            <div class="bg-black border-t-4 border-white p-4 h-1/2 flex flex-col">
+                <h3 id="story-speaker" class="text-neon-yellow font-bold text-lg mb-2">SPEAKER</h3>
+                <p id="story-text" class="text-white text-lg leading-relaxed mb-4 flex-1 overflow-y-auto">
+                    ...
+                </p>
+                <div id="story-choices" class="space-y-2 mt-auto">
+                    <!-- Choices injected here -->
+                </div>
+                <button id="story-next-btn" onclick="nextStory()" class="hidden w-full bg-neon-blue text-black font-bold py-3 rounded animate-pulse">
+                    ไปต่อ >>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Minigame: Condom Master (Sorting) -->
+        <div id="screen-game-condom" class="absolute inset-0 bg-blue-900 hidden flex flex-col z-20 p-4">
+            <div class="text-center mb-4">
+                <h2 class="font-pixel text-xl text-neon-yellow mb-1">MISSION: CONDOM!</h2>
+                <p class="text-sm">เรียงลำดับการใส่ถุงยางให้ถูกต้อง!</p>
+                <div class="w-full bg-gray-700 h-2 mt-2 rounded"><div id="condom-timer" class="bg-red-500 h-2 rounded w-full transition-all duration-1000"></div></div>
+            </div>
+            
+            <div id="condom-slots" class="grid grid-rows-4 gap-2 flex-1 mb-4">
+                <!-- Drop zones -->
+            </div>
+
+            <div id="condom-options" class="grid grid-cols-2 gap-2">
+                <!-- Draggable items (click to select logic for mobile) -->
+            </div>
+        </div>
+
+        <!-- 4. Minigame: Fact Slasher (Reaction) -->
+        <div id="screen-game-fact" class="absolute inset-0 bg-red-900 hidden flex flex-col z-20 overflow-hidden">
+            <div class="absolute top-4 left-0 w-full text-center pointer-events-none">
+                <h2 class="font-pixel text-xl text-white drop-shadow-md">FACT or FAKE?</h2>
+                <p class="text-neon-green bg-black/50 inline-block px-2 rounded">กดเฉพาะข้อที่เป็น "ความจริง"!</p>
+            </div>
+            
+            <!-- Flying Words Area -->
+            <div id="fact-area" class="relative w-full h-full">
+                <!-- Words spawned here -->
+            </div>
+        </div>
+
+        <!-- 5. Game Over / Win Screen -->
+        <div id="screen-end" class="absolute inset-0 bg-black hidden flex flex-col items-center justify-center z-40 p-6 text-center">
+            <div id="end-emoji" class="text-8xl mb-4">🏆</div>
+            <h2 id="end-title" class="font-pixel text-3xl text-neon-yellow mb-4">GAME OVER</h2>
+            <p id="end-desc" class="text-gray-300 mb-8">Score: 0</p>
+            <button onclick="resetGame()" class="pixel-btn bg-white text-black font-bold py-3 px-8 rounded text-lg hover:bg-gray-200">
+                PLAY AGAIN
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- GAME STATE ---
+        const state = {
+            lives: 3,
+            score: 0,
+            currentLevel: 0,
+            audioEnabled: true,
+            storyStep: 0
+        };
+
+        // --- STORY DATA ---
+        const storyScript = [
+            // Level 1: Consent
+            {
+                type: 'story',
+                speaker: 'Narrator',
+                text: 'เย็นวันศุกร์... คุณ (ม.5) มาติวหนังสือที่ห้องของ "พี่ต้น" รุ่นพี่ที่แอบชอบ บรรยากาศเริ่มเงียบ...',
+                emoji: '📚'
+            },
+            {
+                type: 'choice',
+                speaker: 'พี่ต้น',
+                text: '"ติวเสร็จแล้ว... เหนื่อยจัง ขอนั่งใกล้ๆ เราหน่อยได้ไหม?" (พี่ต้นขยับเข้ามาใกล้มาก)',
+                emoji: '😏',
+                choices: [
+                    { text: 'ยอมๆ ไปก่อน กลัวพี่เขาโกรธ', effect: 'bad', feedback: 'ไม่ดีเลย! การยอมเพราะกลัว ไม่ใช่ Consent (ความยินยอม) ที่แท้จริง' },
+                    { text: 'ขยับหนีแล้วบอก "ไม่เอาพี่ นั่งตรงนั้นแหละ"', effect: 'good', feedback: 'เยี่ยม! กล้าปฏิเสธเมื่อรู้สึกอึดอัด คือสิทธิ์ของเรา' }
+                ]
+            },
+            // Minigame: Fact Slasher Setup
+            {
+                type: 'story',
+                speaker: 'Narrator',
+                text: 'จู่ๆ ก็มีปีศาจ "ความเชื่อผิดๆ" โผล่ออกมา! จัดการมันซะด้วยความรู้!',
+                emoji: '👿'
+            },
+            { type: 'minigame', game: 'fact' },
+            
+            // Level 2: Protection
+            {
+                type: 'story',
+                speaker: 'Narrator',
+                text: 'บรรยากาศพาไป... ถ้าจะมีอะไรเกิดขึ้นจริงๆ สิ่งที่ "ต้องมี" คืออะไร?',
+                emoji: '🔥'
+            },
+            {
+                type: 'choice',
+                speaker: 'ตัวคุณ',
+                text: 'ตัดสินใจแล้ว... แต่เดี๋ยวนะ! ต้องเช็คความพร้อมก่อน',
+                emoji: '🤔',
+                choices: [
+                    { text: 'นับวันเอา หน้า 7 หลัง 7 ชัวร์!', effect: 'bad', feedback: 'อันตราย! วัยรุ่นรอบเดือนไม่ปกติ หน้า 7 หลัง 7 พลาดท้องมาเยอะแล้ว' },
+                    { text: 'ใช้ถุงยางอนามัยเท่านั้น', effect: 'good', feedback: 'ถูกต้อง! ป้องกันทั้งท้อง และโรคติดต่อทางเพศสัมพันธ์' }
+                ]
+            },
+            // Minigame: Condom Master Setup
+            {
+                type: 'story',
+                speaker: 'Narrator',
+                text: 'เอาล่ะ! ได้เวลาปฏิบัติภารกิจ "สวมเกราะ" ต้องทำให้ถูกวิธีนะ!',
+                emoji: '🛡️'
+            },
+            { type: 'minigame', game: 'condom' },
+
+            // Level 3: Post-Care
+            {
+                type: 'story',
+                speaker: 'Narrator',
+                text: 'ทุกอย่างผ่านไป... แต่เอ๊ะ! ถ้าถุงยางแตก หรือลืมป้องกันล่ะ?',
+                emoji: '😱'
+            },
+            {
+                type: 'choice',
+                speaker: 'เพื่อนสาว',
+                text: '"แกๆ ฉันพลาดไปแล้ว ทำไงดี กินยาคุมตอนนี้ทันไหม?"',
+                emoji: '📞',
+                choices: [
+                    { text: 'กินยาคุมแบบ 28 เม็ดเลย', effect: 'bad', feedback: 'ผิด! ยาคุมรายเดือนกินย้อนหลังไม่ได้ ต้องกิน "ยาคุมฉุกเฉิน" เท่านั้น' },
+                    { text: 'รีบไปซื้อยาคุมฉุกเฉิน กินภายใน 72 ชม.', effect: 'good', feedback: 'ถูกต้อง! ยิ่งเร็วยิ่งดี และห้ามกินแทนยาคุมปกตินะ' }
+                ]
+            },
+            {
+                type: 'story',
+                speaker: 'Game Master',
+                text: 'ยินดีด้วย! คุณผ่านบททดสอบความรักวัยรุ่นแล้ว มาดูคะแนนกัน!',
+                emoji: '🎓'
+            }
+        ];
+
+        // --- AUDIO SYSTEM (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration) {
+            if (!state.audioEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        const SFX = {
+            click: () => playTone(600, 'square', 0.1),
+            correct: () => { playTone(800, 'sine', 0.1); setTimeout(() => playTone(1200, 'sine', 0.2), 100); },
+            wrong: () => { playTone(300, 'sawtooth', 0.2); setTimeout(() => playTone(200, 'sawtooth', 0.3), 200); },
+            win: () => { 
+                [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'square', 0.2), i*100));
+            },
+            bgm: null // Will implement a simple loop if needed, but keeping it SFX based for simplicity
+        };
+
+        function toggleMute() {
+            state.audioEnabled = !state.audioEnabled;
+            document.getElementById('mute-btn').innerText = state.audioEnabled ? "🔊 SOUND: ON" : "🔇 SOUND: OFF";
+        }
+
+        // --- CORE FUNCTIONS ---
+
+        function updateHUD() {
+            document.getElementById('score').innerText = state.score;
+            document.getElementById('lives').innerText = state.lives;
+        }
+
+        function startGame() {
+            SFX.click();
+            state.score = 0;
+            state.lives = 3;
+            state.storyStep = 0;
+            updateHUD();
+            
+            document.getElementById('screen-start').classList.add('hidden');
+            processStory();
+        }
+
+        function endGame(won) {
+            document.getElementById('screen-game-condom').classList.add('hidden');
+            document.getElementById('screen-game-fact').classList.add('hidden');
+            document.getElementById('screen-story').classList.add('hidden');
+            document.getElementById('screen-end').classList.remove('hidden');
+            
+            const title = document.getElementById('end-title');
+            const desc = document.getElementById('end-desc');
+            const emoji = document.getElementById('end-emoji');
+            
+            if (won) {
+                SFX.win();
+                title.innerText = "MISSION COMPLETE!";
+                title.classList.replace('text-red-500', 'text-neon-green');
+                desc.innerText = `Final Score: ${state.score}\nคุณคือสุดยอด Sex Ed Master!`;
+                emoji.innerText = "👑";
+            } else {
+                title.innerText = "GAME OVER";
+                title.classList.add('text-red-500');
+                desc.innerText = "ความรู้ยังไม่แม่นพอ ลองใหม่นะ!";
+                emoji.innerText = "💀";
+            }
+        }
+
+        function resetGame() {
+            document.getElementById('screen-end').classList.add('hidden');
+            document.getElementById('screen-start').classList.remove('hidden');
+        }
+
+        // --- STORY ENGINE ---
+        function processStory() {
+            if (state.storyStep >= storyScript.length) {
+                endGame(true);
+                return;
+            }
+
+            const scene = storyScript[state.storyStep];
+            
+            if (scene.type === 'minigame') {
+                document.getElementById('screen-story').classList.add('hidden');
+                if (scene.game === 'condom') startCondomGame();
+                if (scene.game === 'fact') startFactGame();
+            } else {
+                document.getElementById('screen-story').classList.remove('hidden');
+                document.getElementById('story-visual').innerText = scene.emoji;
+                document.getElementById('story-speaker').innerText = scene.speaker;
+                document.getElementById('story-text').innerText = scene.text;
+                
+                const choicesDiv = document.getElementById('story-choices');
+                const nextBtn = document.getElementById('story-next-btn');
+                choicesDiv.innerHTML = '';
+                nextBtn.classList.add('hidden');
+
+                if (scene.type === 'choice') {
+                    scene.choices.forEach(choice => {
+                        const btn = document.createElement('button');
+                        btn.className = "w-full bg-gray-800 border-2 border-white text-white p-3 text-left hover:bg-gray-700 hover:border-neon-pink transition mb-2 font-sans";
+                        btn.innerText = `> ${choice.text}`;
+                        btn.onclick = () => handleChoice(choice);
+                        choicesDiv.appendChild(btn);
+                    });
+                } else {
+                    nextBtn.classList.remove('hidden');
+                }
+            }
+        }
+
+        function handleChoice(choice) {
+            SFX.click();
+            const choicesDiv = document.getElementById('story-choices');
+            choicesDiv.innerHTML = `<div class="p-3 border-2 ${choice.effect === 'good' ? 'border-neon-green bg-green-900/50' : 'border-red-500 bg-red-900/50'} text-white rounded">
+                <strong class="block mb-1">${choice.effect === 'good' ? '✅ ถูกต้อง!' : '❌ ระวัง!'}</strong>
+                ${choice.feedback}
+            </div>`;
+            
+            if (choice.effect === 'good') {
+                state.score += 100;
+                SFX.correct();
+            } else {
+                state.lives--;
+                SFX.wrong();
+            }
+            updateHUD();
+
+            if (state.lives <= 0) {
+                setTimeout(() => endGame(false), 2000);
+            } else {
+                // Show continue button
+                const btn = document.createElement('button');
+                btn.className = "w-full bg-white text-black font-bold py-2 mt-2 rounded animate-pulse";
+                btn.innerText = "ไปต่อ >>";
+                btn.onclick = nextStory;
+                choicesDiv.appendChild(btn);
+            }
+        }
+
+        function nextStory() {
+            SFX.click();
+            state.storyStep++;
+            processStory();
+        }
+
+        // --- MINIGAME 1: CONDOM MASTER ---
+        let condomItems = [
+            { id: 1, text: "ดูวันหมดอายุ", correctIndex: 0 },
+            { id: 2, text: "ฉีกซองระวัง", correctIndex: 1 },
+            { id: 3, text: "บีบกระเปาะไล่ลม", correctIndex: 2 },
+            { id: 4, text: "สวมและรูดลง", correctIndex: 3 }
+        ];
+        let currentCondomSlot = 0;
+
+        function startCondomGame() {
+            document.getElementById('screen-game-condom').classList.remove('hidden');
+            currentCondomSlot = 0;
+            const slots = document.getElementById('condom-slots');
+            const options = document.getElementById('condom-options');
+            
+            slots.innerHTML = '';
+            options.innerHTML = '';
+
+            // Create Empty Slots
+            for(let i=0; i<4; i++) {
+                slots.innerHTML += `<div id="slot-${i}" class="bg-black/50 border-2 border-dashed border-gray-500 h-12 flex items-center pl-4 text-gray-500">ขั้นตอนที่ ${i+1}</div>`;
+            }
+
+            // Shuffle Options
+            const shuffled = [...condomItems].sort(() => Math.random() - 0.5);
+            shuffled.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "bg-neon-blue text-black font-bold p-2 rounded shadow-md hover:bg-white active:scale-95";
+                btn.innerText = item.text;
+                btn.onclick = () => selectCondomItem(item, btn);
+                options.appendChild(btn);
+            });
+
+            // Start Timer (Simple Visual)
+            document.getElementById('condom-timer').style.width = '100%';
+            setTimeout(() => { document.getElementById('condom-timer').style.width = '0%'; }, 100);
+        }
+
+        function selectCondomItem(item, btnElement) {
+            SFX.click();
+            const correctItem = condomItems.find(c => c.correctIndex === currentCondomSlot);
+            
+            if (item.id === correctItem.id) {
+                // Correct
+                SFX.correct();
+                document.getElementById(`slot-${currentCondomSlot}`).innerHTML = `<span class="text-neon-green">✅ ${item.text}</span>`;
+                document.getElementById(`slot-${currentCondomSlot}`).classList.remove('border-dashed', 'border-gray-500');
+                document.getElementById(`slot-${currentCondomSlot}`).classList.add('border-solid', 'border-neon-green');
+                btnElement.classList.add('invisible'); // Hide button
+                currentCondomSlot++;
+                state.score += 50;
+                updateHUD();
+
+                if (currentCondomSlot >= 4) {
+                    setTimeout(() => {
+                        document.getElementById('screen-game-condom').classList.add('hidden');
+                        state.storyStep++;
+                        processStory();
+                    }, 1000);
+                }
+            } else {
+                // Wrong
+                SFX.wrong();
+                btnElement.classList.add('bg-red-500');
+                state.lives--;
+                updateHUD();
+                setTimeout(() => btnElement.classList.remove('bg-red-500'), 300);
+                if (state.lives <= 0) endGame(false);
+            }
+        }
+
+        // --- MINIGAME 2: FACT SLASHER ---
+        let factInterval;
+        let factTimeouts = [];
+
+        function startFactGame() {
+            document.getElementById('screen-game-fact').classList.remove('hidden');
+            const factArea = document.getElementById('fact-area');
+            factArea.innerHTML = '';
+            
+            const facts = [
+                { text: "ถุงยางกันท้องได้", isTrue: true },
+                { text: "ถุงยางกันโรคได้", isTrue: true },
+                { text: "ยาคุมกันเอดส์ได้", isTrue: false },
+                { text: "หน้า 7 หลัง 7 ปลอดภัย", isTrue: false },
+                { text: "หลั่งนอกไม่ท้อง", isTrue: false },
+                { text: "Consent คือสำคัญ", isTrue: true },
+                { text: "ยาคุมฉุกเฉินกินแทนขนม", isTrue: false },
+                { text: "ไม่พร้อม = ไม่ทำ", isTrue: true }
+            ];
+
+            let count = 0;
+            const maxWords = 8;
+            
+            factInterval = setInterval(() => {
+                if(count >= maxWords || state.lives <= 0) {
+                    clearInterval(factInterval);
+                    setTimeout(() => {
+                         if(state.lives > 0) {
+                             document.getElementById('screen-game-fact').classList.add('hidden');
+                             state.storyStep++;
+                             processStory();
+                         }
+                    }, 2000);
+                    return;
+                }
+
+                spawnWord(facts[count]);
+                count++;
+            }, 1200);
+        }
+
+        function spawnWord(fact) {
+            const el = document.createElement('div');
+            el.innerText = fact.text;
+            el.className = "absolute px-4 py-2 rounded font-bold cursor-pointer transition transform hover:scale-110 shadow-lg text-sm md:text-base border-2 pixel-border";
+            
+            // Random styling
+            el.style.backgroundColor = Math.random() > 0.5 ? '#FF0099' : '#00F0FF';
+            el.style.color = 'black';
+            el.style.left = Math.random() * 60 + 10 + '%'; // 10% to 70% width
+            el.style.top = '-50px';
+
+            // Click Handler
+            el.onclick = () => {
+                if (fact.isTrue) {
+                    SFX.correct();
+                    state.score += 50;
+                    el.style.backgroundColor = '#00FF66';
+                    el.innerText = "CORRECT!";
+                    el.classList.add('scale-150', 'opacity-0');
+                } else {
+                    SFX.wrong();
+                    state.lives--;
+                    el.style.backgroundColor = 'red';
+                    el.innerText = "DON'T CLICK!";
+                }
+                updateHUD();
+                if (state.lives <= 0) {
+                    clearInterval(factInterval);
+                    endGame(false);
+                }
+            };
+
+            document.getElementById('fact-area').appendChild(el);
+
+            // Animation (Vanilla JS for finer control than CSS sometimes)
+            let pos = -50;
+            const speed = 2 + Math.random() * 2;
+            const move = setInterval(() => {
+                pos += speed;
+                el.style.top = pos + 'px';
+                if (pos > window.innerHeight) {
+                    clearInterval(move);
+                    if (el.parentNode) el.parentNode.removeChild(el);
+                    // Penalty for missing a TRUE fact? Maybe not, keep it simple.
+                }
+            }, 20);
+        }
+
+        function showHowTo() {
+            alert("วิธีเล่น:\n1. อ่านเนื้อเรื่องและเลือกตอบคำถามให้ถูกต้อง\n2. ในมินิเกม 'เรียงถุงยาง' ให้กดขั้นตอน 1-4 ให้ถูกลำดับ\n3. ในมินิเกม 'Fact or Fake' ให้กดเฉพาะข้อความที่เป็น 'ความจริง' เท่านั้น!\n4. รักษาหัวใจไว้ให้ครบ ห้ามตาย!");
+        }
+
+    </script>
+</body>
+</html>
