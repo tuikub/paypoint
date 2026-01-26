@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Tester</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        .container { border: 1px solid #ccc; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, button, textarea { width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; font-size: 1rem; }
+        button:hover { background-color: #218838; }
+        #response { background-color: #f8f9fa; padding: 1rem; border-radius: 4px; min-height: 50px; white-space: pre-wrap; }
+        .label { font-weight: bold; margin-bottom: 0.5rem; display: block; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🤖 Chatbot Tester (n8n)</h2>
+    
+    <label class="label">1. วาง n8n Test URL ตรงนี้:</label>
+    <input type="text" id="webhookUrl" placeholder="https://your-n8n-instance.com/webhook-test/..." />
+    
+    <label class="label">2. พิมพ์ข้อความถึง AI:</label>
+    <textarea id="message" rows="3" placeholder="สวัสดี AI..."></textarea>
+    
+    <button onclick="sendMessage()">🚀 ส่งข้อความ (Send)</button>
+    
+    <label class="label">ผลลัพธ์จาก AI:</label>
+    <div id="response">รอคำตอบ...</div>
+</div>
+
+<script>
+    async function sendMessage() {
+        const url = document.getElementById('webhookUrl').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const responseDiv = document.getElementById('response');
+
+        if (!url) {
+            alert("กรุณาวาง Webhook URL ก่อนครับ");
+            return;
+        }
+        if (!message) {
+            alert("กรุณาพิมพ์ข้อความก่อนครับ");
+            return;
+        }
+
+        responseDiv.textContent = "กำลังส่งข้อมูล...";
+        responseDiv.style.color = "black";
+
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP Error: ${res.status}`);
+            }
+
+            const data = await res.json();
+            // ดึงข้อมูลตามโครงสร้างที่เราทำไว้ใน n8n (key ชื่อ reply)
+            responseDiv.textContent = data.reply || JSON.stringify(data, null, 2);
+            
+        } catch (error) {
+            console.error(error);
+            responseDiv.textContent = "เกิดข้อผิดพลาด: " + error.message + "\n\n(คำแนะนำ: อย่าลืมตั้งค่า 'Allowed Origins (CORS)' ใน n8n Webhook เป็น * ด้วยนะครับ)";
+            responseDiv.style.color = "red";
+        }
+    }
+</script>
+
+</body>
+</html>
