@@ -5,22 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤖 ตัวทดสอบบอท (n8n Tester)</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; }
-        h2 { text-align: center; color: #333; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 16px; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 450px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-top: 15px; color: #555; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        input:focus, textarea:focus { border-color: #007bff; outline: none; }
+        
+        button { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 16px; margin-top: 25px; cursor: pointer; transition: 0.3s; font-weight: bold; }
         button:hover { background-color: #0056b3; }
-        #result { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px; min-height: 50px; white-space: pre-wrap; }
-        .success { color: green; font-weight: bold; }
-        .error { color: red; font-weight: bold; }
+        
+        #result { margin-top: 25px; padding: 20px; border-radius: 10px; min-height: 80px; text-align: center; border: 2px dashed #ccc; background: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; transition: all 0.3s ease; }
+        
+        /* Status Styles */
+        .status-badge { font-size: 24px; font-weight: bold; padding: 8px 20px; border-radius: 50px; display: inline-block; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        .result-success { background-color: #d4edda !important; border: 2px solid #28a745 !important; color: #155724; }
+        .result-success .status-badge { background-color: #28a745; color: white; }
+        
+        .result-error { background-color: #f8d7da !important; border: 2px solid #dc3545 !important; color: #721c24; }
+        .result-error .status-badge { background-color: #dc3545; color: white; }
+        
+        .result-loading { background-color: #e2e3e5 !important; border: 2px solid #6c757d !important; color: #383d41; }
+
+        .provider-tag { font-size: 12px; background: rgba(0,0,0,0.1); padding: 4px 10px; border-radius: 4px; margin-top: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>🧪 ทดสอบบอท AI</h2>
+    <h2>🧪 ตัวทดสอบบอท (Visual Mode)</h2>
     
     <label>1. วาง URL ของ n8n ตรงนี้:</label>
     <input type="text" id="url" placeholder="เช่น https://.../webhook-test/chat">
@@ -28,10 +42,12 @@
     <label>2. พิมพ์ข้อความคุยกับบอท:</label>
     <textarea id="msg" rows="3" placeholder="สวัสดี AI..."></textarea>
     
-    <button onclick="send()">🚀 ส่งข้อความทดสอบ</button>
+    <button onclick="send()">🚀 กดทดสอบ (Start Test)</button>
     
-    <label>ผลลัพธ์จากบอท:</label>
-    <div id="result">รอส่งข้อมูล...</div>
+    <label>ผลการทดสอบ:</label>
+    <div id="result">
+        <span style="color: #888;">ผลลัพธ์จะแสดงที่นี่...</span>
+    </div>
 </div>
 
 <script>
@@ -40,9 +56,15 @@
         const msg = document.getElementById('msg').value;
         const resultBox = document.getElementById('result');
 
-        if(!url) { alert("อย่าลืมใส่ URL นะครับ!"); return; }
+        if(!url) { alert("⚠️ อย่าลืมใส่ URL ของ n8n นะครับ!"); return; }
+        if(!msg) { alert("⚠️ พิมพ์ข้อความก่อนนะครับ"); return; }
         
-        resultBox.innerHTML = "⏳ กำลังส่งข้อมูลไปหา n8n...";
+        // Reset state to Loading
+        resultBox.className = 'result-loading';
+        resultBox.innerHTML = `
+            <div class="status-badge" style="background:#6c757d;">⏳ LOADING...</div>
+            <div>กำลังส่งข้อมูลไปหา n8n...<br><small>(ถ้าค้างนาน ให้เช็คว่ากด Execute ใน n8n หรือยัง)</small></div>
+        `;
         
         try {
             const response = await fetch(url, {
@@ -51,17 +73,45 @@
                 body: JSON.stringify({ message: msg })
             });
             
+            if (!response.ok) {
+                throw new Error(`Server Error: ${response.status}`);
+            }
+
             const data = await response.json();
             
-            // แสดงผลลัพธ์
-            if(data.reply) {
-                resultBox.innerHTML = `<span class="success">✅ ตอบกลับมาว่า:</span>\n"${data.reply}"\n\n(ผู้ตอบ: ${data.provider})`;
+            // Check if reply exists (Success Case)
+            if (data.reply) {
+                resultBox.className = 'result-success';
+                let providerInfo = data.provider ? `<div class="provider-tag">ผู้ตอบ: ${data.provider}</div>` : '';
+                
+                resultBox.innerHTML = `
+                    <div class="status-badge">✅ ผ่าน (PASS)</div>
+                    <div style="font-size: 1.2em; font-weight:bold;">"${data.reply}"</div>
+                    ${providerInfo}
+                `;
             } else {
-                resultBox.innerHTML = JSON.stringify(data, null, 2);
+                // Connected but weird response
+                resultBox.className = 'result-error';
+                resultBox.innerHTML = `
+                    <div class="status-badge" style="background:#ffc107; color:black;">⚠️ ข้อมูลแปลกๆ</div>
+                    <div>เชื่อมต่อได้ แต่รูปแบบข้อมูลไม่ตรง (ไม่เจอ key "reply")</div>
+                    <div style="font-size:0.8em; margin-top:5px;">${JSON.stringify(data)}</div>
+                `;
             }
             
         } catch (error) {
-            resultBox.innerHTML = `<span class="error">❌ เกิดข้อผิดพลาด:</span>\n${error.message}\n\n(ลองเช็คว่ากด Execute ใน n8n หรือยัง?)`;
+            // Error State
+            resultBox.className = 'result-error';
+            resultBox.innerHTML = `
+                <div class="status-badge">❌ ไม่ผ่าน (FAIL)</div>
+                <div style="font-weight:bold;">สาเหตุ: ${error.message}</div>
+                <div style="font-size: 0.9em; margin-top:10px; text-align:left; background:rgba(255,255,255,0.5); padding:10px; border-radius:5px;">
+                    💡 <b>คำแนะนำ (ลองเช็คทีละข้อ):</b><br>
+                    1. กดปุ่ม <b>Execute Workflow</b> ใน n8n ให้หมุนๆ หรือยัง?<br>
+                    2. ใน Webhook > Options > <b>CORS</b> ใส่ดอกจัน <code>*</code> หรือยัง?<br>
+                    3. URL ต้องลงท้ายด้วย <code>webhook-test</code> (ไม่ใช่ webhook เฉยๆ)
+                </div>
+            `;
         }
     }
 </script>
