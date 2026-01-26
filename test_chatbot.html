@@ -3,74 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Tester</title>
+    <title>🤖 ตัวทดสอบบอท (n8n Tester)</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
-        .container { border: 1px solid #ccc; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input, button, textarea { width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box; }
-        button { background-color: #28a745; color: white; border: none; cursor: pointer; font-size: 1rem; }
-        button:hover { background-color: #218838; }
-        #response { background-color: #f8f9fa; padding: 1rem; border-radius: 4px; min-height: 50px; white-space: pre-wrap; }
-        .label { font-weight: bold; margin-bottom: 0.5rem; display: block; }
-        .error { color: red; }
+        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; }
+        h2 { text-align: center; color: #333; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 16px; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #0056b3; }
+        #result { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px; min-height: 50px; white-space: pre-wrap; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🤖 Chatbot Tester (n8n)</h2>
+<div class="card">
+    <h2>🧪 ทดสอบบอท AI</h2>
     
-    <label class="label">1. วาง n8n Test URL ตรงนี้:</label>
-    <input type="text" id="webhookUrl" placeholder="https://your-n8n-instance.com/webhook-test/..." />
+    <label>1. วาง URL ของ n8n ตรงนี้:</label>
+    <input type="text" id="url" placeholder="เช่น https://.../webhook-test/chat">
     
-    <label class="label">2. พิมพ์ข้อความถึง AI:</label>
-    <textarea id="message" rows="3" placeholder="สวัสดี AI..."></textarea>
+    <label>2. พิมพ์ข้อความคุยกับบอท:</label>
+    <textarea id="msg" rows="3" placeholder="สวัสดี AI..."></textarea>
     
-    <button onclick="sendMessage()">🚀 ส่งข้อความ (Send)</button>
+    <button onclick="send()">🚀 ส่งข้อความทดสอบ</button>
     
-    <label class="label">ผลลัพธ์จาก AI:</label>
-    <div id="response">รอคำตอบ...</div>
+    <label>ผลลัพธ์จากบอท:</label>
+    <div id="result">รอส่งข้อมูล...</div>
 </div>
 
 <script>
-    async function sendMessage() {
-        const url = document.getElementById('webhookUrl').value.trim();
-        const message = document.getElementById('message').value.trim();
-        const responseDiv = document.getElementById('response');
+    async function send() {
+        const url = document.getElementById('url').value.trim();
+        const msg = document.getElementById('msg').value;
+        const resultBox = document.getElementById('result');
 
-        if (!url) {
-            alert("กรุณาวาง Webhook URL ก่อนครับ");
-            return;
-        }
-        if (!message) {
-            alert("กรุณาพิมพ์ข้อความก่อนครับ");
-            return;
-        }
-
-        responseDiv.textContent = "กำลังส่งข้อมูล...";
-        responseDiv.style.color = "black";
-
+        if(!url) { alert("อย่าลืมใส่ URL นะครับ!"); return; }
+        
+        resultBox.innerHTML = "⏳ กำลังส่งข้อมูลไปหา n8n...";
+        
         try {
-            const res = await fetch(url, {
+            const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: message })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
             });
-
-            if (!res.ok) {
-                throw new Error(`HTTP Error: ${res.status}`);
+            
+            const data = await response.json();
+            
+            // แสดงผลลัพธ์
+            if(data.reply) {
+                resultBox.innerHTML = `<span class="success">✅ ตอบกลับมาว่า:</span>\n"${data.reply}"\n\n(ผู้ตอบ: ${data.provider})`;
+            } else {
+                resultBox.innerHTML = JSON.stringify(data, null, 2);
             }
-
-            const data = await res.json();
-            // ดึงข้อมูลตามโครงสร้างที่เราทำไว้ใน n8n (key ชื่อ reply)
-            responseDiv.textContent = data.reply || JSON.stringify(data, null, 2);
             
         } catch (error) {
-            console.error(error);
-            responseDiv.textContent = "เกิดข้อผิดพลาด: " + error.message + "\n\n(คำแนะนำ: อย่าลืมตั้งค่า 'Allowed Origins (CORS)' ใน n8n Webhook เป็น * ด้วยนะครับ)";
-            responseDiv.style.color = "red";
+            resultBox.innerHTML = `<span class="error">❌ เกิดข้อผิดพลาด:</span>\n${error.message}\n\n(ลองเช็คว่ากด Execute ใน n8n หรือยัง?)`;
         }
     }
 </script>
