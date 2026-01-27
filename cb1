@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paypoint AI Assistant</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Prompt Font (Thai) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom Scrollbar */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .chat-message {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-child:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="h-screen flex items-center justify-center relative overflow-hidden">
+
+    <!-- Mockup Background Content -->
+    <div class="text-center p-8 max-w-2xl">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Paypoint Service</h1>
+        <p class="text-gray-600 mb-8">บริการรับส่งพัสดุครบวงจร เช็คสถานะ เคลมสินค้า และอื่นๆ</p>
+        <div class="p-6 bg-white rounded-xl shadow-md">
+            <i class="fa-solid fa-box-open text-5xl text-blue-500 mb-4"></i>
+            <p>หน้าเว็บไซต์หลักของคุณ (Chatbot จะอยู่ที่มุมขวาล่าง)</p>
+        </div>
+    </div>
+
+    <!-- CHATBOT WIDGET START -->
+    <div id="chat-widget" class="fixed bottom-4 right-4 z-50 flex flex-col items-end">
+        
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden w-[350px] h-[500px] bg-white rounded-2xl shadow-2xl flex-col overflow-hidden mb-4 border border-gray-200 transition-all duration-300 transform origin-bottom-right scale-95 opacity-0">
+            
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex justify-between items-center text-white shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold text-xl shadow-sm">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg leading-tight">น้อง AI Paypoint</h3>
+                        <p class="text-xs text-blue-100 opacity-90">ผู้ช่วยอัจฉริยะ</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="text-white hover:bg-white/20 p-2 rounded-full transition">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Chat Body -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 scrollbar-hide">
+                <!-- Welcome Message -->
+                <div class="chat-message flex items-start gap-2.5">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="flex flex-col gap-1 max-w-[85%]">
+                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 border border-gray-100">
+                            สวัสดีครับ! 🙏 ผมคือ AI ผู้ช่วยจาก Paypoint <br>
+                            ยินดีให้บริการครับ สอบถามเรื่องอะไรดีครับ?
+                            <ul class="mt-2 space-y-1">
+                                <li>📦 <span class="text-blue-500 cursor-pointer hover:underline" onclick="sendQuickMsg('เช็คพัสดุ')">เช็คพัสดุ</span></li>
+                                <li>💰 <span class="text-blue-500 cursor-pointer hover:underline" onclick="sendQuickMsg('ราคาค่าส่ง')">ราคาค่าส่ง</span></li>
+                                <li>⚠️ <span class="text-blue-500 cursor-pointer hover:underline" onclick="sendQuickMsg('ยื่นคำร้อง/ส่วนต่าง')">ยื่นคำร้อง/ส่วนต่าง</span></li>
+                            </ul>
+                        </div>
+                        <span class="text-[10px] text-gray-400 ml-1">AI Assistant</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="hidden px-4 pb-2">
+                <div class="flex items-center gap-1 text-gray-400 text-xs ml-10">
+                    <span>กำลังเชื่อมต่อ</span>
+                    <span class="typing-dot text-lg">.</span>
+                    <span class="typing-dot text-lg">.</span>
+                    <span class="typing-dot text-lg">.</span>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-3 bg-white border-t border-gray-100 flex gap-2 items-center">
+                <input type="text" id="user-input" 
+                    class="flex-1 bg-gray-100 text-gray-700 text-sm rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+                    placeholder="พิมพ์คำถามที่นี่..." 
+                    onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" 
+                    class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-md transition transform hover:scale-105 active:scale-95">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="chat-toggle-btn" onclick="toggleChat()" 
+            class="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center transition transform hover:scale-110 hover:shadow-xl group">
+            <i class="fa-solid fa-comment-dots text-2xl group-hover:scale-110 transition"></i>
+        </button>
+    </div>
+
+    <!-- Script -->
+    <script>
+        // --- 1. KNOWLEDGE BASE (ข้อมูลจาก Google Sheets) ---
+        // A = Keywords, B = Response, C = Link
+        const knowledgeBase = [
+            {
+                keywords: ["เช็คพัสดุ", "ตามของ", "ของถึงไหน", "tracking", "track", "สถานะ", "เช็คเลข"],
+                response: "ลูกค้าสามารถเช็คสถานะพัสดุได้ง่ายๆ เลยครับ เพียงกดเมนู 'เช็คสถานะ' หรือคลิกที่ลิงก์ด้านล่างนี้ได้เลยครับ",
+                link: "https://tuikub.github.io/tracking/tracking.html",
+                linkText: "🔍 คลิกเพื่อเช็คสถานะพัสดุ"
+            },
+            {
+                keywords: ["เช็คไม่ขึ้น", "หาไม่เจอ", "เลขผิด", "ไม่พบข้อมูล"],
+                response: "ถ้าเพิ่งส่งของ อาจจะต้องรอรถเข้ารับหรือคีย์เข้าระบบสักครู่นะครับ แต่ถ้าส่งนานแล้วยังเช็คไม่ขึ้น แนะนำให้ลองติดต่อร้านต้นทางเพื่อความชัวร์ครับ",
+                link: "https://tuikub.github.io/tracking/tracking.html",
+                linkText: "ลองเช็คอีกครั้ง"
+            },
+            {
+                keywords: ["ของยังไม่ถึง", "ส่งช้า", "นานจัง", "ค้าง"],
+                response: "ขออภัยในความล่าช้าด้วยนะครับ ช่วงนี้พัสดุอาจจะเยอะนิดนึง แต่ระบบกำลังเร่งนำส่งให้เร็วที่สุดเลยครับ",
+                link: "https://tuikub.github.io/tracking/tracking.html",
+                linkText: "ติดตามสถานะ"
+            },
+            {
+                keywords: ["ราคา", "ค่าส่ง", "กี่บาท", "แพงไหม", "คิดเงิน"],
+                response: "ค่าส่งเราเริ่มต้นเบาๆ แค่ 25 บาทเองครับ! ราคาจริงจะคิดตามน้ำหนักและขนาดกล่อง ลองแจ้งรายละเอียดให้แอดมินช่วยคำนวณก่อนได้นะครับ",
+                link: "https://tuikub.github.io/paypoint/c.html",
+                linkText: "💰 ดูตารางราคา"
+            },
+            {
+                keywords: ["ตัดรอบ", "ส่งทันไหม", "ปิดกี่โมง", "รอบส่ง"],
+                response: "ร้านเราตัดรอบ 16.00 น. ทุกวันครับ ถ้ามาทันเวลานี้ ของออกเดินทางวันนี้เลยครับผม",
+                link: "https://tuikub.github.io/paypoint/c.html",
+                linkText: "ดูรอบส่ง"
+            },
+            {
+                keywords: ["พื้นที่ห่างไกล", "เกาะ", "ดอย", "3 จังหวัด", "บวกเพิ่ม"],
+                response: "พื้นที่พิเศษ (เกาะ/ดอย/3 จังหวัด) อาจมีค่าธรรมเนียมเพิ่มนิดหน่อยครับ (20-50 บาท) แต่ถ้าเลือกส่ง KEX (Kerry) จะไม่มีบวกเพิ่มนะครับ คุ้มมาก!",
+                link: "https://tuikub.github.io/tracking/remote.html",
+                linkText: "ดูพื้นที่ห่างไกล"
+            },
+            {
+                keywords: ["cod", "เก็บเงินปลายทาง", "โอนวันไหน"],
+                response: "ยอด COD จะโอนเข้าบัญชีภายใน 3-5 วันทำการครับ (ไม่นับเสาร์-อาทิตย์) ถ้าเกินเวลานี้ทักมาสอบถามได้เลยครับ",
+                link: "https://tuikub.github.io/tracking/cod.html",
+                linkText: "รายละเอียด COD"
+            },
+            {
+                keywords: ["แพ็ค", "ห่อของ", "กล่อง", "วิธีแพ็ค", "ของเหลว", "ห้ามส่ง"],
+                response: "เพื่อความปลอดภัย แนะนำให้ห่อบับเบิ้ลหนาๆ อัดกระดาษให้แน่น ปิดเทปตัว H ครับ (งดส่งของเหลว/ของผิดกฎหมายนะครับ)",
+                link: "https://tuikub.github.io/tracking/prohibited.html",
+                linkText: "วิธีแพ็คของและของต้องห้าม"
+            },
+            {
+                keywords: ["ประกัน", "ของแตก", "เสียหาย", "เคลม", "รับผิดชอบ"],
+                response: "เรามีประกันพื้นฐานให้ทุกชิ้น (วงเงินไม่เกิน 2,000 บาท) ครับ หากของเสียหาย ต้องรบกวนขอคลิปตอนแกะกล่องเพื่อใช้เคลมด้วยนะครับ",
+                link: "https://tuikub.github.io/tracking/warranty.html",
+                linkText: "เงื่อนไขการรับประกัน"
+            },
+            {
+                keywords: ["ส่วนต่าง", "โดนปรับ", "หักเงิน", "น้ำหนักเกิน"],
+                response: "ที่มียอดหักเงิน เพราะน้ำหนักหรือขนาดที่ขนส่งวัดได้จริง 'มากกว่า' ที่ร้านแจ้งไว้น่ะครับ แต่ไม่ต้องกังวลนะ ยื่นเรื่องตรวจสอบได้ครับ",
+                link: "https://tuikub.github.io/paypoint/Digital.html",
+                linkText: "วิธียื่นคำร้อง"
+            },
+            {
+                keywords: ["ยื่นคำร้อง", "อุทธรณ์", "แก้ไขส่วนต่าง", "ขอเงินคืน"],
+                response: "ตอนนี้เรามีระบบใหม่ 'Digital Dispute' ให้ร้านยื่นอุทธรณ์ได้เองเลยครับ แนะนำให้ทำรายการภายใน 5 วันนะครับ",
+                link: "https://tuikub.github.io/paypoint/Digital.html",
+                linkText: "ไปที่ระบบยื่นคำร้อง"
+            },
+            {
+                keywords: ["วิธีใช้", "คู่มือ", "ทำไม่เป็น", "สอนหน่อย"],
+                response: "เราเตรียมคู่มือการใช้งานระบบแบบละเอียดไว้ให้แล้วครับ ลองกดเข้าไปดูทีละขั้นตอนได้เลย ทำตามได้แน่นอน",
+                link: "https://tuikub.github.io/paypoint/#system",
+                linkText: "📘 เปิดคู่มือการใช้งาน"
+            },
+            {
+                keywords: ["แฟรนไชส์", "สนใจเปิดร้าน", "ลงทุน", "สมัคร"],
+                response: "ยินดีเลยครับ! มาร่วมครอบครัว Paypoint กัน สนใจรายละเอียดแฟรนไชส์ โทรมาคุยกันได้ที่ 086-888-3656 นะครับ",
+                link: "https://tuikub.github.io/tracking/franchise.html",
+                linkText: "ดูรายละเอียดแฟรนไชส์"
+            }
+        ];
+
+        // --- 2. API CONFIGURATION (n8n Webhook) ---
+        const API_URL = "https://n8n.srv1265116.hstgr.cloud/webhook/chat"; 
+
+        // --- 3. UI LOGIC ---
+        const chatWindow = document.getElementById('chat-window');
+        const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const messagesContainer = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        let isChatOpen = false;
+
+        function toggleChat() {
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                chatWindow.classList.remove('hidden');
+                setTimeout(() => {
+                    chatWindow.classList.remove('scale-95', 'opacity-0');
+                    chatWindow.classList.add('scale-100', 'opacity-100');
+                    userInput.focus();
+                }, 10);
+                chatToggleBtn.classList.add('hidden');
+            } else {
+                chatWindow.classList.remove('scale-100', 'opacity-100');
+                chatWindow.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                    chatToggleBtn.classList.remove('hidden');
+                }, 300);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendQuickMsg(msg) {
+            userInput.value = msg;
+            sendMessage();
+        }
+
+        function appendMessage(sender, text, link = null, linkText = "คลิกที่นี่") {
+            const isUser = sender === 'user';
+            const alignClass = isUser ? 'items-end' : 'items-start';
+            const bgClass = isUser ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none';
+            const icon = isUser ? '' : `<div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs shrink-0 mr-2"><i class="fa-solid fa-robot"></i></div>`;
+            
+            let contentHtml = text;
+            if (link) {
+                contentHtml += `<br><a href="${link}" target="_blank" class="inline-block mt-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold hover:bg-blue-100 transition"><i class="fa-solid fa-link mr-1"></i> ${linkText}</a>`;
+            }
+
+            const msgHTML = `
+                <div class="chat-message flex ${alignClass} mb-4 ${isUser ? 'justify-end' : ''}">
+                    ${!isUser ? icon : ''}
+                    <div class="${bgClass} px-4 py-2.5 rounded-2xl shadow-sm max-w-[85%] text-sm leading-relaxed">
+                        ${contentHtml}
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.insertAdjacentHTML('beforeend', msgHTML);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 1. User Message
+            appendMessage('user', text);
+            userInput.value = '';
+            
+            // 2. Show Loading
+            loadingIndicator.classList.remove('hidden');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // 3. Logic: Check Local Knowledge Base First (Quick Reply from Sheet Data)
+            const foundAnswer = checkKnowledgeBase(text);
+
+            if (foundAnswer) {
+                setTimeout(() => {
+                    loadingIndicator.classList.add('hidden');
+                    appendMessage('bot', foundAnswer.response, foundAnswer.link, foundAnswer.linkText);
+                }, 600);
+            } else {
+                // 4. Fallback: Call n8n Webhook
+                try {
+                    const aiResponse = await callN8NWebhook(text);
+                    loadingIndicator.classList.add('hidden');
+                    appendMessage('bot', aiResponse);
+                } catch (error) {
+                    loadingIndicator.classList.add('hidden');
+                    appendMessage('bot', "ขออภัยครับ ระบบกำลังเชื่อมต่อกับ Server ลองใหม่อีกครั้งนะครับ 😓");
+                    console.error("API Error:", error);
+                }
+            }
+        }
+
+        function checkKnowledgeBase(query) {
+            query = query.toLowerCase();
+            for (const item of knowledgeBase) {
+                for (const keyword of item.keywords) {
+                    if (query.includes(keyword)) {
+                        return item;
+                    }
+                }
+            }
+            return null;
+        }
+
+        async function callN8NWebhook(userText) {
+            // เตรียมข้อมูลส่งไปที่ n8n
+            // หมายเหตุ: key 'chatInput' คือค่ามาตรฐานสำหรับ n8n Chat Trigger 
+            // หาก n8n ของคุณใช้ key อื่น สามารถเปลี่ยนตรงนี้ได้เลย (เช่น 'message', 'text', 'query')
+            const payload = {
+                chatInput: userText 
+            };
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            
+            // ตรวจสอบว่า n8n ส่งค่ากลับมาใน field ไหน (output, text, หรือ message)
+            // ปรับแก้ตรงนี้ได้ตาม Response ของ n8n คุณ
+            return data.output || data.text || data.message || JSON.stringify(data);
+        }
+
+    </script>
+</body>
+</html>
