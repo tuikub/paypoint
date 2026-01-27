@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI ผู้ช่วยตอบคำถาม (Brain via n8n)</title>
+    <!-- ใช้ Tailwind CSS สำหรับความสวยงาม -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ใช้ Marked.js เพื่อแปลงผลลัพธ์ให้อ่านง่าย (ตัวหนา, หัวข้อ, ลิสต์) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- ใช้ Highlight.js เผื่อมีการแทรกโค้ดในคำตอบ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap');
+        
+        body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; color: #1f2937; }
+        
+        /* ปรับแต่ง Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #e5e7eb; }
+        ::-webkit-scrollbar-thumb { background: #9ca3af; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+        /* กล่องแสดงผล Markdown */
+        .markdown-body {
+            color: #374151;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+            color: #111827;
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+        .markdown-body p { margin-bottom: 1em; }
+        .markdown-body ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .markdown-body ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+        .markdown-body strong { color: #000; font-weight: 700; }
+        
+        /* โค้ดในคำตอบทั่วไป */
+        .markdown-body pre {
+            background-color: #1f2937 !important;
+            color: #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1em;
+        }
+        .markdown-body code {
+            font-family: monospace;
+            background-color: #e5e7eb;
+            color: #c026d3; /* สีชมพูเข้มสำหรับ Inline Code */
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-blue-100">
+
+    <!-- Container หลัก -->
+    <div class="w-full max-w-4xl h-[90vh] flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+        
+        <!-- Header -->
+        <div class="bg-indigo-600 p-4 text-white flex items-center justify-between shadow-md z-10">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                AI Assistant (ผู้ช่วยส่วนตัว)
+            </h1>
+            <div class="text-xs bg-indigo-500 px-3 py-1 rounded-full text-indigo-100">Powered by Gemini via n8n</div>
+        </div>
+
+        <!-- พื้นที่แสดงบทสนทนา (Output) -->
+        <div class="flex-1 bg-gray-50 p-6 overflow-y-auto relative custom-scroll flex flex-col gap-4" id="chatContainer">
+            
+            <!-- ข้อความต้อนรับ -->
+            <div class="self-start bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-200 max-w-[85%]">
+                <p class="text-gray-700">สวัสดีครับ! 👋 ผมคือ AI ผู้ช่วยของคุณ<br>มีอะไรให้ผมช่วยหาคำตอบ ปรึกษา หรือสรุปข้อมูล ถามมาได้เลยครับ</p>
+            </div>
+
+            <!-- Loading Spinner (ซ่อนอยู่) -->
+            <div id="loadingSpinner" class="hidden self-start bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-200 flex items-center gap-3">
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
+                <span class="text-gray-500 text-sm animate-pulse">กำลังเรียบเรียงคำตอบ...</span>
+            </div>
+
+            <!-- คำตอบจะถูกเพิ่มที่นี่ -->
+        </div>
+
+        <!-- พื้นที่พิมพ์คำถาม (Input) -->
+        <div class="bg-white p-4 border-t border-gray-200 shadow-lg z-20">
+            <div class="relative flex gap-2 items-end">
+                <textarea id="promptInput" 
+                    class="w-full bg-gray-100 text-gray-800 p-3 pl-4 rounded-2xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none resize-none text-base leading-relaxed placeholder-gray-400 transition-all shadow-inner"
+                    rows="2"
+                    placeholder="พิมพ์คำถามของคุณที่นี่... (กด Ctrl+Enter เพื่อส่ง)"></textarea>
+                
+                <button onclick="sendRequest()" id="sendBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition-all transform hover:scale-105 flex-shrink-0 mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+                </button>
+            </div>
+            <div class="text-xs text-center mt-2 text-gray-400">
+                รองรับคำถามทั่วไป, การคำนวณ, สรุปบทความ และอื่นๆ
+            </div>
+        </div>
+    </div>
+
+    <!-- Script การทำงาน -->
+    <script>
+        // 🟢🟢 ตั้งค่า URL ของ n8n ตรงนี้ 🟢🟢
+        const N8N_WEBHOOK_URL = "https://n8n.srv1265116.hstgr.cloud/webhook/chat"; 
+
+        async function sendRequest() {
+            const promptInput = document.getElementById('promptInput');
+            const chatContainer = document.getElementById('chatContainer');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const sendBtn = document.getElementById('sendBtn');
+
+            const message = promptInput.value.trim();
+            if (!message) return;
+
+            // 1. เพิ่มคำถามของเราลงในแชท
+            appendUserMessage(message);
+            promptInput.value = ''; // เคลียร์ช่องพิมพ์
+            promptInput.style.height = 'auto'; // รีเซ็ตความสูง
+
+            // 2. แสดงสถานะโหลด
+            loadingSpinner.classList.remove('hidden');
+            // ย้าย Spinner ไปล่างสุด
+            chatContainer.appendChild(loadingSpinner);
+            scrollToBottom();
+            
+            sendBtn.disabled = true;
+            sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            try {
+                // 3. ส่งข้อมูลไปหา n8n Webhook
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+                const data = await response.json();
+                
+                // รับค่าคำตอบ (รองรับทั้ง text, output, reply)
+                const aiText = data.text || data.output || data.reply || JSON.stringify(data);
+
+                // 4. ซ่อนโหลด และแสดงคำตอบ AI
+                loadingSpinner.classList.add('hidden');
+                appendAIMessage(aiText);
+
+            } catch (error) {
+                console.error("Error:", error);
+                loadingSpinner.classList.add('hidden');
+                appendAIMessage(`❌ **เกิดข้อผิดพลาด:** ${error.message}\n\n*คำแนะนำ: เช็ค URL n8n และการตั้งค่า CORS*`, true);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                scrollToBottom();
+            }
+        }
+
+        function appendUserMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = "self-end bg-indigo-600 text-white p-4 rounded-2xl rounded-tr-none shadow-md max-w-[85%] markdown-body";
+            div.style.color = "white"; // บังคับสีตัวอักษร
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            chatContainer.appendChild(div);
+            scrollToBottom();
+        }
+
+        function appendAIMessage(markdownText, isError = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = `self-start bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-200 max-w-[85%] markdown-body ${isError ? 'border-red-300 bg-red-50' : ''}`;
+            
+            // แปลง Markdown เป็น HTML
+            div.innerHTML = marked.parse(markdownText);
+            
+            chatContainer.appendChild(div);
+            
+            // Highlight Code ถ้ามี
+            div.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Auto resize textarea
+        const tx = document.getElementById('promptInput');
+        tx.addEventListener("input", function(){
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + "px";
+            if(this.value === '') this.style.height = 'auto';
+        });
+
+        // กด Ctrl+Enter เพื่อส่ง
+        tx.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                sendRequest();
+            }
+        });
+    </script>
+</body>
+</html>
